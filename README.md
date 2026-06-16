@@ -11,10 +11,10 @@ Most of my projects start with a business question and end with something someon
 **[Walmart Customer Spend Prediction](https://github.com/flynnduel/walmart-spend-prediction.git)** &nbsp;·&nbsp; R &nbsp;·&nbsp; Random Forest, Elastic Net  
 Predicted transaction-level spend from demographic data. The finding that surprised me: rural Category C markets outspend urban ones on average, which runs against how most retailers think about rural purchasing power.
 
-**[Housing Price Prediction](link)** &nbsp;·&nbsp; R &nbsp;·&nbsp; Random Forest, LASSO, Tableau  
+**[Housing Price Prediction](https://github.com/flynnduel/walmart-spend-prediction.git)** &nbsp;·&nbsp; R &nbsp;·&nbsp; Random Forest, LASSO, Tableau  
 Took 81 home attributes down to the 6 that actually move price. Random Forest landed at R² of 0.80. Built it for buyers and developers, not as a class exercise.
 
-**[Music Distribution Database](link)** &nbsp;·&nbsp; MySQL &nbsp;·&nbsp; SQL, Tableau  
+**[Music Distribution Database](https://github.com/flynnduel/music-distribution-db.git)** &nbsp;·&nbsp; MySQL &nbsp;·&nbsp; SQL, Tableau  
 Relational database for a vinyl distribution business: 13 tables, 5 analytical queries, 3 Tableau dashboards. Every query maps to a real management decision.
 
 ---
