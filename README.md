@@ -8,7 +8,7 @@ Most of my projects start with a business question and end with something someon
 
 ## What's here
 
-**[Walmart Customer Spend Prediction]([link](https://github.com/flynnduel/walmart-spend-prediction.git))** &nbsp;·&nbsp; R &nbsp;·&nbsp; Random Forest, Elastic Net  
+**[Walmart Customer Spend Prediction](https://github.com/flynnduel/walmart-spend-prediction.git)** &nbsp;·&nbsp; R &nbsp;·&nbsp; Random Forest, Elastic Net  
 Predicted transaction-level spend from demographic data. The finding that surprised me: rural Category C markets outspend urban ones on average, which runs against how most retailers think about rural purchasing power.
 
 **[Housing Price Prediction](link)** &nbsp;·&nbsp; R &nbsp;·&nbsp; Random Forest, LASSO, Tableau  
