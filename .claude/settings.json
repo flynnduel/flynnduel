@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "pua-skills": {
+      "source": {
+        "source": "github",
+        "repo": "tanweai/pua"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "pua@pua-skills": true
+  }
+}
