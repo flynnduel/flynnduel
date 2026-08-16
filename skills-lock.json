@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "aistro": {
+      "source": "ArcBlock/aistro-skills",
+      "sourceType": "github",
+      "skillPath": "skills/aistro/SKILL.md",
+      "computedHash": "a63ee4b96b3084853cb18fc08700c3c7acfcc46e775acf6f629b50580222f29d"
+    }
+  }
+}

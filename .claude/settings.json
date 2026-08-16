@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "aistro-skills": {
+      "source": {
+        "source": "github",
+        "repo": "ArcBlock/aistro-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "aistro@aistro-skills": true
+  }
+}
