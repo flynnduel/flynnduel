@@ -113,3 +113,35 @@ test('act routes to room, chat is pushed; rate limit', async () => {
     assert.strictEqual((await h.emit(c, 'act', { type: 'chat', text: 'x' })).error, 'Not now');
   } finally { await h.done(); }
 });
+
+test('same socket joining twice with same token stays connected', async () => {
+  const h = await boot();
+  try {
+    const a = await h.connect(); const b = await h.connect();
+    const ra = await h.emit(a, 'create', { name: 'Ann', token: 'ta' });
+    await h.emit(b, 'join', { code: ra.code, name: 'Bob', token: 'tb' });
+    const r = await h.emit(a, 'join', { code: ra.code, name: 'Ann', token: 'ta' });
+    assert.strictEqual(r.playerId, ra.playerId);
+    await new Promise((res) => setTimeout(res, 100));
+    assert.ok(last(b).players.find((p) => p.id === ra.playerId).connected);
+    assert.ok(last(a).players.find((p) => p.id === ra.playerId).connected);
+    assert.ok((await h.emit(a, 'act', { type: 'chat', text: 'still here' })).ok);
+  } finally { await h.done(); }
+});
+
+test('wake scheduler does not tight-loop on stale nextWakeAt', async () => {
+  const { Rooms } = require('../server/rooms');
+  const rooms = new Rooms();
+  const srv = await createServer({ port: 0, host: '127.0.0.1', rooms });
+  const room = rooms.create();
+  let ticks = 0;
+  room.nextWakeAt = () => Date.now() - 1000;
+  room.tick = () => { ticks++; return false; };
+  const s = io('http://127.0.0.1:' + srv.port, { transports: ['websocket'], forceNew: true });
+  try {
+    await new Promise((res) => s.on('connect', res));
+    await new Promise((res) => s.emit('join', { code: room.code, name: 'A', token: 't' }, res));
+    await new Promise((res) => setTimeout(res, 400));
+    assert.ok(ticks >= 2 && ticks <= 10, 'ticks=' + ticks);
+  } finally { s.close(); await srv.close(); }
+});

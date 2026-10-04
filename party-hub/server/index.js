@@ -42,7 +42,7 @@ function createServer({ port = 3000, host = '0.0.0.0', rooms = new Rooms() } = {
   const sockets = new Map(); // room -> Map(playerId -> socket)
   const timers = new Map(); // room -> { timer, at }
 
-  const push = (room) => {
+  const push = (room, afterTick = false) => {
     const bound = sockets.get(room);
     if (bound) {
       for (const [id, s] of bound) {
@@ -53,10 +53,10 @@ function createServer({ port = 3000, host = '0.0.0.0', rooms = new Rooms() } = {
     } else {
       room.takeFx();
     }
-    schedule(room);
+    schedule(room, afterTick);
   };
 
-  function schedule(room) {
+  function schedule(room, afterTick = false) {
     const at = room.nextWakeAt();
     const cur = timers.get(room);
     if (cur && cur.at === at) return;
@@ -66,8 +66,8 @@ function createServer({ port = 3000, host = '0.0.0.0', rooms = new Rooms() } = {
     const timer = setTimeout(() => {
       timers.delete(room);
       room.tick();
-      push(room);
-    }, Math.max(0, at - room.now()));
+      push(room, true);
+    }, Math.max(afterTick ? 50 : 0, at - room.now()));
     timer.unref();
     timers.set(room, { timer, at });
   }
@@ -88,7 +88,9 @@ function createServer({ port = 3000, host = '0.0.0.0', rooms = new Rooms() } = {
   };
 
   const bind = (socket, room, playerId) => {
-    unbind(socket, { disconnectPlayer: true });
+    const prev = bySocket.get(socket.id);
+    const same = prev && prev.room === room && prev.playerId === playerId;
+    if (!same) unbind(socket, { disconnectPlayer: true });
     let m = sockets.get(room);
     if (!m) sockets.set(room, (m = new Map()));
     const old = m.get(playerId);
