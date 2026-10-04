@@ -185,5 +185,22 @@ with `expiresAt` so they survive a refresh; the rest are one-shot `fx` events.
   Jester troll menu, a trick firing, parade, confetti; no horizontal scroll; no
   console errors.
 
-## 10. Out of scope
+## 10. One clue pass and the imposter's word bank
+
+- **One clue pass:** every round has exactly one clue each, then discussion. The
+  "Clue rounds" (passes) setting is removed from the lobby and rules panel;
+  `settings.passes` is fixed at 1 and `setSettings` ignores `passes`.
+- **Word bank (16 words):** each round the server builds `round.wordBank`: the secret
+  word plus 15 other words from the same category, shuffled. Every category (including
+  the secret ones) has at least 16 words; "Inside Jokes" gains 6 more party words.
+- The **imposter sees the grid all round** (on their role card area and on the guess
+  screen) so they can bluff clues that fit. Crew and Jester do not see it during the
+  round. On the result screen everyone sees the grid with the secret word highlighted
+  and the imposter's pick marked.
+- **Guess by tapping:** in `guess`, the imposter taps one word from the grid.
+  `submitGuess` accepts only a word in `round.wordBank` (`'Pick a word from the list'`);
+  correct means it equals the secret word. Typed guesses and the v1 typo tolerance are
+  no longer used for the guess (the v1 rule stays in `rules.js` unused by the guess).
+
+## 11. Out of scope
 Close-word (Undercover) mode, hot seat, custom trick authoring, persistent stats.

@@ -14,6 +14,7 @@
 
 - All code under `imposter-game/`; run commands from there. No new npm dependencies; no network assets.
 - Every `Game` mutator returns `{ ok: true, ... }` or `{ ok: false, error }`; never throws on user input. Non-string user text is treated as `''`.
+- One clue pass per round (`settings.passes` fixed at 1). Imposter word bank: exactly **16** words, guess by tapping one.
 - Verdict timeline: drumroll **1500 ms**, **1200 ms** per vote flip, last words **10000 ms**, stamp **1500 ms**, tie banner **2000 ms**.
 - Accusation cooldown **2000 ms**; feed keeps last **6** events.
 - Jester: setting `jester` default **false**; only with **≥ 5** round players; **+3**; knows the word; no guess.
@@ -49,6 +50,22 @@
 | `public/fx.js`, `public/sound.js` | new: effects layer, synthesized audio |
 | `public/index.html`, `public/style.css` | layers, panels, animations |
 | `README.md` | v2 features |
+
+---
+
+### Task 0: One clue pass + imposter word bank (spec §10)
+
+**Files:** modify `server/words.js`, `server/game.js`, `server/view.js`; tests `test/words.test.js`, `test/game.round.test.js`, `test/game.lobby.test.js`, `test/view.test.js`, `test/smoke.test.js`.
+
+**Interfaces:**
+- `words.js`: `SECRET.insideJokes.words` grows to 16 (add e.g. `'Karaoke Night'`, `'Selfie'`, `'Pizza Party'`, `'Sleepover'`, `'Group Project'`, `'Road Snacks'`). `bankFor(category: string, word: string, rng, size = 16): string[]` — the word plus `size−1` other distinct words from that category (normal or secret, looked up by display name), Fisher–Yates shuffled with `rng`.
+- `Game`: `settings.passes` fixed at 1 (constructor), `setSettings` ignores `passes` (no error). `startRound` sets `round.wordBank = bankFor(category, word, rng)`. `submitGuess(id, text)`: `text` must be one of `round.wordBank` (exact string) else `'Pick a word from the list'` (round continues); `guessCorrect = text === round.word`.
+- View: `round.wordBank` — imposter's own view during the round, and everyone's in `result`/`gameover`; otherwise `null`.
+
+- [ ] **Step 1: Write failing tests:** `every category has 16+ words` (normal and secret); `bankFor has 16 distinct incl word, all from category`; `round deals a word bank`; `imposter guesses by tapping` (`'pasta'` not in bank → `'Pick a word from the list'`; a decoy from the bank → outcome `caught`; the word → `stole`); `wordBank only in imposter view until result`; `passes fixed at 1` (`setSettings(leader, {passes: 3})` ok but `settings.passes === 1`; 4 players → 4 clues then `discussion`).
+- [ ] **Step 2: Update existing tests** that rely on passes 2/3 or typed guesses: lobby `settings` test (defaults `{ passes: 1, target: 10 }`, passes errors removed), round `clue turn order and passes` (one pass), guesses `'piza'`/`'pasta'` → use `round.word` / a decoy from `round.wordBank`; view `result reveals all` guess; smoke guess `'pizza'` → `'Pizza'` (stub `pickWord` category `'Food'` must exist in the bank — use `{ category: 'Food', word: 'Pizza' }`).
+- [ ] **Step 3: Run** → FAIL. **Step 4: Implement.** **Step 5: Run** `npm test` → pass.
+- [ ] **Step 6: Commit** `"imposter-game v2: one clue pass, imposter word bank"`
 
 ---
 
@@ -203,7 +220,8 @@
 
 - [ ] **Step 1: Structure.** `index.html` adds: `#fx` (fixed full-screen, `pointer-events:none` except bubbles), `#chat` slide-up panel (outside `#app`, so re-renders never touch its input) with message list, input, reaction row, unread badge on a 💬 header button; 🔇 header button; `#volume` full-screen prompt.
 - [ ] **Step 2: Screens in `app.js`:**
-  - Lobby: Jester toggle (leader; note "Jester mode needs 5+ players" when on and < 5 connected); 🔊 Test sound.
+  - Lobby: remove the Clue rounds setting; Jester toggle (leader; note "Jester mode needs 5+ players" when on and < 5 connected); 🔊 Test sound.
+  - Imposter word bank: 4×4 grid under the imposter's role card during the round; on the guess screen the grid is the guess input (tap → `guess{text}`); on result everyone sees it with the secret highlighted and the pick marked.
   - Role card: jester variant "You are the JESTER 🃏 — you know the word. Get yourself voted out to win."
   - Accuse board (clues/discussion/vote, read-only in verdict/result): each round player as a row with heat bar and 🔥 count, nickname (effects), swapped names applied, feed of last 6; tap row → `accuse`.
   - Verdict: computes `elapsed = Date.now() + (serverNow_at_receipt − receiptLocalTime) − startedAt` to decide flipped count, tie banner, last-words countdown and stamp; re-renders itself every 250 ms with `requestAnimationFrame`-driven timer while in verdict; leader Continue.
