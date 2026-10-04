@@ -18,6 +18,7 @@ class Room {
     this.emptySince = null; // Rooms.create stamps it so never-joined rooms get swept too
     this.chatLog = [];
     this.chatPaused = false; // later tasks flip this during talk phases
+    this.fx = [];
     this._nextId = 1;
     this._lastChatAt = new Map();
   }
@@ -146,6 +147,21 @@ class Room {
   getPhoto(id) {
     const p = this.players.get(id);
     return p && p.avatar.kind === 'photo' ? p.avatar.data : null;
+  }
+
+  // Extension points for later tasks: effects to broadcast, timer wake-up, timer tick.
+  takeFx() {
+    const out = this.fx;
+    this.fx = [];
+    return out;
+  }
+
+  nextWakeAt() {
+    return null;
+  }
+
+  tick() {
+    return false;
   }
 
   // Extension point: later tasks add lobby/game actions here.
