@@ -279,3 +279,40 @@ test('settings locked after start', () => {
   s.g.startGame(s.leader);
   assert.deepEqual(s.g.setSettings(s.leader, { passes: 3 }), { ok: false, error: 'Not now' });
 });
+
+test('imposter gone during guess → leader can cancel round', () => {
+  const s = setup();
+  const newLeaderGame = s.g;
+  catchImposter(s);
+  newLeaderGame.disconnect(s.imp);
+  assert.equal(newLeaderGame.canCancel(), true);
+  const leader = newLeaderGame.players.find((p) => p.isLeader).id;
+  assert.equal(newLeaderGame.cancelRound(s.crew[2]).ok, s.crew[2] === leader);
+  if (s.crew[2] !== leader) assert.equal(newLeaderGame.cancelRound(leader).ok, true);
+  assert.equal(newLeaderGame.phase, 'result');
+  assert.equal(newLeaderGame.round.outcome, 'cancelled');
+  for (const id of s.ids) assert.equal(score(newLeaderGame, id), 0);
+});
+
+test('cannot cancel a healthy round', () => {
+  const s = setup();
+  toVote(s);
+  assert.equal(s.g.canCancel(), false);
+  assert.deepEqual(s.g.cancelRound(s.leader), { ok: false, error: 'Not now' });
+});
+
+test('paused round can be cancelled and newcomers dealt in', () => {
+  const s = setup({ n: 3 });
+  toDiscussion(s);
+  s.g.disconnect(s.crew[1]);
+  assert.equal(s.g.paused, true);
+  const n1 = s.g.join('New1', 'n1').playerId;
+  s.g.join('New2', 'n2');
+  assert.equal(s.g.paused, true);
+  assert.equal(s.g.cancelRound(s.leader).ok, true);
+  assert.equal(s.g.phase, 'result');
+  assert.equal(s.g.paused, false); // 4 connected incl. waiting players
+  assert.equal(s.g.nextRound(s.leader).ok, true);
+  assert.equal(s.g.phase, 'reveal');
+  assert.ok(s.g.round.playerIds.includes(n1));
+});

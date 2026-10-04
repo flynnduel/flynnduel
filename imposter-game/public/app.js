@@ -24,10 +24,11 @@
 
   const socket = io();
 
+  let myName = null; // kept in memory too, so reconnects work without storage
+
   socket.on('connect', () => {
-    const name = store.get('imposter.name');
-    if (view && name) join(name, true);
-    else if (!view && name && store.get('imposter.joined') === '1') join(name, true);
+    if (view && myName) join(myName, true);
+    else if (!view && store.get('imposter.name') && store.get('imposter.joined') === '1') join(store.get('imposter.name'), true);
   });
   socket.on('view', (v) => {
     // Hide the role card whenever the phase changes so the word never lingers on screen.
@@ -42,13 +43,20 @@
     socket.emit('join', { name, token }, (res) => {
       if (res.ok) {
         joinError = '';
-        store.set('imposter.name', name.trim());
+        myName = name.trim();
+        store.set('imposter.name', myName);
         store.set('imposter.joined', '1');
       } else if (!silent) {
         joinError = res.error;
         render();
       } else {
+        // Couldn't get our seat back: show the Join screen instead of a frozen game.
         store.set('imposter.joined', '0');
+        if (view) {
+          view = null;
+          joinError = res.error;
+          render();
+        }
       }
     });
   }
@@ -90,7 +98,11 @@
   }
 
   function screen() {
-    const paused = view.paused ? '<div class="banner paused">Waiting for players to reconnect…</div>' : '';
+    let paused = view.paused ? '<div class="banner paused">Waiting for players to reconnect…</div>' : '';
+    if (view.canCancel) {
+      paused += view.paused ? '' : '<div class="banner paused">The imposter left the game.</div>';
+      paused += leaderBtn('Cancel this round (no points)', 'cancelRound', 'danger');
+    }
     if (view.me.waiting) return paused + waitingScreen();
     const screens = {
       lobby: lobbyScreen, reveal: revealScreen, clues: cluesScreen, discussion: discussionScreen,

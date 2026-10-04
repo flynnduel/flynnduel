@@ -254,6 +254,10 @@ are attached to the round so every screen shows the same banners. 7 is client-on
   is cancelled, no points, leader taps Next round.
 - **Fewer than 3 connected players** after the game starts: play pauses with a
   banner until someone rejoins or new players are dealt in at the next round.
+- **Round can't continue** (play is paused, or the imposter is disconnected at any
+  point mid-round, including during their guess): the leader sees **Cancel this round**,
+  which ends it as cancelled with no points. On the result screen, newcomers waiting
+  to be dealt in count toward the 3-player minimum, so Next round can deal them in.
 - **Mid-round joins:** placed in `waiting`, dealt in at the next round.
 - **Names:** 1–16 characters, trimmed, unique case-insensitively among connected
   players.

@@ -113,3 +113,11 @@ test('lobby view', () => {
   assert.deepEqual(v.me, { id: ids[1], name: 'Ben', isLeader: false, waiting: false });
   assert.equal(v.players.length, 4);
 });
+
+test('view exposes canCancel when imposter is gone', () => {
+  const { g, imp, crew } = setup();
+  g.startGame(imp);
+  assert.equal(viewFor(g, crew[0]).canCancel, false);
+  g.disconnect(imp);
+  assert.equal(viewFor(g, crew[0]).canCancel, true);
+});

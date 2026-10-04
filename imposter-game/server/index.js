@@ -21,6 +21,7 @@ const ACTIONS = {
   closeVote: (g, id) => g.closeVote(id),
   guess: (g, id, a) => g.submitGuess(id, a.text),
   nextRound: (g, id) => g.nextRound(id),
+  cancelRound: (g, id) => g.cancelRound(id),
   newGame: (g, id) => g.newGame(id),
   startGame: (g, id) => g.startGame(id),
   settings: (g, id, a) => g.setSettings(id, {

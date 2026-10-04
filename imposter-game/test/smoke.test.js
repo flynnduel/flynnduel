@@ -84,3 +84,17 @@ test('three players play a full round over sockets', async () => {
     await server.close();
   }
 });
+
+test('cancelRound action is wired', async () => {
+  const game = new Game();
+  const server = await createServer({ port: 0, game, host: '127.0.0.1' });
+  const c = io(`http://127.0.0.1:${server.port}`, { forceNew: true, transports: ['websocket'] });
+  try {
+    await new Promise((r) => c.on('connect', r));
+    await c.emitWithAck('join', { name: 'Solo', token: 's' });
+    assert.deepEqual(await c.emitWithAck('action', { type: 'cancelRound' }), { ok: false, error: 'Not now' });
+  } finally {
+    c.disconnect();
+    await server.close();
+  }
+});

@@ -60,6 +60,7 @@ function viewFor(game, playerId) {
       inRound: Boolean(r && r.playerIds.includes(p.id)),
     })),
     canSkip: game.canSkip(),
+    canCancel: game.canCancel(),
     round: roundView(game, playerId),
     winners: game.phase === 'gameover' && game.winners ? [...game.winners] : null,
     gameEggs: game.phase === 'gameover' ? game.gameEggs.map((e) => EGG_TEXT[e]) : [],

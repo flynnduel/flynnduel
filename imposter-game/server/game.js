@@ -58,6 +58,8 @@ class Game {
 
   get paused() {
     if (!this.inPlay || !this.round) return false;
+    // Between rounds, newcomers waiting to be dealt in count toward the minimum.
+    if (this.phase === 'result') return this.connectedPlayers().length < MIN_PLAYERS;
     const connected = this.round.playerIds.filter((id) => this.player(id).connected);
     return connected.length < MIN_PLAYERS;
   }
@@ -356,6 +358,20 @@ class Game {
     this.scoreHistory.push(Object.fromEntries(this.players.map((p) => [p.id, p.score])));
     r.eggs = roundEggs(r);
     this.phase = 'result';
+  }
+
+  // A round that can't continue (too few players, or the imposter is gone) can be
+  // cancelled by the leader: no points, like the imposter-left rule in spec §7.
+  canCancel() {
+    if (!['reveal', 'clues', 'discussion', 'vote', 'guess'].includes(this.phase)) return false;
+    return this.paused || !this.player(this.round.imposterId).connected;
+  }
+
+  cancelRound(id) {
+    if (!this.isLeader(id)) return fail(ERR.leader);
+    if (!this.canCancel()) return fail(ERR.notNow);
+    this.finishRound('cancelled');
+    return { ok: true };
   }
 
   nextRound(id) {
