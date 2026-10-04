@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- All code under `imposter-game/`; run commands from there. No new npm dependencies; no network assets.
+- All code under `src/imposter-game/`; run commands from there. No new npm dependencies; no network assets.
 - Every `Game` mutator returns `{ ok: true, ... }` or `{ ok: false, error }`; never throws on user input. Non-string user text is treated as `''`.
 - One clue pass per round (`settings.passes` fixed at 1). Imposter word bank: exactly **16** words, guess by tapping one.
 - Verdict timeline: drumroll **1500 ms**, **1200 ms** per vote flip, last words **10000 ms**, stamp **1500 ms**, tie banner **2000 ms**.

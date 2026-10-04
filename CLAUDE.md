@@ -11,7 +11,7 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 - **Build System**: none; `npm start` runs, `npm test` (`node --test`) tests
 - **Asset Pipeline**: SVG drawn in code, Web Audio synthesized sounds, bundled open-license font
 
-> **Note**: This repo holds web party games (`imposter-game/`, `party-hub/`).
+> **Note**: This repo holds web party games (`src/imposter-game/`, `src/party-hub/`).
 > The Godot/Unity/Unreal specialist agents do not apply; use the design, UX,
 > QA, audio, narrative, production and general programming agents.
 > Active work is specified in `docs/superpowers/specs/` and planned in

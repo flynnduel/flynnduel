@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- All code lives under `imposter-game/`. Run every command from that folder.
+- All code lives under `src/imposter-game/`. Run every command from that folder.
 - 3–12 players; exactly one imposter per round, uniformly random each round.
 - Settings: passes ∈ {1,2,3} default **2**; target ∈ 3..30 default **10**; locked once a game starts.
 - Scoring: escaped → imposter +2; accused + correct guess → imposter +1; accused + wrong guess → each crew member of that round +2; cancelled → nobody.
@@ -54,8 +54,8 @@ All `Game` mutators return `{ ok: true, ...extra }` or `{ ok: false, error: stri
 ### Task 1: Scaffold + `rules.js`
 
 **Files:**
-- Create: `imposter-game/package.json`, `imposter-game/.gitignore` (`node_modules/`), `imposter-game/server/rules.js`
-- Test: `imposter-game/test/rules.test.js`
+- Create: `src/imposter-game/package.json`, `src/imposter-game/.gitignore` (`node_modules/`), `src/imposter-game/server/rules.js`
+- Test: `src/imposter-game/test/rules.test.js`
 
 **Interfaces:**
 - Produces (all exported from `server/rules.js`):
@@ -132,8 +132,8 @@ test('scoreRound', () => {
 ### Task 2: Word bank `words.js`
 
 **Files:**
-- Create: `imposter-game/server/words.js`
-- Test: `imposter-game/test/words.test.js`
+- Create: `src/imposter-game/server/words.js`
+- Test: `src/imposter-game/test/words.test.js`
 
 **Interfaces:**
 - Produces:
@@ -185,8 +185,8 @@ test('pickWord never repeats until exhausted', () => {
 ### Task 3: `Game` — players, lobby, leader, settings
 
 **Files:**
-- Create: `imposter-game/server/game.js`
-- Test: `imposter-game/test/game.lobby.test.js`
+- Create: `src/imposter-game/server/game.js`
+- Test: `src/imposter-game/test/game.lobby.test.js`
 
 **Interfaces:**
 - Consumes: `pickWord` (Task 2) — injected so tests control words.
@@ -218,8 +218,8 @@ test('pickWord never repeats until exhausted', () => {
 ### Task 4: `Game` — round flow, voting, guess, scoring, game over
 
 **Files:**
-- Modify: `imposter-game/server/game.js`
-- Test: `imposter-game/test/game.round.test.js`
+- Modify: `src/imposter-game/server/game.js`
+- Test: `src/imposter-game/test/game.round.test.js`
 
 **Interfaces:**
 - Consumes: Task 1 `validateClue`, `isCorrectGuess`, `tallyVotes`, `scoreRound`; Task 3 `Game`.
@@ -267,8 +267,8 @@ test('pickWord never repeats until exhausted', () => {
 ### Task 5: Easter eggs `eggs.js`
 
 **Files:**
-- Modify: `imposter-game/server/eggs.js`
-- Test: `imposter-game/test/eggs.test.js`
+- Modify: `src/imposter-game/server/eggs.js`
+- Test: `src/imposter-game/test/eggs.test.js`
 
 **Interfaces:**
 - Produces:
@@ -291,8 +291,8 @@ test('pickWord never repeats until exhausted', () => {
 ### Task 6: `view.js` — per-player redaction
 
 **Files:**
-- Create: `imposter-game/server/view.js`
-- Test: `imposter-game/test/view.test.js`
+- Create: `src/imposter-game/server/view.js`
+- Test: `src/imposter-game/test/view.test.js`
 
 **Interfaces:**
 - Consumes: `Game` (Tasks 3–5), `EGG_TEXT`.
@@ -336,8 +336,8 @@ View = {
 ### Task 7: Server wiring `index.js` + smoke test
 
 **Files:**
-- Create: `imposter-game/server/index.js`
-- Test: `imposter-game/test/smoke.test.js`
+- Create: `src/imposter-game/server/index.js`
+- Test: `src/imposter-game/test/smoke.test.js`
 
 **Interfaces:**
 - Consumes: `Game`, `viewFor`, `EGG_TEXT`.
@@ -361,7 +361,7 @@ View = {
 ### Task 8: Client UI, rules panel, client easter egg, README
 
 **Files:**
-- Create: `imposter-game/public/index.html`, `imposter-game/public/app.js`, `imposter-game/public/style.css`, `imposter-game/README.md`
+- Create: `src/imposter-game/public/index.html`, `src/imposter-game/public/app.js`, `src/imposter-game/public/style.css`, `src/imposter-game/README.md`
 
 **Interfaces:**
 - Consumes: the Task 7 socket protocol and the `View` shape (Task 6). Socket.IO client script from `/socket.io/socket.io.js`.

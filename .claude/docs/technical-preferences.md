@@ -10,31 +10,31 @@
 
 ## Engine & Language
 
-- **Engine**: [TO BE CONFIGURED — run /setup-engine]
-- **Language**: [TO BE CONFIGURED]
-- **Rendering**: [TO BE CONFIGURED]
-- **Physics**: [TO BE CONFIGURED]
+- **Engine**: Web (no engine) — Node.js 20+ server + browser client
+- **Language**: JavaScript (CommonJS server, plain ES modules in the browser, no build step)
+- **Rendering**: Browser DOM + inline SVG + Canvas (confetti)
+- **Physics**: None
 
 ## Input & Platform
 
 <!-- Written by /setup-engine. Read by /ux-design, /ux-review, /test-setup, /team-ui, and /dev-story -->
 <!-- to scope interaction specs, test helpers, and implementation to the correct input methods. -->
 
-- **Target Platforms**: [TO BE CONFIGURED — e.g., PC, Console, Mobile, Web]
-- **Input Methods**: [TO BE CONFIGURED — e.g., Keyboard/Mouse, Gamepad, Touch, Mixed]
-- **Primary Input**: [TO BE CONFIGURED — the dominant input for this game]
-- **Gamepad Support**: [TO BE CONFIGURED — Full / Partial / None]
-- **Touch Support**: [TO BE CONFIGURED — Full / Partial / None]
-- **Platform Notes**: [TO BE CONFIGURED — any platform-specific UX constraints]
+- **Target Platforms**: Web (phones and laptops, any modern browser)
+- **Input Methods**: Touch, Mouse/Keyboard
+- **Primary Input**: Touch (phones are the controllers)
+- **Gamepad Support**: None
+- **Touch Support**: Full
+- **Platform Notes**: Mobile-first 360–1280 px, no horizontal scroll, buttons ≥ 44 px, no hover-only interactions
 
 ## Naming Conventions
 
-- **Classes**: [TO BE CONFIGURED]
-- **Variables**: [TO BE CONFIGURED]
-- **Signals/Events**: [TO BE CONFIGURED]
-- **Files**: [TO BE CONFIGURED]
-- **Scenes/Prefabs**: [TO BE CONFIGURED]
-- **Constants**: [TO BE CONFIGURED]
+- **Classes**: PascalCase (`Room`, `Rooms`)
+- **Variables**: camelCase
+- **Signals/Events**: camelCase Socket.IO event names (`join`, `act`, `view`, `fx`)
+- **Files**: kebab-case (`secret-hitler.js`)
+- **Scenes/Prefabs**: kebab-case client screen modules under `public/js/`
+- **Constants**: SCREAMING_SNAKE (`MAX_PLAYERS`)
 
 ## Performance Budgets
 
@@ -45,7 +45,7 @@
 
 ## Testing
 
-- **Framework**: [TO BE CONFIGURED]
+- **Framework**: node:test + node:assert/strict (`npm test`); Playwright screenshots for UI checks
 - **Minimum Coverage**: [TO BE CONFIGURED]
 - **Required Tests**: Balance formulas, gameplay systems, networking (if applicable)
 
@@ -57,7 +57,7 @@
 ## Allowed Libraries / Addons
 
 <!-- Add approved third-party dependencies here -->
-- [None configured yet — add as dependencies are approved]
+- express, socket.io, socket.io-client (dev), qrcode-terminal, cloudflared, @dicebear/core + @dicebear/collection (lorelei/notionists, CC0 art), @fontsource/fredoka (OFL)
 
 ## Architecture Decisions Log
 
@@ -70,12 +70,12 @@
 <!-- Read by /code-review, /architecture-decision, /architecture-review, and team skills -->
 <!-- to know which specialist to spawn for engine-specific validation. -->
 
-- **Primary**: [TO BE CONFIGURED — run /setup-engine]
-- **Language/Code Specialist**: [TO BE CONFIGURED]
-- **Shader Specialist**: [TO BE CONFIGURED]
-- **UI Specialist**: [TO BE CONFIGURED]
-- **Additional Specialists**: [TO BE CONFIGURED]
-- **Routing Notes**: [TO BE CONFIGURED]
+- **Primary**: gameplay-programmer (no engine specialist applies)
+- **Language/Code Specialist**: gameplay-programmer
+- **Shader Specialist**: technical-artist (SVG/CSS/Canvas effects)
+- **UI Specialist**: ui-programmer
+- **Additional Specialists**: network-programmer (Socket.IO, tunnel), security-engineer (public rooms, input validation)
+- **Routing Notes**: Web project — Godot/Unity/Unreal specialists do not apply.
 
 ### File Extension Routing
 
@@ -84,9 +84,9 @@
 
 | File Extension / Type | Specialist to Spawn |
 |-----------------------|---------------------|
-| Game code (primary language) | [TO BE CONFIGURED] |
-| Shader / material files | [TO BE CONFIGURED] |
-| UI / screen files | [TO BE CONFIGURED] |
-| Scene / prefab / level files | [TO BE CONFIGURED] |
+| Game code (primary language) | gameplay-programmer |
+| Shader / material files | technical-artist |
+| UI / screen files | ui-programmer |
+| Scene / prefab / level files | ui-programmer |
 | Native extension / plugin files | [TO BE CONFIGURED] |
 | General architecture review | Primary |

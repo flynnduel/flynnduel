@@ -2,7 +2,7 @@
 
 Date: 2026-10-04
 Status: Draft for review
-Location of code: `imposter-game/` in this repo
+Location of code: `src/imposter-game/` in this repo
 
 ## 1. Purpose
 
@@ -125,7 +125,7 @@ clues like "pear" for "bear").
 
 ### 3.2 File layout
 ```
-imposter-game/
+src/imposter-game/
   package.json         deps: express, socket.io, qrcode-terminal
                        devDeps: socket.io-client (smoke test only)
                        scripts: start, test (node --test)
@@ -295,7 +295,7 @@ Page fetches were blocked in the research environment; rules were taken from
 search summaries of:
 - The Chameleon (party game) — https://en.wikipedia.org/wiki/The_Chameleon_(party_game)
 - How to Play Imposter Game — https://playimposter.com/guide/
-- How to play Imposter — https://imposter.app/how-to-play-imposter-game/
+- How to play Imposter — https://imposter.app/how-to-play-src/imposter-game/
 - Imposter game tips — https://imposter.app/imposter-game-tips/
 - Undercover for Beginners — https://yanstarstudio.com/undercover-how-to-play
 - Imposter tutorial — https://gameonfamily.com/blogs/tutorials/imposter

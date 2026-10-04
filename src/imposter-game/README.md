@@ -9,7 +9,7 @@ laptop; one computer runs the game.
 You need [Node.js](https://nodejs.org) 20 or newer.
 
 ```bash
-cd imposter-game
+cd src/imposter-game
 npm install      # first time only
 npm start
 ```

@@ -2,7 +2,7 @@
 
 Date: 2026-10-04
 Status: Draft for review
-Code location: `party-hub/` (new). `imposter-game/` is unchanged.
+Code location: `src/party-hub/` (new). `src/imposter-game/` is unchanged.
 
 ## 1. Purpose
 
@@ -283,7 +283,7 @@ nothing targeting protected groups. Default enabled: Classic + Pop Culture.
 ## 11. Architecture
 
 ```
-party-hub/
+src/party-hub/
   server/
     index.js      Express + Socket.IO, static files, tunnel start, QR
     tunnel.js     cloudflared quick tunnel with graceful fallback

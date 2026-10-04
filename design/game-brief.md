@@ -1,7 +1,7 @@
 # Game Brief: Party Night
 
 <!-- Detailed rules and decisions: docs/superpowers/specs/2026-10-04-party-hub-design.md
-     Build plan: docs/superpowers/plans/2026-10-04-party-hub.md (code lives in party-hub/) -->
+     Build plan: docs/superpowers/plans/2026-10-04-party-hub.md (code lives in src/party-hub/) -->
 
 **One-sentence pitch:** One room code pulls your friends in from anywhere for a night of faithful party classics — Wavelength, Codenames, Secret Hitler — with a vote on every next game, trash talk out loud, and a leaderboard that ends in a ridiculous awards show.
 
