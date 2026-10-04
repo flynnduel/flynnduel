@@ -69,10 +69,26 @@ try another"), so a rejection never reveals the role. *(Accepted risk: an impost
 whose clue is rejected learns it was close to the word. This is rare and funny.)*
 
 ### 2.4 Imposter's guess matching
-The guess is correct if, after trimming, lowercasing, removing a leading
-`a ` / `an ` / `the `, removing spaces, hyphens and apostrophes, and stripping a
-trailing `s` / `es`, it equals the secret word treated the same way
-("icecream" matches "Ice Cream").
+Typing mistakes should never cost the imposter a correct guess. Both the guess and
+the secret word are normalized: trim, lowercase, remove a leading
+`a ` / `an ` / `the `, remove spaces, hyphens and apostrophes, and strip a trailing
+`s` / `es`. Capitals never matter ("PIZZA", "Pizza", "pizza" all match), and
+"icecream" matches "Ice Cream".
+
+Spelling errors are then tolerated by edit distance (Damerau–Levenshtein: an insert,
+delete, substitution, or swap of two adjacent letters each counts as 1) between the
+normalized strings, scaled to the word's length:
+
+| Normalized secret word length | Max allowed distance | Example accepted |
+|---|---|---|
+| 1–3 letters | 0 (exact) | "cat" only |
+| 4–7 letters | 1 | "piza", "pizzza", "ipzza" (swap); "pisa" is rejected (2) |
+| 8+ letters | 2 | "elefant" for "elephant", "spagetti" for "spaghetti" |
+
+The result screen shows what was typed and whether it was accepted, e.g.
+`Guessed "piza" — close enough ✓`. Spelling tolerance applies **only to the
+imposter's guess**, not to clue validation (where fuzzy matching would wrongly block
+clues like "pear" for "bear").
 
 ### 2.5 Scoring
 | Outcome | Imposter | Each crew member |
@@ -167,7 +183,11 @@ No other code path emits game state to sockets.
 
 Every screen has a header with the game name, the player's name, and a **?** button.
 
-- **Join:** name field + Join. Shows "Game in progress, you'll be dealt in next round"
+- **Join:** the first screen anyone sees when opening the link. A name field
+  (autofocused, 1–16 characters, Enter submits) + Join button. Errors show inline
+  under the field ("That name is taken", "Enter a name"). After joining, the player
+  appears in every lobby list instantly. A returning device pre-fills its last name.
+  Shows "Game in progress, you'll be dealt in next round"
   if joining mid-round.
 - **Lobby:** player list (crown on leader), settings (leader edits, others read),
   Start game (enabled at 3+ connected players).
@@ -245,7 +265,8 @@ are attached to the round so every screen shows the same banners. 7 is client-on
 
 ## 8. Testing
 - `rules.test.js`: clue validation (word, plurals, substrings, spaces, length),
-  guess matching (case, articles, plurals), tally with ties, scoring for all three
+  guess matching (case, articles, plurals, spaces; typos at each length tier
+  including adjacent swaps; near-misses just over the limit rejected), tally with ties, scoring for all three
   outcomes.
 - `game.test.js`: full rounds with 3–6 fake players: imposter not accused,
   accused + correct guess, accused + wrong guess, tie → revote resolved,
@@ -255,7 +276,8 @@ are attached to the round so every screen shows the same banners. 7 is client-on
   and no player's view contains another player's role or vote before the reveal.
 - `eggs.test.js`: each egg triggers on its condition and not otherwise.
 - `smoke.test.js`: start the real server on a random port, connect 3
-  `socket.io-client`s, play one round end to end.
+  `socket.io-client`s that join with names (including a rejected duplicate name),
+  and play one round end to end.
 - Manual: run locally, screenshot each phase at phone (390 px) and laptop
   (1280 px) widths.
 
