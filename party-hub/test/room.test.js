@@ -166,3 +166,44 @@ test('act dispatches chat/setAvatar and rejects unknown', () => {
   assert.deepEqual(room.act('ghost', { type: 'chat', text: 'x' }), { ok: false, error: 'Not now' });
   assert.deepEqual(room.act(a.playerId, null), { ok: false, error: 'Not now' });
 });
+
+test('returning player with a now-taken name gets a suffix and keeps the seat', () => {
+  const { room } = mk();
+  const a = room.join({ name: 'Ann', token: 'ta' });
+  room.disconnect(a.playerId);
+  const b = room.join({ name: 'Bob', token: 'tb' });
+  room.join({ name: 'ann', token: 'tc' });
+  assert.deepEqual(room.reconnect('ta'), { ok: true, playerId: a.playerId });
+  assert.equal(room.players.get(a.playerId).name, 'Ann 2');
+  assert.equal(room.join({ name: 'Ann', token: 'ta' }).playerId, a.playerId);
+  void b;
+});
+
+test('suffix respects the 16 char limit', () => {
+  const { room } = mk();
+  const long = 'x'.repeat(16);
+  const a = room.join({ name: long, token: 'ta' });
+  room.disconnect(a.playerId);
+  room.join({ name: long, token: 'tb' });
+  room.reconnect('ta');
+  const n = room.players.get(a.playerId).name;
+  assert.equal(n.length, 16);
+  assert.ok(n.endsWith(' 2'));
+});
+
+test('disconnect on an already-disconnected player is a no-op', () => {
+  const { room, clock } = mk();
+  const a = room.join({ name: 'Ann', token: 'ta' });
+  clock.t = 2000;
+  room.disconnect(a.playerId);
+  clock.t = 9000;
+  assert.deepEqual(room.disconnect(a.playerId), { ok: true });
+  assert.equal(room.emptySince, 2000);
+});
+
+test('avatar: null is treated like no avatar', () => {
+  const { room } = mk();
+  const a = room.join({ name: 'Ann', token: 'ta', avatar: null });
+  assert.equal(a.ok, true);
+  assert.equal(room.players.get(a.playerId).avatar.kind, 'dicebear');
+});

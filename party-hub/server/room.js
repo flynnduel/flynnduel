@@ -48,7 +48,19 @@ class Room {
     if (best) this.hostId = best.id; // otherwise keep the old host seat until someone connects
   }
 
+  _uniqueName(p) {
+    const taken = new Set();
+    for (const o of this.players.values()) if (o !== p && o.connected) taken.add(o.name.toLowerCase());
+    if (!taken.has(p.name.toLowerCase())) return p.name;
+    for (let n = 2; ; n++) {
+      const suffix = ' ' + n;
+      const cand = p.name.slice(0, MAX_NAME - suffix.length).trimEnd() + suffix;
+      if (!taken.has(cand.toLowerCase())) return cand;
+    }
+  }
+
   _markConnected(p) {
+    if (!p.connected) p.name = this._uniqueName(p);
     p.connected = true;
     this.emptySince = null;
     this._ensureHost();
@@ -68,7 +80,7 @@ class Room {
       if (p.connected && p.name.toLowerCase() === lower) return this._err('That name is taken');
     }
     if (this.players.size >= MAX_PLAYERS) return this._err('Room is full');
-    const av = avatar === undefined ? null : validateAvatar(avatar);
+    const av = avatar == null ? null : validateAvatar(avatar);
     if (av && !av.ok) return this._err(av.error);
     const player = {
       id: 'p' + this._nextId++,
@@ -89,6 +101,7 @@ class Room {
   disconnect(id) {
     const p = this.players.get(id);
     if (!p) return NOT_NOW;
+    if (!p.connected) return { ok: true };
     p.connected = false;
     if (this._connectedCount() === 0) this.emptySince = this.now();
     this._ensureHost();
