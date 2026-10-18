@@ -2,9 +2,13 @@
   "extraKnownMarketplaces": {
     "superpowers-dev": {
       "source": { "source": "github", "repo": "obra/superpowers" }
+    },
+    "claude-plugins-official": {
+      "source": { "source": "github", "repo": "anthropics/claude-plugins-official" }
     }
   },
   "enabledPlugins": {
-    "superpowers@superpowers-dev": true
+    "superpowers@superpowers-dev": true,
+    "mattpocock-skills@claude-plugins-official": true
   }
 }
