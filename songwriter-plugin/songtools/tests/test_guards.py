@@ -34,3 +34,21 @@ def test_no_gpl_family_licenses_installed():
 def test_version_subcommand(capsys):
     assert main(["version"]) == 0
     assert '"version"' in capsys.readouterr().out
+
+
+def test_songtools_error_exit_code_and_stderr_format(monkeypatch, capsys):
+    import json
+    import sys
+    import types
+
+    from songtools import cli
+
+    def handler(args):
+        raise cli.SongtoolsError("a.txt", 3, "bad")
+
+    mod = types.ModuleType("fake_boom")
+    mod.register = lambda sub: sub.add_parser("boom").set_defaults(handler=handler)
+    monkeypatch.setitem(sys.modules, "fake_boom", mod)
+    monkeypatch.setattr(cli, "MODULES", ("fake_boom",))
+    assert cli.main(["boom"]) == 2
+    assert json.loads(capsys.readouterr().err) == {"error": "a.txt:3: bad"}

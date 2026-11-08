@@ -22,13 +22,10 @@ class SongtoolsError(Exception):
         self.message = message
 
     def __str__(self) -> str:
-        parts = []
-        if self.file is not None:
-            parts.append(str(self.file))
+        prefix = str(self.file) if self.file is not None else ""
         if self.line is not None:
-            parts.append(str(self.line))
-        parts.append(self.message)
-        return ": ".join(parts) if len(parts) > 1 else parts[0]
+            prefix = f"{prefix}:{self.line}" if prefix else str(self.line)
+        return f"{prefix}: {self.message}" if prefix else self.message
 
 
 def _version_handler(args: argparse.Namespace) -> tuple[dict, None]:
