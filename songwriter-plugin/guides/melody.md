@@ -30,7 +30,7 @@ Attribution matters here. Perricone's Melody in Songwriting excerpt and his own 
 ## Phrasing
 
 - Pattison: a phrase that starts on the downbeat, or picks up to it, is front-heavy and feels solid and stable; one that starts after the downbeat is back-heavy and feels in motion, and the later it starts the less stable. [verified]
-- In 4/4 a phrase starting after beat 3 usually acts as a pickup to the next downbeat, and count as front-heavy. [verified]
+- In 4/4 a phrase starting after beat 3 usually acts as a pickup to the next downbeat; such phrases count as front-heavy. [verified]
 - Strong and weak bars alternate. Phrasing in the weak bar (strong bar left empty) feels floaty like back-heavy phrasing, and back-heavy in a weak bar is floatier still. [verified]
 - Pattison suggests looking for downbeats and strong bars for lines you really mean, and back-heavy or weak-bar phrasing for regret or longing. [verified]
 - Offer these as options, not rules. [design]

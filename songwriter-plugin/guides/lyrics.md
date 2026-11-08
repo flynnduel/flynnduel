@@ -14,7 +14,7 @@ Rhyme is a dial of stability, not a pass/fail test. Treat the writer's rhymes as
 - A relative is a partner (same place of articulation, opposite voicing, such as t/d or f/v) or a companion (same family, same voicing). [verified]
 - Family candidates have a closeness order per family. For plosives: the partner first (t to d), then the companions (k, p), then the rest of the family (b, g). For fricatives: the companions first (f to s, sh, ch), then the partner v. [verified]
 - Offer family candidates in that order. [design]
-- Assonance can be taught through diphthong parts: a long i contains an open-a sound and an ee sound, [verified]
+- Assonance can be taught through diphthong parts: a long i contains an open-a sound and an ee sound. [verified]
 - That lets a long i rhyme by assonance with either part. [design]
 - Pattison says finding a rhyme is not the creative act. [verified]
 - So a rhyming dictionary or a candidate list is legitimate help. [design]
