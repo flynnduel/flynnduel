@@ -458,6 +458,13 @@ def to_text(result: dict) -> str:
     return ", ".join(result["names"]) or "(no matching chord name)"
 
 
+def _with_basis(handler):
+    def run(args):
+        result, text = handler(args)
+        return {**result, "basis": BASIS}, text
+    return run
+
+
 def register(subparsers) -> None:
     g = subparsers.add_parser("guitar", help="fretboard: identify, verify, V-System, capo, voicings")
     sub = g.add_subparsers(dest="guitar_command", required=True)
@@ -466,7 +473,7 @@ def register(subparsers) -> None:
     p.add_argument("shape", help="e.g. x32010, or quoted 'x 10 12 12 12 10'")
     p.add_argument("--key", default=None, help="song key, for flat spelling")
     _common(p)
-    p.set_defaults(handler=_h_identify)
+    p.set_defaults(handler=_with_basis(_h_identify))
 
     p = sub.add_parser("verify", help="does this fingering sound this chord?")
     p.add_argument("shape")
@@ -474,24 +481,24 @@ def register(subparsers) -> None:
     p.add_argument("--band-bass", action="store_true", help="a bass player covers the root")
     p.add_argument("--key", default=None)
     _common(p)
-    p.set_defaults(handler=_h_verify)
+    p.set_defaults(handler=_with_basis(_h_verify))
 
     p = sub.add_parser("vsystem", help="Ted Greene V-System group of a four-note voicing")
     p.add_argument("notes", nargs="+", metavar="NOTE", help="MIDI numbers or notes like C4")
-    p.set_defaults(handler=_h_vsystem)
+    p.set_defaults(handler=_with_basis(_h_vsystem))
 
     p = sub.add_parser("joni", help="Joni Mitchell-style tuning code")
     _common(p, capo=False)
-    p.set_defaults(handler=_h_joni)
+    p.set_defaults(handler=_with_basis(_h_joni))
 
     p = sub.add_parser("capo", help="capo positions ranked by open shapes")
     p.add_argument("chords", nargs="+", metavar="CHORD")
     p.add_argument("--max-fret", type=int, default=7)
     _common(p, capo=False)
-    p.set_defaults(handler=_h_capo)
+    p.set_defaults(handler=_with_basis(_h_capo))
 
     p = sub.add_parser("voicings", help="fingerings for a chord")
     p.add_argument("name")
     p.add_argument("--limit", type=int, default=8)
     _common(p, capo=False)
-    p.set_defaults(handler=_h_voicings)
+    p.set_defaults(handler=_with_basis(_h_voicings))

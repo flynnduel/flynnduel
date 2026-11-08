@@ -92,16 +92,16 @@ Scoring is a simplified version of Hayes (2005), whose model matched listeners' 
 
 | Data | Source | Licence |
 |---|---|---|
-| Pronunciations (`data/cmudict`) | CMU Pronouncing Dictionary | BSD-style |
-| Guitar chords (`data/chords-db`) | tombatossals/chords-db | MIT |
-| Fonts (`data/fonts`) | Lato | SIL Open Font License 1.1 |
-| Word ranks (`data/word_rank.tsv`) | derived from wordfreq 3.1.1 | CC BY-SA 4.0 |
-| Tunings (`data/tunings.json`) | Wikipedia, Guitar tunings | verified, see `data/ATTRIBUTION.md` |
+| Pronunciations (`../data/cmudict`) | CMU Pronouncing Dictionary | BSD-style |
+| Guitar chords (`../data/chords-db`) | tombatossals/chords-db | MIT |
+| Fonts (`../data/fonts`) | Lato | SIL Open Font License 1.1 |
+| Word ranks (`../data/word_rank.tsv`) | derived from wordfreq 3.1.1 | CC BY-SA 4.0 |
+| Tunings (`../data/tunings.json`) | facts from Wikipedia's guitar tunings list; no text copied | see `../data/ATTRIBUTION.md` |
 
-`word_rank.tsv` is share-alike: any redistribution or adaptation of that file must credit wordfreq
+`../data/word_rank.tsv` is share-alike: any redistribution or adaptation of that file must credit wordfreq
 and be released under CC BY-SA 4.0 or a compatible licence.
 
-Runtime libraries: pychord (MIT), reportlab (BSD), mido (MIT). Dev-only tools (pytest, music21,
+Runtime libraries: pychord (MIT), reportlab (BSD), mido (MIT). Their dependencies: pillow (MIT-CMU, via reportlab), charset-normalizer (MIT, via reportlab), packaging (Apache-2.0 OR BSD-2-Clause, via mido), as read from the installed package metadata. Dev-only tools (pytest, music21,
 wordfreq) are never imported from `src/`. No GPL-family dependencies.
 
 ## Tests
@@ -112,4 +112,6 @@ uv run --frozen pytest
 
 Sockets are disabled during tests. `tests/test_e2e.py` runs every subcommand on the original sample
 song in `tests/fixtures/sample_song`, in JSON and text modes, and checks the installed size of the
-runtime libraries stays under 25 MB.
+runtime dependency closure plus the shipped data directory stays under 40 MB.
+
+Measured footprint: 32,874,776 bytes (pillow 20.4 MB, data 6.1 MB, reportlab 4.9 MB, charset-normalizer 0.8 MB, packaging 0.5 MB, mido 0.15 MB, pychord 0.04 MB).

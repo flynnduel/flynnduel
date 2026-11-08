@@ -244,22 +244,29 @@ def _h_parse(args: argparse.Namespace):
     return d, to_text
 
 
+def _with_basis(handler):
+    def run(args):
+        result, text = handler(args)
+        return {**result, "basis": BASIS}, text
+    return run
+
+
 def register(subparsers) -> None:
     p = subparsers.add_parser("chord", help="chord spelling, parsing, naming and transposition")
     sub = p.add_subparsers(dest="chord_command", required=True)
     s = sub.add_parser("spell", help="spell a pitch class (0-11)")
     s.add_argument("pc", type=int)
     s.add_argument("--key", default=None)
-    s.set_defaults(handler=_h_spell)
+    s.set_defaults(handler=_with_basis(_h_spell))
     t = sub.add_parser("transpose", help="transpose a chord symbol")
     t.add_argument("symbol")
     t.add_argument("semitones", type=int)
     t.add_argument("--key", default=None)
-    t.set_defaults(handler=_h_transpose)
+    t.set_defaults(handler=_with_basis(_h_transpose))
     n = sub.add_parser("names", help="chord names for a set of notes")
     n.add_argument("notes", nargs="+", metavar="NOTE")
     n.add_argument("--bass", default=None, metavar="NOTE")
-    n.set_defaults(handler=_h_names)
+    n.set_defaults(handler=_with_basis(_h_names))
     q = sub.add_parser("parse", help="parse a chord symbol")
     q.add_argument("symbol")
-    q.set_defaults(handler=_h_parse)
+    q.set_defaults(handler=_with_basis(_h_parse))
