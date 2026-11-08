@@ -103,27 +103,23 @@ def parse_shape(s: str) -> list[int | None]:
     return out
 
 
-def _clamped(capo: Capo, i: int, n: int) -> bool:
-    if capo.strings is None:
-        return True
-    if len(capo.strings) != n:
-        raise SongtoolsError(None, None, f"partial capo needs {n} entries, got {len(capo.strings)}")
-    return capo.strings[i]
-
-
 def sounding(shape: list[int | None], tuning: Tuning, capo: Capo = Capo(0)) -> list[int | None]:
-    """MIDI note per string (None = muted). Frets are relative to the capo: a clamped string sounds
-    tuning + capo + fret; an unclamped string at fret 0 is open, otherwise tuning + capo + fret too."""
-    if len(shape) != len(tuning.strings):
-        raise SongtoolsError(None, None, f"fingering has {len(shape)} strings, tuning has {len(tuning.strings)}")
+    """MIDI note per string (None = muted). On a clamped string frets are relative to the capo (0 = the
+    capo fret): tuning + capo + fret. On an unclamped string (partial capo) frets are physical: tuning + fret,
+    0 = open. A full capo (strings=None) clamps every string."""
+    n = len(tuning.strings)
+    if len(shape) != n:
+        raise SongtoolsError(None, None, f"fingering has {len(shape)} strings, tuning has {n}")
+    if capo.strings is not None and len(capo.strings) != n:
+        raise ValueError(f"partial capo needs {n} entries, got {len(capo.strings)}")
     out: list[int | None] = []
     for i, (f, open_midi) in enumerate(zip(shape, tuning.strings)):
         if f is None:
             out.append(None)
-        elif f == 0 and not _clamped(capo, i, len(tuning.strings)):
-            out.append(open_midi)
-        else:
+        elif capo.strings is None or capo.strings[i]:
             out.append(open_midi + capo.fret + f)
+        else:
+            out.append(open_midi + f)
     return out
 
 
@@ -362,6 +358,8 @@ def capo_options(chords: list[str], tuning: Tuning, max_fret: int = 7) -> list[C
 # --- CLI ---------------------------------------------------------------------------------------------
 
 def _capo(args) -> Capo:
+    if not 0 <= args.capo <= 12:
+        raise SongtoolsError(None, None, f"--capo must be 0-12, got {args.capo}")
     mask = getattr(args, "partial_capo", None)
     if mask is None:
         return Capo(args.capo)

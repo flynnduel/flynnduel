@@ -160,3 +160,21 @@ def test_cli_errors(capsys):
     assert main(["guitar", "identify", "x32010", "--tuning", "bogus"]) == 2
     assert main(["guitar", "identify", "x32010", "--partial-capo", "0111"]) == 2
     assert main(["guitar", "verify", "x32010", "Hx"]) == 2
+
+
+def test_partial_capo_unclamped_frets_are_physical():
+    cap = Capo(2, (True, False, False, False, False, False))
+    assert sounding(parse_shape("010000"), STD, cap) == [42, 46, 50, 55, 59, 64]
+    assert sounding(parse_shape("032000"), STD, cap) == [42, 48, 52, 55, 59, 64]
+
+
+def test_sounding_validates_mask_length_even_without_open_strings():
+    with pytest.raises(ValueError):
+        sounding(parse_shape("x32010"), STD, Capo(2, (True, False, True)))
+    with pytest.raises(ValueError):
+        sounding(parse_shape("111111"), STD, Capo(2, (True,) * 7))
+
+
+@pytest.mark.parametrize("n", ["-1", "13"])
+def test_cli_capo_range(n, capsys):
+    assert main(["guitar", "identify", "x32010", "--capo", n]) == 2
