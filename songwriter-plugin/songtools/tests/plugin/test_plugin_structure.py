@@ -11,7 +11,7 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[3]
 INVOKE = 'UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools'
 SKILLS = ["newsong", "idea", "structure", "lyrics", "melody", "chords", "arrange", "chart", "critique", "finalcheck", "bank"]
 # Skills not written yet; each skill task removes its own name from this set.
-SKILLS_PENDING = {"newsong", "idea", "structure", "lyrics", "melody", "chords", "arrange", "chart", "critique",
+SKILLS_PENDING = {"newsong", "idea", "structure", "melody", "chords", "arrange", "chart", "critique",
                   "finalcheck", "bank"}
 
 
@@ -68,6 +68,12 @@ def _skill_params():
             if n in SKILLS_PENDING else n for n in SKILLS]
 
 
+# Skill-authoring standards (writing-skills; Anthropic best practices): the body stays under
+# 500 lines, and the description says when to use the skill without summarizing its process.
+MAX_BODY_LINES = 500
+WORKFLOW_WORDS = re.compile(r"\b(then|runs|dispatches|steps?)\b", re.I)
+
+
 def check_skill_text(text: str, name: str) -> list[str]:
     """Return a list of problems found in a SKILL.md text (empty list = ok)."""
     errs: list[str] = []
@@ -85,6 +91,10 @@ def check_skill_text(text: str, name: str) -> list[str]:
     desc = fm.get("description", "")
     if not (desc.startswith("Use when") and len(desc) <= 1024):
         errs.append("bad description")
+    if WORKFLOW_WORDS.search(desc):
+        errs.append("description summarizes workflow (say when to use, not how it works)")
+    if len(body.splitlines()) > MAX_BODY_LINES:
+        errs.append(f"body over {MAX_BODY_LINES} lines")
     subs = set(real_subcommands())
 
     def check_call(cand: str) -> None:
@@ -173,3 +183,24 @@ def test_helper_rulebook_first():
     _bad("Intro.\n" + INVOKE + " version\n" + RB, "rulebook")
     _bad("No guide here.\n", "rulebook")
     _bad("Read guides/rulebook.md first.\n", "rulebook")
+
+
+def test_helper_rejects_body_over_500_lines():
+    filler = "".join(f"line {i}\n" for i in range(500 - GOOD[len(FM):].count("\n")))
+    ok = GOOD + filler
+    assert ok[len(FM):].count("\n") == 500
+    assert check_skill_text(ok, "x") == []
+    errs = check_skill_text(ok + "one more\n", "x")
+    assert any("500 lines" in e for e in errs), errs
+
+
+@pytest.mark.parametrize("words", ["then", "Then", "runs", "dispatches", "step", "steps"])
+def test_helper_rejects_description_that_summarises_workflow(words):
+    text = f"---\nname: x\ndescription: Use when testing lyrics, {words} the checks.\n---\n" + RB
+    errs = check_skill_text(text, "x")
+    assert any("workflow" in e for e in errs), errs
+
+
+def test_helper_workflow_words_match_whole_words_only():
+    text = "---\nname: x\ndescription: Use when a stepparent rerunsthen writes lyrics.\n---\n" + RB
+    assert check_skill_text(text, "x") == []
