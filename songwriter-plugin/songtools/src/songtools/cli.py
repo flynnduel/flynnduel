@@ -11,7 +11,7 @@ from songtools import __version__
 from songtools.output import emit
 
 # Later tasks append module names (each exposes register(subparsers)).
-MODULES: tuple[str, ...] = ()
+MODULES: tuple[str, ...] = ("songtools.rhyme",)
 
 
 class SongtoolsError(Exception):
