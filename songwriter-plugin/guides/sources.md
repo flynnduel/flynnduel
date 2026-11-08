@@ -69,8 +69,8 @@ Links: https://americansongwriter.com/how-to-write-one-song-jeff-tweedy-book-int
 
 ## Zollo
 Read: Zollo Blog excerpts on American Songwriter and a revision column.
-Status: verified for the Dylan, Simon, King and Townes Van Zandt interviews; unverified for Mitchell, Newman and Young.
-Links: https://americansongwriter.com/the-paul-zollo-blog-qa-with-bob-dylan/ ; https://americansongwriter.com/the-paul-zollo-blog-qa-with-paul-simon/ ; https://americansongwriter.com/the-paul-zollo-blog-qa-with-carole-king/ ; https://americansongwriter.com/the-paul-zollo-blog-qa-with-townes-van-zandt/
+Status: verified for the Dylan, Simon, King, Townes Van Zandt and Cohen (via Zollo's American Songwriter memorial piece); unverified for Mitchell, Newman and Young.
+Links: https://americansongwriter.com/the-paul-zollo-blog-qa-with-bob-dylan/ ; https://americansongwriter.com/the-paul-zollo-blog-qa-with-paul-simon/ ; https://americansongwriter.com/the-paul-zollo-blog-qa-with-carole-king/ ; https://americansongwriter.com/the-paul-zollo-blog-qa-with-townes-van-zandt/ ; https://americansongwriter.com/?p=176756
 
 ## Lerman
 Read: the published Critical Response Process description.

@@ -6,12 +6,13 @@ This guide condenses the lyric craft tools the plugin applies, mostly Pattison's
 
 Rhyme is a dial of stability, not a pass/fail test. Treat the writer's rhymes as choices to describe, never as errors.
 
-- Rank rhyme types by how much they close the line: perfect rhyme closes most, then family, additive, assonance and consonance, which leave the ear wanting more. [verified]
+- Rank rhyme types by how much they close the line: perfect rhyme closes most, then family, then remoter types; Pattison's example order runs hat to hack/nap/sad/grab, then rats, laugh and spot. [verified]
+- Place additive and subtractive rhyme between family and assonance as a working assumption; his own definitions of them were not read. [design]
 - Pattison calls the belief that all rhyme must be perfect a misconception; imperfect rhyme is a tool for unrest and longing. [verified]
 - Rhyme type is not one of his four structure elements, but he uses it for the same job, so model it as a labelled fifth dial. [design]
 - Family rhyme keeps the vowel and swaps the following consonant for a relative inside one of three families: plosives, fricatives or nasals. [verified]
 - A relative is a partner (same place of articulation, opposite voicing, such as t/d or f/v) or a companion (same family, same voicing). [verified]
-- Offer family candidates in the right order per family: for plosives the partner comes first; for fricatives the companions come first (f to s, sh, ch) and the partner v after. [verified]
+- Offer family candidates in the right order per family. For plosives: the partner first (t to d), then the companions (k, p), then the rest of the family (b, g). For fricatives: the companions first (f to s, sh, ch), then the partner v. [verified]
 - Assonance can be taught through diphthong parts: a long i contains an open-a sound and an ee sound, so it can match either. [verified]
 - Pattison says finding a rhyme is not the creative act, so a rhyming dictionary or a candidate list is legitimate help. [verified]
 - Flag cliché pairs such as love/dove/above, fire/desire, hand/understand, eyes/realize, home/roam and home/alone, and ask whether the writer wants the stock sound. [verified]
@@ -60,7 +61,8 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 
 ## Object writing
 
-- Open a writing session with object writing: pick an object and write sensory detail about it without stopping. [verified]
+- Open a writing session with object writing: pick an object, keep to sensory detail, and do not edit while writing. [verified]
+- Writing nonstop against a timer is the usual form of the exercise, but that detail is secondhand. [as reported]
 - The seven-senses list (including organic and kinesthetic) comes from a Writer's Digest snippet and Berklee material, and the ten-minute timing is secondhand. [as reported]
 - When the song record has no material, run object writing or ask a question before drafting. [design]
 
@@ -69,7 +71,7 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 - Default to Pattison. Webb's strict lens and the commercial lens are opt-in. [design]
 - Webb (strict rhyme): on NPR he called the line/time pairing in "Wichita Lineman" a false rhyme he would have fixed, and he revised a lyric to get a perfect rhyme with "flies". [verified]
 - Under the strict lens, list every non-perfect rhyme and offer inflection or plural fixes before the writer gives up an image. [design]
-- Pattison would class line/time as a fairly strong family rhyme; present this as a documented disagreement and let the writer choose. [verified]
+- Pattison's nasal family covers n and m, so line/time is a family rhyme under his lens; present this as a documented disagreement and let the writer choose. [design]
 - Webb's rhyming-dictionary opinions, warnings about eye rhymes and favourite dictionary are secondhand; do not quote them. [as reported]
 - Davis can be cited by title (three books) but not by rule; label her principles "Davis (as reported)". [as reported]
 - Davis's figures-of-speech catalogue is unverified and should not be used. [unverified]
@@ -79,7 +81,7 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 - Destination writing and toggling belong to Stolpe, not Pattison. [verified]
 - The co-writing "No-Free Zone" belongs to Nashville writer Stan Webb, not Jimmy Webb. [verified]
 - "Writing Hit Lyrics" is not a Davis title in the catalogue, and Wikipedia's "Sheila Davis" page is about someone else. [verified]
-- The earlier claim that voiced/unvoiced partners are always the closest family relatives is wrong; the order differs by family. [verified]
+- Closest family relatives differ by family: the partner is closest for plosives, while the companions come first for fricatives. [verified]
 - Pattison's POV taxonomy has four types, not three. [verified]
 - Pattison's second metaphor type covers adverb-verb friction as well as adjective-noun. [verified]
 - Still unchecked against the books: Pattison's definitions of additive, subtractive and partial rhyme, the "boxes" mechanics, Davis's checklist and Webb's lyric chapter. [unverified]
