@@ -1,0 +1,9 @@
+{
+  "name": "songwriter",
+  "version": "0.1.0",
+  "description": "A songwriting partner for Claude Code: co-writes and critiques lyrics, coaches the music, gives arrangement guidance, and measures rhyme, stability, prosody and harmony with an offline toolkit.",
+  "author": {
+    "name": "Claude",
+    "email": "noreply@anthropic.com"
+  }
+}

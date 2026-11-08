@@ -1,0 +1,14 @@
+{
+  "name": "flynnduel",
+  "owner": {
+    "name": "Claude",
+    "email": "noreply@anthropic.com"
+  },
+  "plugins": [
+    {
+      "name": "songwriter",
+      "source": "./songwriter-plugin",
+      "description": "Songwriting partner: co-writes and critiques lyrics, coaches the music, and measures rhyme, stability, prosody and harmony with an offline toolkit."
+    }
+  ]
+}
