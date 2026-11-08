@@ -27,6 +27,8 @@ RULES: dict[str, tuple[int, Literal["strong", "soft"]]] = {
 }
 _ORDER = {r: i for i, r in enumerate(RULES)}
 LOWEST_SLOT = -3  # proposals may start up to three eighths before the first downbeat
+MAX_BARS = 8      # settings span at most 8 bars of 4/4 eighths
+HIGHEST_SLOT = MAX_BARS * 8 - 1
 
 
 @dataclass
@@ -118,8 +120,9 @@ def syllabify(lyric: str, lex: Lexicon) -> list[Syl]:
             continue
         pron = lex.lookup(token)[0]
         n = pron.syllables
-        if n < 1:
-            continue
+        estimated = pron.estimated
+        if n < 1:  # no vowel in the entry (hmm, mm, shh): sung as one syllable
+            n, estimated = 1, True
         cls = word_class(token)
         if n == 1:
             stresses = [0 if cls == "function" else 1]
@@ -128,7 +131,7 @@ def syllabify(lyric: str, lex: Lexicon) -> list[Syl]:
             if cls == "function" and n == 2:
                 stresses = [2 if s == 1 else s for s in stresses]
         for i, label in enumerate(_split_labels(word, n)):
-            out.append(Syl(word, label, i, n, stresses[i], cls, pron.estimated))
+            out.append(Syl(word, label, i, n, stresses[i], cls, estimated))
     return out
 
 
@@ -244,6 +247,8 @@ def propose(syls: list[Syl], bars: int = 2) -> list[int]:
     n = len(syls)
     if n == 0:
         return []
+    if not 1 <= bars <= MAX_BARS:
+        raise ValueError(f"bars must be 1..{MAX_BARS}, got {bars}")
     lo, hi, line = LOWEST_SLOT, bars * 8 - 1, bars * 8
     if n > hi - lo + 1:
         raise ValueError(f"{n} syllables do not fit in {bars} bars of eighth notes")
@@ -347,11 +352,17 @@ def propose(syls: list[Syl], bars: int = 2) -> list[int]:
 
 
 def check(syls: list[Syl], slots: list[int] | None, bars: int = 2) -> ProsodyReport:
+    if not 1 <= bars <= MAX_BARS:
+        raise ValueError(f"bars must be 1..{MAX_BARS}, got {bars}")
     if slots is not None:
         _validate(syls, slots)
+        if slots and not (LOWEST_SLOT <= slots[0] and slots[-1] <= HIGHEST_SLOT):
+            raise ValueError(f"slots must lie in {LOWEST_SLOT}..{HIGHEST_SLOT}")
     bars = max(bars, -(-(len(syls) + LOWEST_SLOT) // 8))  # room for every syllable
     if slots:
         bars = max(bars, max(slots) // 8 + 1)
+    if bars > MAX_BARS:
+        raise ValueError(f"{len(syls)} syllables do not fit in {MAX_BARS} bars of eighth notes")
     line = bars * 8
     best = propose(syls, bars)
     best_score = score(syls, best, line)[0]
@@ -447,8 +458,15 @@ def _handler(args: argparse.Namespace):
                                  f"in {sec.name!r} line {args.line}")
         if any(b <= a for a, b in zip(slots, slots[1:])):
             raise SongtoolsError(err_file, err_line, "slots must be strictly increasing")
+        if not (LOWEST_SLOT <= slots[0] and slots[-1] <= HIGHEST_SLOT):
+            raise SongtoolsError(err_file, err_line,
+                                 f"slots must lie in {LOWEST_SLOT}..{HIGHEST_SLOT} "
+                                 f"(3 pickup eighths, at most {MAX_BARS} bars)")
 
-    rep = check(syls, slots)
+    try:
+        rep = check(syls, slots)
+    except ValueError as e:  # e.g. more syllables than fit in MAX_BARS
+        raise SongtoolsError(str(lyrics_path), line.number, str(e)) from None
     shown = slots if slots is not None else rep.best_slots
     result = {
         "section": sec.name, "line": args.line, "lyric": line.lyric,

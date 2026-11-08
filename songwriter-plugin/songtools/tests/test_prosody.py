@@ -218,3 +218,58 @@ def test_cli_compare(tmp_path, capsys):
     out = json.loads(capsys.readouterr().out)
     assert [c["section"] for c in out["compare"]] == ["Verse 2"]
     assert out["compare"][0]["syllables"] == [9, 4] and out["compare"][0]["matches"] is False
+
+
+# --- fix round 1 ---
+
+def test_vowelless_word_is_one_estimated_syllable():
+    s = syls("hmm the river")                             # CMU: hmm HH M (no vowel)
+    assert len(s) == 4
+    assert (s[0].word, s[0].word_len, s[0].stress, s[0].estimated) == ("hmm", 1, 1, True)
+
+
+def test_cli_counts_vowelless_word(tmp_path, capsys):
+    (tmp_path / "lyrics.md").write_text("## Verse\nHmm the river\n")
+    (tmp_path / "melody.md").write_text("## Verse\n1: hmm/0 the/2 ri/4 ver/6\n")
+    assert main(["prosody", str(tmp_path), "--section", "Verse", "--line", "1"]) == 0
+    assert json.loads(capsys.readouterr().out)["slots"] == [0, 2, 4, 6]
+    assert main(["prosody", str(tmp_path), "--section", "Verse", "--line", "1",
+                 "--slots", "0 2 4"]) == 2
+    assert "4 syllables" in json.loads(capsys.readouterr().err)["error"]
+
+
+def test_cli_rejects_out_of_range_slots(tmp_path, capsys):
+    d = _song(tmp_path)
+    assert main(["prosody", d, "--section", "Verse 2", "--line", "1",
+                 "--slots", "100000 100001 100002 100003"]) == 2
+    assert "-3" in json.loads(capsys.readouterr().err)["error"]
+    assert main(["prosody", d, "--section", "Verse 2", "--line", "1",
+                 "--slots", "-4 0 2 4"]) == 2
+    capsys.readouterr()
+    assert main(["prosody", d, "--section", "Verse 2", "--line", "1",
+                 "--slots", "0 2 4 63"]) == 0
+
+
+def test_library_caps_bars_and_slots():
+    s = syls("river")
+    with pytest.raises(ValueError):
+        propose(s, bars=9)
+    with pytest.raises(ValueError):
+        check(s, None, bars=9)
+    with pytest.raises(ValueError):
+        check(s, [100000, 100001])
+    assert check(s, [0, 63]).score >= 0
+
+
+def test_cli_non_integer_slots(tmp_path, capsys):
+    d = _song(tmp_path)
+    assert main(["prosody", d, "--section", "Verse 2", "--line", "1",
+                 "--slots", "0 two 4 6"]) == 2
+    assert "integers" in json.loads(capsys.readouterr().err)["error"]
+
+
+def test_cli_non_increasing_slots(tmp_path, capsys):
+    d = _song(tmp_path)
+    assert main(["prosody", d, "--section", "Verse 2", "--line", "1",
+                 "--slots", "0 4 4 6"]) == 2
+    assert "strictly increasing" in json.loads(capsys.readouterr().err)["error"]
