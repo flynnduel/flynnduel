@@ -24,7 +24,8 @@ Evidence is uneven. The layer vocabulary and energy trajectories are verified in
 ## Energy
 
 - Cobb's article situates section-by-section "sonic energy" in Butler, Nobile (initiation, buildup, arrival) and Osborn (riser, drop), with energy trajectories that build momentum across a verse, prechorus, chorus rotation. [verified]
-- Osborn, quoted by Cobb: Top-40 EDM songs almost never have a viable contrasting bridge, and producers must balance sonic contrast against thematic memorability; too little contrast makes a song repetitive. [verified]
+- Osborn is reported via Cobb to find that Top-40 EDM songs almost never have a viable contrasting bridge. [as reported]
+- Osborn, quoted by Cobb: producers must balance sonic contrast against thematic memorability; too little contrast makes a song repetitive. [verified]
 - Cobb studies late "groove switches" (a dramatic change of texture for the final large section) as another source of contrast, with Billie Eilish's "bad guy" among the cases. [verified]
 - So a bridge is optional: when none exists, offer a groove or texture switch. [design]
 - Berklee's core arranging course frames arranging as shaping a song's emotional contour through dynamics, articulation and texture. [verified]
@@ -35,7 +36,8 @@ Evidence is uneven. The layer vocabulary and energy trajectories are verified in
 - Shapes to offer: staircase, breakdown and rebuild, slow burn, flat and intimate, jam bloom, late groove switch. [design]
 - One example among the shapes above, not a default for any genre: intro 2, verse 1 at 2, prechorus 3, chorus 1 at 4, verse 2 at 3, chorus 2 at 4, bridge at 2 or 5, final chorus 5, outro 2 to 3. Fit the shape to the song the writer describes. [design]
 - Chorus 1 should leave headroom: if it is already the peak, ask what the last chorus can add. [design]
-- The function terms initiation, buildup and arrival (Nobile) explain why a section has its energy; see structure.md for the sources. [verified]
+- Nobile maps verse, prechorus and chorus onto initiation, buildup and arrival; see structure.md for the sources. [verified]
+- Those terms can explain why a section has its energy. [design]
 - Contrast and ending are the plugin's own additions to that list, for sections that are neither building nor arriving. [design]
 
 ## Road map

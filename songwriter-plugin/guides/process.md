@@ -31,7 +31,7 @@ Eight doors lead into one song record. Each door marks what the writer already h
 
 ## Receive, then edit
 
-Interview accounts from Zollo's book interviews, read on American Songwriter, show a shared stance: generation is receptive and the conscious work is selecting and setting up. [verified]
+Interview accounts from Zollo's book interviews, read on American Songwriter, read together suggest a shared stance: generation is receptive and the conscious work is selecting and setting up. This is a cross-interview synthesis; each writer's own statements below are verified. [design]
 
 The plugin separates the two. [design]
 

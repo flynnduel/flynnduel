@@ -105,7 +105,7 @@ The final check runs big to small, so no time goes into polishing a line in a ve
 | 9 | Irritant scan: does anything still bother you? | Simon via Zollo (verified) |
 | 10 | Writer chooses: done, done for now, keep working. Writing done is separate from demo done. | Zollo; Webb (verified) |
 
-- Zollo records that on replay certain lines or notes "seem irksome", and that is the song showing what is wrong; [verified]
+- Zollo records that on replay certain lines or notes "seem irksome" compared with the rest, and he describes that as the song showing what is wrong. [verified]
 - The irritant scan asks for exactly that, and the writer decides what to do about it. [design]
 - Status choices are working, done for now and done, and only the writer sets them; the plugin never declares a song finished. [design]
 - Blume advises workshopping a work tape before investing in a demo. [verified]

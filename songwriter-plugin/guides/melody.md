@@ -30,7 +30,7 @@ Attribution matters here. Perricone's Melody in Songwriting excerpt and his own 
 ## Phrasing
 
 - Pattison: a phrase that starts on the downbeat, or picks up to it, is front-heavy and feels solid and stable; one that starts after the downbeat is back-heavy and feels in motion, and the later it starts the less stable. [verified]
-- In 4/4 a phrase starting after beat 3 usually acts as a pickup to the next downbeat, and therefore counts as front-heavy. [verified]
+- In 4/4 a phrase starting after beat 3 usually acts as a pickup to the next downbeat, and count as front-heavy. [verified]
 - Strong and weak bars alternate. Phrasing in the weak bar (strong bar left empty) feels floaty like back-heavy phrasing, and back-heavy in a weak bar is floatier still. [verified]
 - Pattison suggests looking for downbeats and strong bars for lines you really mean, and back-heavy or weak-bar phrasing for regret or longing. [verified]
 - Offer these as options, not rules. [design]
@@ -79,7 +79,8 @@ Attribution matters here. Perricone's Melody in Songwriting excerpt and his own 
 - State this limit whenever a prosody result is given. [design]
 - The 70% figure is from English folksong data, not pop. [verified]
 - So treat the check as a second opinion. [design]
-- A 16-position line has at most about 13,000 possible settings, which makes exhaustive search cheap. [verified]
+- A 16-position line has at most about 13,000 possible settings. [verified]
+- That is few enough for the toolkit to enumerate every setting. [design]
 - Good settings often sacrifice a stress match to avoid a lapse. [verified]
 - So treat a mismatch as a question, not an error. [design]
 - Hayes and Kaun add four stress levels, prosodic-phrase effects and duration matching, and a setting can win despite a stress mismatch when its rivals do worse elsewhere. [verified]

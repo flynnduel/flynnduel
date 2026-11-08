@@ -15,7 +15,9 @@ Evidence is uneven. The V-System is verified from Hober's reconstruction of Gree
 
 ## Voicings
 
-The V-System (Greene, as reconstructed by Hober) sorts four-note chords into 14 groups by spacing, not by string set. It is a tool for band-context upper-string voicings, not six-string open strums. [verified]
+The V-System (Greene, as reconstructed by Hober) sorts four-note chords into 14 groups by spacing, not by string set. [verified]
+
+The plugin uses it for band-context upper-string voicings, not six-string open strums. [design]
 
 - Scope: four-note chords with four distinct pitches (no unison or octave doublings), standard tuning, normal technique; no alternate tunings. The chord may be rootless, altered or stretched. [verified]
 - A chord is classified by its spacing, not by the strings it is played on; each group tends to sit on certain string sets (V-4 on strings 5-3-2-1 and 6-4-3-2, for example). [verified]

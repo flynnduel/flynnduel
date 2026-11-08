@@ -21,7 +21,7 @@ KNOWN_AUTHORS = [
     "Hudson", "Hunter", "Seskin", "Covach", "Kachulis", "Zocher", "Wikipedia", "Berklee",
 ]
 CONSEQUENCE = ("; so ", ", so ", "so ask", "so offer", "so treat", "so never", "so do not", "use this",
-               "treat this", "which is why")
+               "treat this", "which is why", "therefore", "which makes", "and so ", "so can")
 BULLET = re.compile(r"^\s*(?:[-*]|\d+\.)\s+")
 QUOTE = re.compile(r'"([^"]*)"|“([^”]*)”')
 
@@ -89,6 +89,9 @@ def test_lint_flags_verified_bullet_with_instruction(tmp_path):
                  "- Cliches are stock. [verified]\n- Ask the writer about them. [design]\n")
     out = lint_guide(p)
     assert len(out) == 1 and "g.md:2" in out[0] and "consequence" in out[0]
+    p.write_text("## Rules\n- It is short, therefore easy [verified]\n- That is cheap, which makes search fast [verified]\n"
+                 "- A long i has two parts and so can match [verified]\n- A long i has two parts, so can match [verified]\n")
+    assert len(lint_guide(p)) == 4
 
 
 def test_lint_ignores_fenced_code(tmp_path):
