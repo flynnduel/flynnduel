@@ -6,7 +6,7 @@ Conventions: [design]
 
 - Output is JSON by default. `--text` (before the command) prints readable text. `--pron FILE` (or env `SONGTOOLS_PRON`) names a personal pronunciations file, also placed before the command. [design]
 - Errors print `{"error": "<file>:<line>: <message>"}` on stderr and exit with code 2. Usage errors take the same form. [design]
-- Every result carries a `basis` string naming its source. Quote it when naming the basis of a note (rulebook rule 2). [design]
+- Every successful result carries a `basis` string naming its source. Quote it when naming the basis of a note (rulebook rule 2). [design]
 - The toolkit never invents a result. When something cannot be determined the output says `undetermined`; when a pronunciation was guessed it carries `"estimated": true`. Report both to the writer. [design]
 - `<song>` means a song folder such as `songs/Porch Light Left On`. Commands that take a lyrics file use `lyrics.md`. [design]
 

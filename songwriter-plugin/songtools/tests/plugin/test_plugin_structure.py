@@ -68,40 +68,108 @@ def _skill_params():
             if n in SKILLS_PENDING else n for n in SKILLS]
 
 
-@pytest.mark.parametrize("name", _skill_params())
-def test_skill_frontmatter_and_invocation(name):
-    path = PLUGIN_ROOT / "skills" / name / "SKILL.md"
-    assert path.exists(), path
-    text = path.read_text()
+def check_skill_text(text: str, name: str) -> list[str]:
+    """Return a list of problems found in a SKILL.md text (empty list = ok)."""
+    errs: list[str] = []
     m = re.match(r"---\n(.*?)\n---\n(.*)", text, re.S)
-    assert m, "missing frontmatter"
+    if not m:
+        return ["missing frontmatter"]
     fm_text, body = m.groups()
     fm = {}
     for line in fm_text.splitlines():
         if ":" in line and not line.startswith(" "):
             k, v = line.split(":", 1)
             fm[k.strip()] = v.strip().strip('"')
-    assert fm.get("name") == name
+    if fm.get("name") != name:
+        errs.append("name != folder")
     desc = fm.get("description", "")
-    assert desc.startswith("Use when") and len(desc) <= 1024
+    if not (desc.startswith("Use when") and len(desc) <= 1024):
+        errs.append("bad description")
     subs = set(real_subcommands())
+
+    def check_call(cand: str) -> None:
+        c = cand.strip()
+        if c.startswith("$ "):
+            c = c[2:].strip()
+        if not c.startswith(INVOKE):
+            errs.append(f"INVOKE prefix missing: {cand.strip()}")
+            return
+        toks = c[len(INVOKE):].split()
+        i = 0
+        while i < len(toks) and toks[i] in ("--text", "--pron"):
+            i += 2 if toks[i] == "--pron" else 1
+        if i < len(toks) and not toks[i].startswith("-") and toks[i] not in subs:
+            errs.append(f"unknown subcommand: {cand.strip()}")
+
+    in_fence = False
     for line in body.splitlines():
-        if "songtools " not in line:
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
             continue
-        stripped = line.strip().lstrip("`-*$ ").strip()
-        if INVOKE in line:
-            assert stripped.startswith(INVOKE), line
-            after = line.split(INVOKE, 1)[1].split()
-            toks = [t for t in after if not t.startswith("-")]
-            if toks:
-                assert toks[0] in subs, line
+        if in_fence:
+            if "songtools" in line:
+                check_call(line)
         else:
-            # prose: only a backticked `songtools <sub>` is a command reference
-            for sub in re.findall(r"`songtools ([a-z]+)", line):
-                assert sub in subs, line
+            for span in re.findall(r"`([^`]*)`", line):
+                if re.search(r"songtools [a-z]", span):
+                    check_call(span)
+            if INVOKE in line and not re.search(r"`[^`]*" + re.escape(INVOKE), line):
+                check_call(line)
     for g in re.findall(r"\$\{CLAUDE_PLUGIN_ROOT\}/guides/([\w-]+\.md)", body):
-        assert (PLUGIN_ROOT / "guides" / g).exists(), g
-    assert re.search(r"guides/rulebook\.md", body), "body must send Claude to guides/rulebook.md"
-    first_read = body.find("guides/rulebook.md")
-    other = [body.find(f"guides/{x}.md") for x in ("toolkit",) if f"guides/{x}.md" in body]
-    assert all(first_read < o for o in other), "rulebook must be read first"
+        if not (PLUGIN_ROOT / "guides" / g).exists():
+            errs.append(f"missing guide {g}")
+    rb = "${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md"
+    first = body.find(rb)
+    if first < 0:
+        errs.append("rulebook path missing")
+    else:
+        others = [m.start() for m in re.finditer(r"guides/(?!rulebook\.md)[\w-]+\.md", body)]
+        if INVOKE in body:
+            others.append(body.index(INVOKE))
+        if any(o < first for o in others):
+            errs.append("rulebook not read first")
+    return errs
+
+
+@pytest.mark.parametrize("name", _skill_params())
+def test_skill_frontmatter_and_invocation(name):
+    path = PLUGIN_ROOT / "skills" / name / "SKILL.md"
+    assert path.exists(), path
+    assert check_skill_text(path.read_text(), name) == []
+
+
+FM = "---\nname: x\ndescription: Use when testing.\n---\n"
+RB = "Read ${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md first.\n"
+GOOD = FM + RB + "```\n" + INVOKE + " rhyme a b\n```\n"
+
+
+def _bad(body, needle):
+    errs = check_skill_text(FM + body, "x")
+    assert any(needle in e for e in errs), (needle, errs)
+
+
+def test_helper_positive():
+    assert check_skill_text(GOOD, "x") == []
+    assert check_skill_text(FM + RB + "`" + INVOKE + " rhyme a b`\nsongtools is offline.\n", "x") == []
+    assert check_skill_text(FM + RB + "$ " + INVOKE + " --pron p.txt --text rhyme a b\n", "x") == []
+    assert check_skill_text(FM + RB + "Then ${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md.\n", "x") == []
+
+
+def test_helper_rejects_bare_and_misprefixed_invocations():
+    _bad(RB + "```\nuv run songtools rhyme a b\n```\n", "INVOKE")
+    _bad(RB + "```\n$ songtools rhyme a b\n```\n", "INVOKE")
+    _bad(RB + '```\nUV_PROJECT_ENVIRONMENT="x/venv" uv run --frozen --project X songtools rhyme\n```\n', "INVOKE")
+    _bad(RB + "Run `songtools rhyme a b` now.\n", "INVOKE")
+    _bad(RB + "Run `uv run songtools rhyme a b` now.\n", "INVOKE")
+
+
+def test_helper_rejects_unknown_subcommand_even_after_global_flags():
+    _bad(RB + INVOKE + " bogus a\n", "subcommand")
+    _bad(RB + INVOKE + " --pron p.txt --text bogus a\n", "subcommand")
+
+
+def test_helper_rulebook_first():
+    _bad("Read ${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md.\n" + RB, "rulebook")
+    _bad("Intro.\n" + INVOKE + " version\n" + RB, "rulebook")
+    _bad("No guide here.\n", "rulebook")
+    _bad("Read guides/rulebook.md first.\n", "rulebook")
