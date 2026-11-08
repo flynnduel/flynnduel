@@ -317,8 +317,9 @@ Every skill task follows the writing-skills RED → GREEN → REFACTOR loop:
 2. **RED (baseline).** Dispatch a test-subject subagent (model: sonnet) for each scenario. Give it the scenario setup, the writer's message, and this line: "You are helping a songwriter in this folder. The toolkit is available as `uv run --frozen --project /home/user/flynnduel/songwriter-plugin/songtools songtools`." Do not give it the skill. Record in the file which pass criteria it broke, and how.
 3. **GREEN.** Write `skills/<skill>/SKILL.md`. It contains frontmatter, "Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first", the guides to load, the stage steps, the exact toolkit calls with `INVOKE`, and a short "Red flags" list taken from the baseline failures. Re-run each scenario with a test subject that is given the SKILL.md text, with `${CLAUDE_PLUGIN_ROOT}` replaced by `/home/user/flynnduel/songwriter-plugin` and `${CLAUDE_PLUGIN_DATA}` by a scratch path. Every pass criterion must hold. Record the result.
 4. **REFACTOR.** For any criterion that still fails, or a new rationalization the subject used, add an explicit counter to the skill and re-run that scenario.
-5. Remove the skill from the structure test's xfail set. Run `uv run --frozen pytest tests/plugin -v` and the full songtools suite; both must pass.
-6. Commit the skill file and its scenario file together.
+5. **Professional benchmarks (where the task lists a `BM` scenario).** These come from Pat Pattison's published worked critiques, which the research read in full. Notes are in `research_notes/…/03_melody_prosody.md`, `07_critique_revision.md` and `02_structure_hooks.md`. Use only the short fragments recorded in the notes (each quote 14 words or fewer). Where the notes describe a structure but don't quote the lyric, write an **original** lyric with that same structure. Never reproduce a published lyric at length. The test subject gets the input with no hint of what to look for. It passes only if it finds the same problem Pattison found, for the same reason (the same mechanism), and offers options rather than one fix. The baseline (RED) and with-skill (GREEN) results are recorded side by side.
+6. Remove the skill from the structure test's xfail set. Run `uv run --frozen pytest tests/plugin -v` and the full songtools suite; both must pass.
+7. Commit the skill file and its scenario file together.
 
 ---
 
@@ -342,6 +343,8 @@ Scenarios (each one's pass criteria in brackets):
 - **L4 — Writer revises a line; the plugin thinks it's weaker.** [The plugin flags it with a mechanism and a basis, offers 2–4 options, does not overwrite the line, and takes a snapshot before any change it does make.]
 - **L5 — Lyrics pasted into chat, no folder.** [The plugin offers to create `songs/<title>/` with lyrics.md and still gives help in the same reply.]
 - **L6 — Stock lines.** The writer asks "does this sound like AI?" about a line with "neon" and "we rise above". [The plugin answers by naming stock imagery as a craft issue and never says or implies the line is AI-written.]
+- **L7 (BM) — Pattison's "Unconditionally" setting.** Editing mode. Give the fragments and their beat placements as recorded in the melody/prosody notes. [Finds the function words ("the", "did") sitting on downbeats, the secondary stresses of "insecurities" on strong beats, and "-ly" on a downbeat. Explains each as stress fighting the beat, using `prosody` output as the basis. Offers settings or rewordings. Doesn't rewrite the whole line unasked.]
+- **L8 — Structure check also enforced by tests.** Extend `check_skill_text` in `test_plugin_structure.py`: a SKILL.md body over 500 lines fails, and a description containing workflow verbs that summarize the process ("then", "runs", "dispatches", "step") fails. Add negative tests for both.
 
 - [ ] **Step 1:** Write the scenarios. **Step 2:** Run the baselines (RED) and record them. **Step 3:** Write the SKILL.md and run with it (GREEN). **Step 4:** Refactor until every criterion passes. **Step 5:** Update the xfail set and run both suites. **Step 6:** Commit — `git commit -m "feat(plugin): /lyrics skill with pressure tests"`
 
@@ -360,6 +363,7 @@ Scenarios:
 - **C4 — Kept lines.** [Previously kept lines are listed in their own short group and asked about once.]
 - **F1 — Final check.** [All 10 steps, big to small, with a basis for each. Kept lines are revisited. The irritant scan is asked. The writer chooses done, done for now, or keep working. The plugin never declares the song finished, and `status:` is written only after the writer's choice.]
 - **F2 — Missing music.md.** [Steps 5 and 7 are reported as "not run: no music.md". There is no invented chord check.]
+- **C5 (BM) — Pattison's Bellbird Hill master class.** Use an original four-line verse with the same features recorded in the critique notes: an aabb scheme, and the strongest image buried in line 3. [Notes that aabb stops the motion at each couplet. Suggests bringing the image forward. Offers the same verse in 2–4 alternative schemes (for example abab, xxaa, abba) side by side for the writer to choose by feel. Never imposes one rewrite.]
 
 - [ ] Steps 1–6 as in the shared method. Commit — `git commit -m "feat(plugin): /critique and /finalcheck skills with pressure tests"`
 
@@ -395,6 +399,8 @@ Scenarios:
 - **A1 — "Write the drum part".** [The plugin declines. The road map has every template field, including "left to the players". There is no notation.]
 - **A2 — Too many parts in the chorus.** [The plugin flags more than 4 elements with its basis and offers alternatives.]
 - **A3 — `/arrange` with no structure yet.** [The plugin works from the sections in lyrics.md and says form isn't set. It doesn't invent sections.]
+- **S2 (BM) — Pattison's "Southern Comfort" problem.** An original song whose verses and chorus share the same meter and rhyme pattern (Common Meter throughout), with a bridge arriving late. [Finds that the chorus's first line doesn't contrast with the verse, with `stability` and the contrast check as basis. Explains that listeners drift before the bridge. Offers ways to change the chorus form.]
+- **S3 (BM) — Pattison's "Valentine" bridge.** An original song with a deliberately interrupted three-line bridge that snaps back to verse 1 to show the character stuck. [Recognises the asymmetry as serving the meaning and does not "fix" it. If the bridge is flagged as unstable, the meaning is named as the reason to keep it.]
 
 - [ ] Steps 1–6. Commit — `git commit -m "feat(plugin): /idea, /structure and /arrange skills with pressure tests"`
 
@@ -445,4 +451,5 @@ def test_every_guide_is_used_by_some_skill():
   - the writer sets the status.
 - [ ] **Step 4: Write `README.md`:** what the plugin does and doesn't do; installing (add the marketplace, install `songwriter`, `uv` is required); the 11 commands with one example each; the song-folder layout; the lenses and modes; the sources and their tags (link `guides/sources.md`); the open items from spec section 12.
 - [ ] **Step 5: Run both suites** — `uv run --frozen pytest -q` (songtools plus plugin). Expected: all pass.
-- [ ] **Step 6: Commit and push** — `git commit -m "feat(plugin): README and end-to-end run"`, then `git push -u origin claude/dazzling-feynman-furauz`.
+- [ ] **Step 6: Writer acceptance review (the human gate).** The controller stops here and asks the writer (the user) to install the plugin from the branch and run it on one of their own songs or drafts: at least `/newsong` or `/lyrics`, `/critique` and `/chords`. The writer judges each response by whether they would take that advice from a professional co-writer. Every response the writer marks as generic, wrong or unhelpful is logged in `skill-tests/acceptance.md` (what was asked, what came back, what the writer said) and fixed in the skill that produced it, with a new scenario reproducing it (RED then GREEN). The plan is complete only when the writer accepts.
+- [ ] **Step 7: Commit and push** — `git commit -m "feat(plugin): README and end-to-end run"`, then `git push -u origin claude/dazzling-feynman-furauz`.
