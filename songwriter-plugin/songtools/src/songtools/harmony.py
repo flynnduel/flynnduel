@@ -148,6 +148,38 @@ def _score(chords: list[Chord], tonic_pc: int, mode: str) -> int:
     return s
 
 
+def _diatonic_count(chords: list[Chord], tonic_pc: int, mode: str) -> int:
+    scale = {(tonic_pc + i) % 12 for i in SCALES[mode]}
+    return sum(c.pcs <= scale for c in chords)
+
+
+def _rank(chords: list[Chord]) -> list[tuple[int, str, int]]:
+    """(score, mode, tonic pc), best first. Ties: more chords diatonic to the scale, then the first
+    chord's root on the tonic, then major-first mode order, then pitch class."""
+    first = _pc(chords[0].root)
+    keyed = sorted((-_score(chords, pc, m), -_diatonic_count(chords, pc, m), first != pc,
+                    MODES.index(m), pc, m) for pc in range(12) for m in MODES)
+    return [(-k[0], k[5], k[4]) for k in keyed]
+
+
+def _scale_set(pc: int, mode: str) -> frozenset[int]:
+    return frozenset((pc + i) % 12 for i in SCALES[mode])
+
+
+def _prefer_plain(cands: list[tuple[int, str, int]]) -> tuple[list[tuple[int, str, int]], bool]:
+    """A mixolydian/dorian winner gives way to the plain major/minor reading of the SAME pitch-class
+    set unless it outscores that reading by more than the dual window. Returns (cands, demoted):
+    the preferred reading first; when demoted, the modal reading is dropped from the list."""
+    top = cands[0]
+    if top[1] not in ("mixolydian", "dorian"):
+        return cands, False
+    same = _scale_set(top[2], top[1])
+    plain = next((c for c in cands if c[1] in ("major", "minor") and _scale_set(c[2], c[1]) == same), None)
+    if plain is None or not top[0] + plain[0] or top[0] / (top[0] + plain[0]) - 0.5 > _DUAL_WINDOW:
+        return cands, False
+    return [plain, *(c for c in cands if c not in (plain, top))], True
+
+
 def _diatonic(chords: list[Chord], tonic: str, mode: str) -> bool:
     scale = {(_pc(tonic) + i) % 12 for i in SCALES[mode]}
     return all(c.pcs <= scale for c in chords)
@@ -204,13 +236,13 @@ def analyze(chords: list[str], key: str | None = None) -> HarmonyAnalysis:
             errors.append(sym)
     if not parsed:
         raise SongtoolsError(None, None, "no valid chords to analyse")
-    ranked = sorted(((-_score(parsed, pc, m), MODES.index(m), pc, m) for pc in range(12) for m in MODES))
-    cands = [(-neg, m, pc) for neg, _, pc, m in ranked]
+    cands = _rank(parsed)
     if key is not None:
         tonic, mode = _parse_key(key)
         score = _score(parsed, _pc(tonic), mode)
         top, confidence, dual = (score, mode, _pc(tonic)), 1.0, None  # an explicit key is not second-guessed
     else:
+        cands, _ = _prefer_plain(cands)
         top = cands[0]
         confidence = top[0] / (top[0] + cands[1][0]) if top[0] + cands[1][0] else 0.5
         tonic, mode = _tonic_name(top[2], top[1]), top[1]

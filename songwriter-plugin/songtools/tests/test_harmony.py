@@ -177,3 +177,27 @@ def test_cli_errors(capsys, tmp_path):
     assert main(["harmony"]) == 2
     assert main(["harmony", "G", "--music", str(tmp_path / "x.md")]) == 2
     assert main(["harmony", "--music", str(tmp_path / "missing.md")]) == 2
+
+
+@pytest.mark.parametrize("chords,tonic,mode", [
+    (["C", "Am", "F", "G"], "C", "major"),
+    (["G", "Em", "C", "D"], "G", "major"),
+    (["G", "D", "Em", "C"], "G", "major"),
+])
+def test_plain_major_preferred_over_same_set_mode(chords, tonic, mode):
+    a = analyze(chords)
+    assert (a.key.tonic, a.key.mode) == (tonic, mode)
+    assert a.numerals[0] == "I" and 0.5 <= a.confidence <= 1
+
+
+def test_aeolian_loop_reads_minor_or_relative_major_with_the_other_as_dual():
+    a = analyze(["Am", "F", "C", "G"])
+    got = (a.key.tonic, a.key.mode)
+    assert got in {("A", "minor"), ("C", "major")}
+    other = ("C", "major") if got == ("A", "minor") else ("A", "minor")
+    assert a.dual_reading and (a.dual_reading["tonic"], a.dual_reading["mode"]) == other
+
+
+def test_strong_mixolydian_still_wins():
+    a = analyze(["G", "F", "C", "G"])
+    assert (a.key.tonic, a.key.mode) == ("G", "mixolydian")
