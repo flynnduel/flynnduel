@@ -1,0 +1,148 @@
+{
+  "rhyme_pairs": [
+    {
+      "pair": [
+        "love",
+        "dove"
+      ],
+      "source": "Pattison (verified)"
+    },
+    {
+      "pair": [
+        "love",
+        "above"
+      ],
+      "source": "Pattison (verified)"
+    },
+    {
+      "pair": [
+        "fire",
+        "desire"
+      ],
+      "source": "Pattison (verified)"
+    },
+    {
+      "pair": [
+        "hand",
+        "understand"
+      ],
+      "source": "Pattison (verified)"
+    },
+    {
+      "pair": [
+        "eyes",
+        "realize"
+      ],
+      "source": "Pattison (verified)"
+    },
+    {
+      "pair": [
+        "home",
+        "roam"
+      ],
+      "source": "Pattison (verified)"
+    },
+    {
+      "pair": [
+        "home",
+        "alone"
+      ],
+      "source": "Pattison (verified)"
+    }
+  ],
+  "phrases": [],
+  "abstract": [
+    {
+      "text": "sad",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "beautiful",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "special",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "amazing",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "wonderful",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "perfect",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "happy",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "lonely",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "pain",
+      "source": "BMI (as reported)"
+    },
+    {
+      "text": "feelings",
+      "source": "BMI (as reported)"
+    }
+  ],
+  "stock_image": [
+    {
+      "text": "neon",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "echoes",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "shadows",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "whisper",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "city lights",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "rise above",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "broken wings",
+      "source": "commentary (unverified)"
+    },
+    {
+      "text": "heart of gold",
+      "source": "commentary (unverified)"
+    }
+  ],
+  "emotion_naming": [
+    {
+      "text": "i feel so",
+      "source": "Davis (as reported)"
+    },
+    {
+      "text": "my heart is breaking",
+      "source": "Davis (as reported)"
+    },
+    {
+      "text": "i'm so lonely",
+      "source": "Davis (as reported)"
+    },
+    {
+      "text": "filled with joy",
+      "source": "Davis (as reported)"
+    }
+  ]
+}
