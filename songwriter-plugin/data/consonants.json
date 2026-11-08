@@ -1,0 +1,6 @@
+{
+  "plosive": {"voiced": ["B", "D", "G"], "unvoiced": ["P", "T", "K"]},
+  "fricative": {"voiced": ["V", "DH", "Z", "ZH", "JH"], "unvoiced": ["F", "TH", "S", "SH", "CH"]},
+  "nasal": {"voiced": ["M", "N", "NG"], "unvoiced": []},
+  "partners": {"B": "P", "D": "T", "G": "K", "V": "F", "DH": "TH", "Z": "S", "ZH": "SH", "JH": "CH"}
+}
