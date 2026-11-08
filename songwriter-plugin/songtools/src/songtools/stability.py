@@ -3,7 +3,7 @@
 import argparse
 import re
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
 from songtools.cli import SongtoolsError
@@ -29,7 +29,9 @@ class SectionStability:
     stresses_per_line: list[int]
     lengths_matched: bool
     rhyme_scheme: str
-    end_rhyme_types: list[str]
+    # per line: rhyme type against its partner (the most recent earlier line with the
+    # same scheme letter); None for x lines and first occurrences of a letter
+    end_rhyme_types: list[str | None]
     verdict: Literal["stable", "unstable", "undetermined"]
     reasons: list[str]
 
@@ -38,6 +40,7 @@ class SectionStability:
 class Contrast:
     contrasts: bool
     differences: list[str]
+    notes: list[str] = field(default_factory=list)
 
 
 def _words(lyric: str) -> list[str]:
@@ -98,12 +101,17 @@ def _scheme(words: list[str], lex: Lexicon) -> str:
 def analyze_section(section: Section, lex: Lexicon) -> SectionStability:
     lines = _sung(section)
     if not lines:
-        return SectionStability(section.name, 0, [], True, "", [], "undetermined", [])
+        return SectionStability(section.name, 0, [], True, "", [], "undetermined",
+                                ["no sung lines"])
     words = [end_word(l) for l in lines]
     stresses = [stresses_in(l.lyric, lex) for l in lines]
     matched = len(set(stresses)) == 1
     scheme = _scheme(words, lex)
-    adjacent = [classify(a, b, lex).type for a, b in zip(words, words[1:])]
+    partner_types: list[str | None] = []
+    for i, letter in enumerate(scheme):
+        j = next((k for k in range(i - 1, -1, -1) if scheme[k] == letter), None) \
+            if letter != "x" else None
+        partner_types.append(classify(words[j], words[i], lex).type if j is not None else None)
     reasons: list[str] = []
     if len(lines) % 2:
         reasons.append(f"odd phrase count ({len(lines)})")
@@ -113,9 +121,9 @@ def analyze_section(section: Section, lex: Lexicon) -> SectionStability:
         reasons.append(f"open rhyme scheme ({scheme})")
     if scheme.endswith("x"):
         reasons.append("final line unrhymed (x)")
-    if adjacent and adjacent[-1] in ("assonance", "consonance"):
-        reasons.append(f"final pair rhymes by {adjacent[-1]} (remote rhyme)")
-    return SectionStability(section.name, len(lines), stresses, matched, scheme, adjacent,
+    if partner_types[-1] in ("assonance", "consonance"):
+        reasons.append(f"final line rhymes by {partner_types[-1]} (remote rhyme)")
+    return SectionStability(section.name, len(lines), stresses, matched, scheme, partner_types,
                             "unstable" if reasons else "stable", reasons)
 
 
@@ -128,9 +136,10 @@ def _mode(values: list):
 def chorus_contrast(verse: Section, chorus: Section, lex: Lexicon) -> Contrast:
     vlines, clines = _sung(verse), _sung(chorus)
     if not vlines or not clines:
-        return Contrast(False, [])
+        return Contrast(False, [], ["no sung lines to compare"])
     first = clines[0]
     diffs: list[str] = []
+    notes: list[str] = []
     norm = _mode([stresses_in(l.lyric, lex) for l in vlines])
     got = stresses_in(first.lyric, lex)
     if got != norm:
@@ -141,15 +150,19 @@ def chorus_contrast(verse: Section, chorus: Section, lex: Lexicon) -> Contrast:
         diffs.append(f"syllables {norm} vs {got}")
     vowels = [v for v in (_end_vowel(l, lex) for l in vlines) if v]
     got_v = _end_vowel(first, lex)
-    if vowels and got_v:
+    if not got_v or not vowels:
+        notes.append("end vowel not compared (estimated pronunciation)")
+    else:
         norm_v = _mode(vowels)
         if got_v != norm_v:
             diffs.append(f"end vowel {norm_v} vs {got_v}")
-    return Contrast(bool(diffs), diffs)
+    return Contrast(bool(diffs), diffs, notes)
 
 
-def _first(sections: list[Section], kind: str) -> Section | None:
-    return next((s for s in sections if s.kind == kind), None)
+def _first(sections: list[Section], kind: str) -> tuple[Section | None, bool]:
+    """First section of this kind that has sung lines; flag says whether any section of the kind exists."""
+    of_kind = [s for s in sections if s.kind == kind]
+    return next((s for s in of_kind if _sung(s)), None), bool(of_kind)
 
 
 def _handler(args: argparse.Namespace):
@@ -165,14 +178,18 @@ def _handler(args: argparse.Namespace):
         chosen = [s for s in sections if s.name.lower() == args.section.lower()]
         if not chosen:
             raise SongtoolsError(str(path), None, f"no section named {args.section!r}")
-    verse, chorus = _first(sections, "verse"), _first(sections, "chorus")
+    verse, has_verse = _first(sections, "verse")
+    chorus, has_chorus = _first(sections, "chorus")
     if verse is None:
-        contrast = {"contrast": None, "note": "no verse to compare"}
+        note = "verse has no lines to compare" if has_verse else "no verse to compare"
+        contrast = {"contrast": None, "note": note}
     elif chorus is None:
-        contrast = {"contrast": None, "note": "no chorus to compare"}
+        note = "chorus has no lines to compare" if has_chorus else "no chorus to compare"
+        contrast = {"contrast": None, "note": note}
     else:
         c = chorus_contrast(verse, chorus, lex)
-        contrast = {"contrast": {"contrasts": c.contrasts, "differences": c.differences},
+        contrast = {"contrast": {"contrasts": c.contrasts, "differences": c.differences,
+                                 "notes": c.notes},
                     "verse": verse.name, "chorus": chorus.name}
     out = []
     for s in chosen:
@@ -197,6 +214,7 @@ def to_text(r: dict) -> str:
         c = r["contrast"]
         lines.append(f"Contrast ({r['verse']} vs {r['chorus']}): "
                      + ("; ".join(c["differences"]) if c["contrasts"] else "none"))
+        lines += [f"  note: {n}" for n in c["notes"]]
     return "\n".join(lines)
 
 

@@ -54,3 +54,43 @@ def test_cli_section_filter_and_contrast(tmp_path, capsys):
     f.write_text("## Verse\nI walked out in the night\nThe river took the day\n\n## Chorus\nHold on\nHold on to me\n")
     assert main(["--text", "stability", str(f), "--section", "Verse"]) == 0
     assert "Verse" in capsys.readouterr().out
+
+
+def test_undetermined_section_carries_reason():
+    s = analyze_section(Section("Verse", "verse", []), LEX)
+    assert s.verdict == "undetermined" and s.reasons == ["no sung lines"]
+    chord_only = parse_lyrics("## Verse\n[C] [G]\n")[0]
+    assert analyze_section(chord_only, LEX).reasons == ["no sung lines"]
+
+
+def test_remote_rhyme_fires_for_abab():
+    s = analyze_section(sec("I walked out in the night\nThe river took the lane\nI chased the golden light\nAnd begged the dark to save\n"), LEX)
+    assert s.rhyme_scheme == "abab"
+    assert s.end_rhyme_types == [None, None, "perfect", "assonance"]
+    assert s.verdict == "unstable" and any("remote rhyme" in r for r in s.reasons)
+
+
+def test_contrast_skips_header_only_verse(tmp_path, capsys):
+    import json
+    f = tmp_path / "lyrics.md"
+    f.write_text("## Verse\n\n## Verse 2\nI walked out in the night again\nThe river took the light away\n\n## Chorus\nHold on\nHold on to me\n")
+    assert main(["stability", str(f)]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["verse"] == "Verse 2" and out["contrast"]["contrasts"] is True
+
+
+def test_contrast_header_only_verse_gives_note(tmp_path, capsys):
+    import json
+    f = tmp_path / "lyrics.md"
+    f.write_text("## Verse\n\n## Chorus\nHold on\nHold on to me\n")
+    assert main(["stability", str(f)]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["contrast"] is None and out["note"] == "verse has no lines to compare"
+
+
+def test_estimated_end_word_skips_end_vowel():
+    v = sec("I walked out in the night again\nThe river took the light away\n")
+    c = parse_lyrics("## Chorus\nHold on to zorbletastic\n")[0]
+    r = chorus_contrast(v, c, LEX)
+    assert not any(d.startswith("end vowel") for d in r.differences)
+    assert "end vowel not compared (estimated pronunciation)" in r.notes
