@@ -98,3 +98,34 @@ def test_music21_oracle_agrees_on_spelling():
         ours = parse_chord(sym).pcs
         m21 = frozenset(p.pitchClass for p in music21.harmony.ChordSymbol(sym).pitches)
         assert ours == m21, sym
+
+
+@pytest.mark.parametrize("sym,tones", [
+    ("Cm", ["C", "Eb", "G"]), ("Fm", ["F", "Ab", "C"]), ("Gm7", ["G", "Bb", "D", "F"]),
+    ("Dm7b5", ["D", "F", "Ab", "C"]), ("C7b9", ["C", "E", "G", "Bb", "Db"]),
+    ("Cm9", ["C", "Eb", "G", "Bb", "D"]), ("C7b5", ["C", "E", "Gb", "Bb"]),
+    ("E7#9", ["E", "G#", "B", "D", "G"]), ("Caug", ["C", "E", "G#"]),
+    ("Bm", ["B", "D", "F#"]), ("F#m", ["F#", "A", "C#"]),
+])
+def test_tones_spelled_by_interval_letter(sym, tones):
+    assert parse_chord(sym).tones == tones
+
+
+def test_names_for_key_spelling():
+    assert names_for({10, 2, 5, 9}, bass_pc=10, key="F")[0] == "Bbmaj7"
+    assert names_for({10, 2, 5, 9}, bass_pc=10)[0] == "A#maj7"
+    assert "Gm/Bb" in names_for({10, 2, 7}, bass_pc=10, key="F")
+
+
+def test_transpose_no_chord_unchanged():
+    assert transpose("N.C.", 3) == "N.C."
+    assert transpose("NC", -2, key="F") == "NC"
+
+
+@pytest.mark.parametrize("sym,same_as", [
+    ("C+", "Caug"), ("Caug7", "C7#5"), ("C°7", "Cdim7"), ("C°", "Cdim"), ("Cø", "Cm7b5"),
+    ("C6/9", "C69"), ("C7sus", "C7sus4"), ("C(9)", "Cadd9"), ("C6/9/E", "C69/E"),
+])
+def test_chart_aliases(sym, same_as):
+    a, b = parse_chord(sym), parse_chord(same_as)
+    assert a.pcs == b.pcs and a.quality == b.quality and a.symbol == b.symbol

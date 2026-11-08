@@ -46,7 +46,20 @@ QUALITIES: dict[str, tuple[int, ...]] = {
     "mmaj7": (0, 3, 7, 11),
     "11": (0, 2, 4, 5, 7, 10),
     "13": (0, 2, 4, 5, 7, 9, 10),
+    "7#5": (0, 4, 8, 10),
 }
+
+# Common chart spellings -> canonical quality (applied to the whole quality string).
+ALIASES: dict[str, str] = {
+    "+": "aug", "aug7": "7#5", "+7": "7#5", "°": "dim", "°7": "dim7", "ø": "m7b5", "ø7": "m7b5",
+    "7sus": "7sus4", "(9)": "add9", "sus": "sus4",
+}
+
+# Letter steps above the root for each semitone interval (enharmonic natural/single-accidental
+# choice: e.g. a #9 above E is spelled G, not F##).
+_STEPS = {0: 0, 1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 4, 7: 4, 8: 4, 9: 5, 10: 6, 11: 6}
+_LETTERS = "CDEFGAB"
+_LETTER_PC = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 
 _SYMBOL = re.compile(r"^([A-G][#b♯♭]?)(.*?)(?:/([A-G][#b♯♭]?))?$")
 _NO_CHORD = {"N.C.", "N.C", "NC", "N/C"}
@@ -100,19 +113,30 @@ def _pychord_intervals(quality: str) -> tuple[str, tuple[int, ...]]:
 
 def _quality_intervals(quality: str) -> tuple[str, tuple[int, ...]]:
     """Canonical quality and intervals: pychord first, QUALITIES table as fallback."""
+    quality = ALIASES.get(quality, quality)
     try:
         _, ivs = _pychord_intervals(quality)
-        return ("sus4" if quality == "sus" else quality), ivs
-    except Exception:
+        return quality, ivs
+    except (ValueError, KeyError, IndexError, TypeError, AttributeError):
         pass
-    alias = "sus4" if quality == "sus" else quality
+    alias = quality
     if alias in QUALITIES:
         return alias, QUALITIES[alias]
     raise ValueError(f"unknown chord quality: {quality!r}")
 
 
+def _tone(root: str, root_pc: int, interval: int, flat: bool) -> str:
+    """Spell a chord tone on the letter its interval implies; fall back if >1 accidental."""
+    pc = (root_pc + interval) % 12
+    letter = _LETTERS[(_LETTERS.index(root[0]) + _STEPS[interval % 12]) % 7]
+    acc = (pc - _LETTER_PC[letter] + 6) % 12 - 6
+    if acc in (-1, 0, 1):
+        return letter + "#" * (acc == 1) + "b" * (acc == -1)
+    return _spell_flat(pc, flat)
+
+
 def parse_chord(symbol: str) -> Chord:
-    m = _SYMBOL.match(symbol.strip()) if isinstance(symbol, str) else None
+    m = _SYMBOL.match(symbol.strip().replace("6/9", "69")) if isinstance(symbol, str) else None
     if not m or "/" in m.group(2):
         raise ValueError(f"invalid chord symbol: {symbol!r}")
     root, quality, bass = _norm(m.group(1)), _norm(m.group(2)), m.group(3)
@@ -124,7 +148,7 @@ def parse_chord(symbol: str) -> Chord:
     root_pc = _pc_of(root)
     flat = "b" in root or (bass is not None and "b" in bass)
     pcs = frozenset((root_pc + i) % 12 for i in ivs)
-    tones = [root] + [_spell_flat((root_pc + i) % 12, flat) for i in ivs[1:]]
+    tones = [root] + [_tone(root, root_pc, i, flat) for i in ivs[1:]]
     if bass is not None:
         pcs = pcs | {_pc_of(bass)}
     text = root + quality + (f"/{bass}" if bass else "")
@@ -137,6 +161,8 @@ def is_no_chord(symbol: str) -> bool:
 
 def transpose(symbol: str, semitones: int, key: str | None = None) -> str:
     """Move root and bass separately; respell for the key (or keep flats if written)."""
+    if is_no_chord(symbol):
+        return symbol
     c = parse_chord(symbol)
     flat = _flat_key(key) if key is not None else ("b" in c.root or (c.bass is not None and "b" in c.bass))
     root = _spell_flat(_pc_of(c.root) + semitones, flat)
@@ -146,9 +172,10 @@ def transpose(symbol: str, semitones: int, key: str | None = None) -> str:
     return out
 
 
-def names_for(pcs: set[int], bass_pc: int | None = None) -> list[str]:
+def names_for(pcs: set[int], bass_pc: int | None = None, key: str | None = None) -> list[str]:
     """Chord names whose pitch classes equal pcs (or equal it with the fifth missing).
 
+    Roots and basses are spelled for `key` (sharps when no key).
     Returns [] when bass_pc is given but is not among pcs.
     """
     target = frozenset(p % 12 for p in pcs)
@@ -166,9 +193,9 @@ def names_for(pcs: set[int], bass_pc: int | None = None) -> list[str]:
                 no5 = 1
             else:
                 continue
-            name = SHARPS[root] + q + ("(no5)" if no5 else "")
+            name = spell(root, key) + q + ("(no5)" if no5 else "")
             if bass_pc is not None and bass_pc != root:
-                name += "/" + SHARPS[bass_pc]
+                name += "/" + spell(bass_pc, key)
             found.append((bass_pc is None or bass_pc != root, no5, qi, root, name))
     found.sort()
     return [f[-1] for f in found]
