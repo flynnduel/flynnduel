@@ -1,3 +1,6 @@
+import pytest
+
+from songtools.cli import SongtoolsError
 from songtools.pron import load_lexicon, word_class
 
 
@@ -15,8 +18,45 @@ def test_unknown_word_is_estimated_not_crash():
     assert p.estimated and p.phones is None and p.syllables == 4
 
 
-def test_dropped_g_resolves_to_ing_form():
-    assert load_lexicon().lookup("walkin'")[0].phones == load_lexicon().lookup("walking")[0].phones
+@pytest.mark.parametrize("w", ["walkin'", "Walkin',", "walkin'!", "'walkin'", "\u2018walkin\u2019", "(walkin')"])
+def test_dropped_g_resolves_to_ing_form(w):
+    lex = load_lexicon()
+    p = lex.lookup(w)[0]
+    assert not p.estimated and p.phones == lex.lookup("walking")[0].phones
+
+
+@pytest.mark.parametrize("w", ["zoomie", "wuzzie", "flibbie", "kyree", "jaxxee", "gatsbye"])
+def test_unknown_vowel_plus_e_keeps_syllable(w):
+    p = load_lexicon().lookup(w)[0]
+    assert p.estimated and p.syllables == 2
+
+
+def test_override_without_stress_digit_errors(tmp_path):
+    f = tmp_path / "p.txt"
+    f.write_text("ok R IY1\nbad R IY V\n")
+    with pytest.raises(SongtoolsError) as e:
+        load_lexicon(f)
+    assert e.value.line == 2
+
+
+def test_override_line_without_phones_errors(tmp_path):
+    f = tmp_path / "p.txt"
+    f.write_text("river\n")
+    with pytest.raises(SongtoolsError) as e:
+        load_lexicon(f)
+    assert e.value.line == 1
+
+
+def test_override_missing_file_errors(tmp_path):
+    with pytest.raises(SongtoolsError):
+        load_lexicon(tmp_path / "nope.txt")
+
+
+def test_override_bad_encoding_errors(tmp_path):
+    f = tmp_path / "p.txt"
+    f.write_bytes(b"caf\xe9 K AE1 F EY1\n")
+    with pytest.raises(SongtoolsError):
+        load_lexicon(f)
 
 
 def test_number_is_estimated():
