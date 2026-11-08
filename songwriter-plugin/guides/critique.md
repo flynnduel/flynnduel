@@ -6,14 +6,17 @@ Several things are deliberately excluded because they could not be read: NSAI's 
 
 ## Critical Response Process
 
-Lerman's official page gives four steps. The plugin follows them in order for a full critique, and uses them as a gate for opinions at any time. [verified]
+Lerman's official page gives four steps. The plugin follows them in order for a full critique, and uses them as a gate for opinions at any time. [design]
 
-- Step 1, statements of meaning: responders say what was meaningful, evocative, interesting, exciting or striking. For the plugin: what the song seems to be about, and one to three specific things that land. [verified]
-- Step 2, the artist as questioner: the artist asks questions and responders may give opinions in direct answer to those questions. So when the writer asks "is the bridge weak?", answer directly. [verified]
+- Step 1, statements of meaning: responders say what was meaningful, evocative, interesting, exciting or striking. [verified]
+- For the plugin, step 1 means saying what the song seems to be about and one to three specific things that land. [design]
+- Step 2, the artist as questioner: the artist asks questions and responders may give opinions in direct answer to those questions. [verified]
+- So when the writer asks "is the bridge weak?", answer directly. [design]
 - Step 3, neutral questions: responders ask questions with no opinion couched in them, for example asking what the listener should feel at the bridge instead of asking whether it is weak. [verified]
 - Step 4, permissioned opinions: responders offer an opinion only if the artist agrees to hear it, in the form "I have an opinion about ___, would you like to hear it?", and the artist may decline. [verified]
 - Optional extras after step 4: the artist's next steps, a separate subject-matter discussion, and "working the work" (labbing it directly). [verified]
-- Lerman's process aims to leave the maker eager and motivated to get back to work, so end a critique with the writer's choices, not the plugin's verdict. [verified]
+- Lerman's process aims to leave the maker eager and motivated to get back to work. [verified]
+- So end a critique with the writer's choices, not the plugin's verdict. [design]
 - The permission gate applies only to unsolicited taste. A craft note on a mechanism can be stated plainly, and a direct question gets a direct answer. [design]
 - Order for a full critique: meaning and strengths; the writer's own questions answered directly; neutral intent questions; then about three ranked notes. [design]
 - Rank notes by level, song before section before line: idea, title and development first; then clarity, prosody and melody by section; line polish last. Report the highest-impact issues first. [design]
@@ -24,14 +27,15 @@ Lerman's official page gives four steps. The plugin follows them in order for a 
 
 - Pattison's critique sessions focus on the strengths of the lyric, with suggestions for the next step, and use the seminar tools to show how each would improve the lyric's impact. [verified]
 - His master classes work on already strong songs and target prosody between the intent of the song and its structure, rhyme, rhythm, point of view and phrasing. [verified]
-- Diagnose and demonstrate: name the mechanism, then try several concrete variants of the same lines side by side and let the writer choose by feel, as Pattison does. [verified]
+- Pattison's pattern is diagnose and demonstrate: name the mechanism, then try several concrete variants of the same lines side by side, with the writer choosing by feel. [verified]
 - The plugin limits itself to two to four variants. [design]
 - In his Perth master-class write-up the class swapped lines so an image came first, noted that an aabb scheme stops motion four times across two verses, then tried abab, xxaa and abba with the same words to show different emotional journeys. [verified]
 - His own check taxonomy covers line counts and lengths, rhyme schemes, line rhythms, symmetry, motion, contrast between sections, point of view, tense and recoloring repetition. [verified]
 - His published critique of one hit song shows the diagnostic style: unstressed words on downbeats, secondary stresses of a long word landing on strong beats, and musical phrases that split one lyric idea. [verified]
 - His method for a line is to say it aloud several times and listen to the natural stresses, then compare them with the beat positions. [verified]
 - A weak setting pulls the listener's attention from what is said to how it is said. [verified]
-- A student testimonial on his site that he asks the right questions is self-selected; do not treat it as evidence of results. [verified]
+- A student testimonial on his site that he asks the right questions is self-selected. [verified]
+- So do not treat it as evidence of results. [design]
 - Pattison's "Second Verse Hell" is the named failure of a second verse that only repeats the first. [verified]
 - Option wording, for example: keep it; swap lines 1 and 2 so the image comes first; try abab; try xxaa. Always include keeping it. [design]
 
@@ -49,7 +53,8 @@ Lerman's official page gives four steps. The plugin follows them in order for a 
 - Zollo's revision column records that the amount of revision is the writer's call: some hold to perfect rhyme and strict meter, others value expression, and "that determination is up to you". [verified]
 - Simon removes the irritant, Cohen cut polished verses to protect a song's tone, Newman keeps the critic smaller than the creator while drafting, and Browne loosened his perfect-rhyme rule under Zevon's influence. [verified]
 - Blume calls assuming the first melody is the strongest "just arrogance" and advises workshopping a work tape before paying for a demo. [verified]
-- Blume's interviewer disputes his title-in-the-chorus rule with counterexamples, so title placement is a market heuristic, not a craft law. [verified]
+- Blume's interviewer disputes his title-in-the-chorus rule with counterexamples. [verified]
+- So treat title placement as a market heuristic, not a craft law. [design]
 - Blume's checklists and NSAI's criteria were not read at source. [unverified]
 - Murphy's finding that the title should arrive within 60 seconds is known from summary pages only. [as reported]
 - Tell-lists of stock imagery that circulate as signs of machine writing are commentary without systematic evidence; use them only as a stock-language vocabulary. [as reported]
@@ -100,10 +105,12 @@ The final check runs big to small, so no time goes into polishing a line in a ve
 | 9 | Irritant scan: does anything still bother you? | Simon via Zollo (verified) |
 | 10 | Writer chooses: done, done for now, keep working. Writing done is separate from demo done. | Zollo; Webb (verified) |
 
-- Zollo records that on replay certain lines or notes "seem irksome", and that is the song showing what is wrong; the irritant scan asks for exactly that and the writer decides what to do about it. [verified]
+- Zollo records that on replay certain lines or notes "seem irksome", and that is the song showing what is wrong; [verified]
+- The irritant scan asks for exactly that, and the writer decides what to do about it. [design]
 - Status choices are working, done for now and done, and only the writer sets them; the plugin never declares a song finished. [design]
 - Blume advises workshopping a work tape before investing in a demo. [verified]
 - Writing done and demo done as separate milestones is supported only by summary-level sources, so treat it as the plugin's rule. [design]
-- Webb sent off "Wichita Lineman" believing it was unfinished, and found a false rhyme in it when he later analysed his songs, which supports a "shipped but unfinished" state. [verified]
+- Webb sent off "Wichita Lineman" believing it was unfinished, and found a false rhyme in it when he later analysed his songs. [verified]
+- That supports offering a "shipped but unfinished" state. [design]
 - Each step reports pass, flag, or kept by choice; a flagged step lists its note in the format above. [design]
 - NSAI criteria, Davis's checklist and Blume's checklist stay excluded until verified. [design]

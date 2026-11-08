@@ -28,7 +28,8 @@ The V-System (Greene, as reconstructed by Hober) sorts four-note chords into 14 
 - Greene mostly used fretted notes; when he used an open string it was most often an E or A bass, and the system handles open strings only with care. [verified]
 - Mapping of the common jazz drop names onto groups (drop-2 to V-2, drop-3 to V-4, drop-2-and-4 to V-5, starting from close position) is the research team's own derivation. [design]
 - The toolkit's `guitar vsystem` returns a group of `null` when a voicing is not a four-note V-System voicing; say so and describe it by pitch set and bass note instead. [design]
-- Hober reconstructed Methods 1 and 3 from Greene's notes because Greene never published them; cite as "Greene via Hober". [verified]
+- Hober reconstructed Methods 1 and 3 from Greene's notes because Greene never published them; [verified]
+- Cite the system as "Greene via Hober". [design]
 - For strummed open chords use pitch-set and bass analysis, not V-groups. [design]
 - The chords-db dataset (MIT licence; 828 chords and 3,283 positions) is safe to bundle. [verified]
 - The GuitarSet repository shows no licence, so any claim that it is MIT is unconfirmed. [unverified]
@@ -42,7 +43,9 @@ The V-System (Greene, as reconstructed by Hober) sorts four-note chords into 14 
 - Tunings with the same code are transpositions of each other, so a shape maps one-to-one between them, possibly through a capo. [design]
 - Codes the toolkit computes: Drop D is D75545, DADGAD is D75525, Open G is D57543, Open D is D75435, Open E is E75435 (the same family as Open D) and Open C is C75754. [design]
 - Berklee describes retuning to an open tuning by fret-matching strings, and the "fret two strings, let the rest drone" approach to shapes in open tunings. [verified]
-- Nick Drake used alternate tunings to make cluster chords that are hard in standard tuning; this is verified, but his song-by-song tunings are contested (for "Pink Moon", sources give CGCFCE with a capo at 2, DADGDF#, and Berklee's open D), so never state one as fact. [verified]
+- Nick Drake used alternate tunings to make cluster chords that are hard in standard tuning. [verified]
+- His song-by-song tunings are contested (for "Pink Moon", sources give CGCFCE with a capo at 2, DADGDF#, and Berklee's open D). [unverified]
+- So never state one of his tunings as fact. [design]
 - Mitchell's total tuning count is given as "over 50" and "about 60" by different sources. [as reported]
 
 ## Capo

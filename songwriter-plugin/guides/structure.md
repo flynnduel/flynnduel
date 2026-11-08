@@ -14,17 +14,20 @@ Each entry names the form, what it is, a source, and when it tends to fit. The "
 - Simple verse-chorus: verse and chorus share harmonic content; the label is Covach's, as reported by de Clercq. [verified]
 - Contrasting verse-chorus: verse and chorus differ in harmony and design; the type is Covach's, but his five-type list was read only secondhand. [as reported]
 - Verse, prechorus, chorus, postchorus: the order is fixed, the four make one cycle, and not all four need be present (Open Music Theory). [verified]
-- Compound AABA with an abridged last A (written AABA-prime): Temperley's default layout, as quoted by Hudson, is two verse-chorus pairs, then an instrumental or bridge, then a third pair or just a chorus; the final A is often shortened or altered, which is why Hudson proposes the prime label. [verified]
-- Compound AABA, scope: Temperley holds that virtually all verse-chorus songs are compound AABA, while Covach treats it as one subtype, so present this as an open disagreement, not a settled fact. [verified]
+- Compound AABA with an abridged last A (written AABA-prime): Temperley's default layout, as quoted by Hudson, is two verse-chorus pairs, then an instrumental or bridge, then a third pair or just a chorus; the final A is often shortened or altered, and Hudson proposes the prime label for that. [verified]
+- Compound AABA, scope: Temperley holds that virtually all verse-chorus songs are compound AABA, while Covach treats it as one subtype. [verified]
+- So present the scope of compound AABA as an open disagreement, not a settled fact. [design]
 - Verse-hook: the form of much hip-hop. Open Music Theory supports its paradigms; the corpus count behind it (Duinker) was read secondhand. [as reported]
 - Through-composed rock (Osborn): no discrete, identifiable section is recapitulated; the climax is often held back to the end. [verified]
 - Terminal climax (Osborn): an independent climax arrives once at the song's end and balances against the chorus. The type list comes from search summaries, not the paper. [as reported]
 - Drop forms: the chorus withholds the peak and a drop or instrumental postchorus supplies it; see Asymmetry below for Nobile's anti-telos chorus. [verified]
 - Head plus open section ("jam" form): a stated head and an open improvised section. No peer-reviewed source exists for jam-band form, so label it a heuristic whenever it is offered. [unverified]
-- Module size: modules typically span 8 to 24 bars, so a four-bar invariant passage is a refrain, not a chorus, and a new module cannot begin until the current pattern completes. [verified]
-- Dating: verse-chorus dominates the Billboard Top 20 from the 1980s, and Temperley says simple verse and AABA became much rarer after 1970; use this to describe a form's era, never to rank it. [verified]
+- Module size: modules typically span 8 to 24 bars, a four-bar invariant passage is a refrain, not a chorus, and a new module cannot begin until the current pattern completes. [verified]
+- Dating: verse-chorus dominates the Billboard Top 20 from the 1980s, and Temperley says simple verse and AABA became much rarer after 1970. [verified]
+- Use dating to describe a form's era, never to rank it. [design]
 - Corpus limits: Summach drew norms from 700 Billboard Top-20 songs (1955 to 1989) and warns they may not hold for genres weak on the charts or rising later. [verified]
-- Label ambiguity: de Clercq scores a section against weighted attributes and allows blends such as prechorus/chorus, chorus/link and bridge/chorus, so report a blend when two roles overlap instead of forcing one label. [verified]
+- Label ambiguity: de Clercq scores a section against weighted attributes and allows blends such as prechorus/chorus, chorus/link and bridge/chorus. [verified]
+- Report a blend when two roles overlap instead of forcing one label. [design]
 
 ## Section jobs
 
@@ -34,7 +37,8 @@ Each entry names the form, what it is, a source, and when it tends to fit. The "
 - Prechorus, signs to look for: fragmentation into one- or two-bar units, rising register, an emphasised subdominant, and an open ending that does not cadence on tonic. [verified]
 - Prechorus, accompaniment drop-out: since the 1960s the accompaniment often thins in the prechorus's last bar to spotlight the chorus arrival. [verified]
 - Prechorus, incidence: about a third of verse-chorus hits in 1965-69 had one and about 60% by the late 1980s, with dips around 1970 and in 1979 when disco was strong; the dating of its first appearance is inconsistent inside Summach's own article. [verified]
-- Prechorus, caution: prechorus songs were no longer than verse-chorus songs without one, so adding one is not a length decision. [verified]
+- Prechorus and length: prechorus songs were no longer than verse-chorus songs without one. [verified]
+- So do not treat adding a prechorus as a length decision. [design]
 - Nobile's telos principle: with a prechorus, verse, prechorus and chorus map onto initiation, buildup and arrival, and the goal is the start of the chorus; without a prechorus the goal tends to arrive at the end of the chorus. [verified]
 - Nobile, harmony: an initiating verse does not complete a harmonic circuit and must lead to a chorus, while a sectional verse closes its own circuit. [verified]
 - Nobile, eras: harmonic teleology in the 1960s to 80s, texture and voice as the drivers from 1991 to 2010, and subversions such as anti-telos choruses and drops in the 2010s. [verified]
@@ -43,14 +47,16 @@ Each entry names the form, what it is, a source, and when it tends to fit. The "
 - Postchorus, rule of thumb: repeated short motives or vocables are typical enough to decide the label. [verified]
 - Bridge: usually appears once, before the last (pre)chorus, replacing a verse or prechorus in that cycle; in verse-chorus songs it has more freedom to contrast than an AABA bridge, and may be absent. [verified]
 - Bridge, option: Stolpe notes that a partial repeat of the chorus or prechorus can be the strongest bridge late in a song. [verified]
-- Bridge, optional in modern pop: Osborn reports (via Cobb) that Top-40 EDM almost never has a viable contrasting bridge, so offer a groove or texture switch as an alternative. [verified]
+- Bridge, optional in modern pop: Osborn reports (via Cobb) that Top-40 EDM almost never has a viable contrasting bridge. [verified]
+- So offer a groove or texture switch as an alternative to a bridge. [design]
 - Climb: a one-phrase, prechorus-function ending of a verse. [verified]
 - Refrain versus chorus: a refrain is a lyric-invariant passage inside a section, usually a tail refrain; a chorus is a full section. [verified]
 - Intro, outro, coda: intros are short and mostly instrumental and preview core material; outros reuse earlier material and lose energy; a coda brings new material. [verified]
 - Closing rhetoric: immediate repetition of a core section, thinning texture, late intensification, fadeout, or closing an open section harmonically. [verified]
 - Statement, restatement, departure, conclusion (srdc, Everett's labels): the most common strophe pattern, and the ancestor of verse, prechorus and chorus per Summach and Nobile. [verified]
 - Sentential share: more than a quarter of Summach's 700 songs contain a sentential module and strophes are sentential almost half the time. [verified]
-- Use "energy gain" only as Open Music Theory's summary term; Summach's own words are momentum and teleology. [verified]
+- "Energy gain" is Open Music Theory's summary term; Summach's own words are momentum and teleology. [verified]
+- Use "energy gain" only as that summary term. [design]
 
 ## Contrast
 
@@ -77,7 +83,8 @@ Each entry names the form, what it is, a source, and when it tends to fit. The "
 - Blume's numbered hook taxonomy and BMI column details (signature lick as an instrumental hook, rhythmic hooks, hooks in any section) are secondhand. [as reported]
 - Stroud's postchorus vocables count as a second kind of hook. [verified]
 - Stroud notes that recent tracks increasingly open on the chorus, which makes chorus-first an option, not a norm. [verified]
-- The interviewer in a verified Blume interview disputes his title-in-the-chorus rule with counterexamples, so treat placement as a choice with options. [verified]
+- The interviewer in a verified Blume interview disputes his title-in-the-chorus rule with counterexamples. [verified]
+- So treat title placement as a choice with options. [design]
 - Always offer the placement options side by side: first line, last line, both, or a melodic outlier mid-chorus. [design]
 
 ## Asymmetry
@@ -85,7 +92,7 @@ Each entry names the form, what it is, a source, and when it tends to fit. The "
 Symmetry is the baseline that makes a deviation audible. The plugin suggests one meaningful deviation, tied to what the song is saying, never decoration. [design]
 
 - Mismatched line lengths and rhymes create pull: unequal lengths such as 3, 3 and 5 stresses feel unstable and tell the listener to keep going. [verified]
-- Principle of Sequence: once line 3 mimics line 1 we expect line 4 to mimic line 2, so a break in sequence is felt. [verified]
+- Principle of Sequence: once line 3 mimics line 1 we expect line 4 to mimic line 2, and a break in that sequence is felt. [verified]
 - An interrupted bridge can enact an unresolved story: Pattison reads a three-line bridge that stops and jumps back to verse 1 as a character stuck going backwards. [verified]
 - Truncated final line, as in the one-bar last line above (Pattison). [verified]
 - Extended final lines are a natural counterpart but no source was read for them. [design]

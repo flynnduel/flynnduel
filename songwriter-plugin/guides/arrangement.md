@@ -68,7 +68,7 @@ LEFT TO THE PLAYERS: exact bass line, drum pattern, voicings
 
 - The Nashville Number System was developed by Matthews in the late 1950s for vocal parts and adapted by McCoy in the early 1960s for rhythm sections. [as reported]
 - Williams is the system's historian and author of the standard book (11th edition, 2023), not its originator. [as reported]
-- Chords are numbered by the root's scale degree with the tonic as 1, so a chart works in any key; minor is marked with a dash or an m. [verified]
+- Chords are numbered by the root's scale degree with the tonic as 1, which lets a chart work in any key; minor is marked with a dash or an m. [verified]
 - Charts usually run four measures to a line; several chords in one bar are grouped by underlining, a boxed bar marks a complex measure, and a diamond marks a sustained chord. [verified]
 - The symbols are not standardized: individual players notate differently, and the standard book shows one song charted by seven session players to prove it. [verified]
 - So any number chart the plugin offers carries a legend of the symbols it uses. [design]

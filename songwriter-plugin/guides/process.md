@@ -23,14 +23,17 @@ Eight doors lead into one song record. Each door marks what the writer already h
 - Banked fragment: a line, riff, progression or title captured earlier is promoted into a song. Order: bank it, or expand it at once if an instrument is at hand, then build outward from the core. [design]
 - Co-write exchange: Hunter described trading "starter ideas" back and forth with Garcia, with the best results when each batted work back until both agreed. [verified]
   - Reordering: alternate partial drafts on the words and music, with shared history. [design]
-- Townes Van Zandt sometimes had the core of a song come all at once; treat that as a banked fragment or as a whole-song start. [verified]
+- Townes Van Zandt sometimes had the core of a song come all at once. [verified]
+- Treat that as a banked fragment or as a whole-song start. [design]
 - Simon tries to discover what a song says rather than plot it, and words often come from the sound of the music before they become coherent thoughts. [verified]
 - No data exists on how often professionals use each entry point. [unverified]
 - Steve Seskin is not a source for title-first writing; the title-first material here is Stolpe's. [verified]
 
 ## Receive, then edit
 
-Interview accounts from Zollo's book interviews, read on American Songwriter, show a shared stance: generation is receptive and the conscious work is selecting and setting up. The plugin separates the two. [verified]
+Interview accounts from Zollo's book interviews, read on American Songwriter, show a shared stance: generation is receptive and the conscious work is selecting and setting up. [verified]
+
+The plugin separates the two. [design]
 
 - Dylan wants an environment where he can accept unconscious material and take it down. [verified]
 - Simon tries to discover a song rather than plot it, and sees his job as the editor who spots good lines and builds the first half of a thought as set-up for the second. [verified]
@@ -51,7 +54,8 @@ Interview accounts from Zollo's book interviews, read on American Songwriter, sh
 - Promoting a bank item into a song makes it the song's entry point and marks its facet as given. [design]
 - Banking is not drafting: the plugin saves the item and does not critique it. [design]
 - A large bank is normal: Seskin banked about 150 uncut songs over three years of commuting, and Goffin called 150 early songs by him and King "bad songs" before their first big hit. [verified]
-- Tweedy's one-in-five ratio supports treating most banked ideas as practice. [verified]
+- Tweedy says about one song in five means a lot. [verified]
+- That supports treating most banked ideas as practice. [design]
 
 ## Getting unstuck
 
@@ -64,7 +68,8 @@ Offer these as options, never as obligations, and avoid streak or guilt messagin
 - Tweedy says the hard part when low is picking up the guitar, after which the music reliably helps. [verified]
 - King's guilt-free walk-away: step out, do something else, come back. [verified]
 - Townes's focused session: he once took a motel room to write and came away with two or three songs, though he was skeptical of hour-by-hour scheduled co-writes. [verified]
-- Townes finished "Pancho and Lefty" the day after he first played it, so a finish-tomorrow note is legitimate. [verified]
+- Townes finished "Pancho and Lefty" the day after he first played it. [verified]
+- So a finish-tomorrow note is legitimate. [design]
 - Word ladders, stealing words from a book, cut-ups of the writer's own banked lines, a hum-while-skimming melody exercise and a three-part daily checklist are attributed to Tweedy's book but were read in summaries only. Label them as such when offered. [as reported]
 - Hunter's spiral notebook on tour shows a lyricist who is not a performer still works by capture. [verified]
 - Webb's routine and step-away advice come from a book summary only. [unverified]

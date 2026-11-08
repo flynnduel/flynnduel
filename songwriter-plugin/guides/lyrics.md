@@ -12,10 +12,13 @@ Rhyme is a dial of stability, not a pass/fail test. Treat the writer's rhymes as
 - Rhyme type is not one of his four structure elements, but he uses it for the same job, so model it as a labelled fifth dial. [design]
 - Family rhyme keeps the vowel and swaps the following consonant for a relative inside one of three families: plosives, fricatives or nasals. [verified]
 - A relative is a partner (same place of articulation, opposite voicing, such as t/d or f/v) or a companion (same family, same voicing). [verified]
-- Offer family candidates in the right order per family. For plosives: the partner first (t to d), then the companions (k, p), then the rest of the family (b, g). For fricatives: the companions first (f to s, sh, ch), then the partner v. [verified]
-- Assonance can be taught through diphthong parts: a long i contains an open-a sound and an ee sound, so it can match either. [verified]
-- Pattison says finding a rhyme is not the creative act, so a rhyming dictionary or a candidate list is legitimate help. [verified]
-- Flag cliché pairs such as love/dove/above, fire/desire, hand/understand, eyes/realize, home/roam and home/alone, and ask whether the writer wants the stock sound. [verified]
+- Family candidates have a closeness order per family. For plosives: the partner first (t to d), then the companions (k, p), then the rest of the family (b, g). For fricatives: the companions first (f to s, sh, ch), then the partner v. [verified]
+- Offer family candidates in that order. [design]
+- Assonance can be taught through diphthong parts: a long i contains an open-a sound and an ee sound, and so can match either. [verified]
+- Pattison says finding a rhyme is not the creative act. [verified]
+- So a rhyming dictionary or a candidate list is legitimate help. [design]
+- Pattison names cliché pairs such as love/dove/above, fire/desire, hand/understand, eyes/realize, home/roam and home/alone. [verified]
+- Flag them and ask whether the writer wants the stock sound. [design]
 - Describe how a scheme moves: aabb stops at every couplet, abab is a stable four-line journey, abba and xxaa stay open. [verified]
 
 ## Stability
@@ -26,7 +29,7 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 - Measure line length in stressed syllables, not total syllables. [verified]
 - Read unmatched lengths such as 3/3/5 as a signal that the section keeps going, and matched lengths as settling. [verified]
 - Report a stability profile per section and ask whether it fits the section's job (verse unsettled, chorus settled, for example). [design]
-- Treat prosody as the one place where he states a rule rather than offering a tool; the idea predates him and traces back to Aristotle's unity. [verified]
+- Prosody is the one place where he states a rule rather than offering a tool; the idea predates him and traces back to Aristotle's unity. [verified]
 
 ## Title and verse development
 
@@ -34,8 +37,8 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 - Mine the title with who, what, when, where, why and how to find verse material. [verified]
 - Keep each chorus line general enough that every verse can recolor it with a new angle. [verified]
 - Put separate ideas in separate systems rather than blending them in one block. [verified]
-- Treat the I, you, we split across three verses as a useful starting guideline that can harden into habit. [verified]
-- Name second-verse stagnation (a verse that only repeats the first) and cure it by recoloring the chorus. [verified]
+- Pattison presents the I, you, we split across three verses as a useful starting guideline that can harden into habit. [verified]
+- Pattison names second-verse stagnation (a verse that only repeats the first) and cures it by recoloring the chorus. [verified]
 - Treat the middle line of a chorus as a secondary power position; this comes from Stolpe's write-up of his course, not from his own words. [as reported]
 - Make repetition productive by changing the grammatical type of a repeated fragment (statement to question or command) so it adds meaning. [verified]
 - Davis (as reported) prefers titles that are identifiable after one hearing. [as reported]
@@ -44,7 +47,8 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 
 - Classify every lyric into one of four points of view: direct address (I to you), second-person narrative (you, no I), first-person narrative (I and third persons, no you), third-person narrative (neither). [verified]
 - Run the classifier by pronoun, excluding quoted speech and flagging generic "you". [design]
-- POV check: try the song in all four before finishing, and show the writer the variants side by side. [verified]
+- Pattison's POV check is to try the song in all four points of view before finishing. [verified]
+- Show the writer the variants side by side. [design]
 - Keep a mixed POV only if it beats a consistent version in an A/B comparison; most of the time consistency wins. [verified]
 - Run a drift check on tense, time frame and setting, framed as "was this deliberate?"; Davis (as reported) holds single time frame, consistent viewpoint and unchanging setting as defaults. [as reported]
 - Prefer citing Pattison for consistency checks, with Davis as corroboration only. [design]
@@ -52,16 +56,19 @@ Pattison's lens asks whether each song, verse and line is stable or unstable, an
 
 ## Metaphor
 
-- A metaphor is a collision and must be literally false; test it by asking whether the statement could be true as written. [verified]
+- A metaphor is a collision and must be literally false: the statement could not be true as written. [verified]
+- Test it by asking whether the statement could be true as written. [design]
 - Three types: expressed identity (x is y, the y of x, x's y), qualifying metaphor (adjective-noun or adverb-verb friction) and verbal metaphor (a verb clashing with its subject or object). [verified]
-- Simile does not shift focus to the second term, so use it for one-off comparisons and sustain a metaphor instead. [verified]
+- Simile does not shift focus to the second term, while metaphor does. [verified]
+- So use simile for one-off comparisons and sustain a metaphor instead. [design]
 - Drill: collide words from a key idea with unrelated ones; noun by verb lists tend to be the most productive. [verified]
 - Flag dead metaphors and metaphors that start and are dropped, then ask what the writer wants to keep. [design]
 - Offer to move the strongest image toward line 1. [design]
 
 ## Object writing
 
-- Open a writing session with object writing: pick an object, keep to sensory detail, and do not edit while writing. [verified]
+- Pattison's object writing: pick an object, keep to sensory detail, and do not edit while writing. [verified]
+- Open a writing session with it. [design]
 - Writing nonstop against a timer is the usual form of the exercise, but that detail is secondhand. [as reported]
 - The seven-senses list (including organic and kinesthetic) comes from a Writer's Digest snippet and Berklee material, and the ten-minute timing is secondhand. [as reported]
 - When the song record has no material, run object writing or ask a question before drafting. [design]

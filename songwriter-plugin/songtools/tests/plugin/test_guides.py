@@ -20,6 +20,8 @@ KNOWN_AUTHORS = [
     "Murphy", "Léveillé Gauvin", "Duinker", "Carter", "Matthews", "McCoy", "Williams",
     "Hudson", "Hunter", "Seskin", "Covach", "Kachulis", "Zocher", "Wikipedia", "Berklee",
 ]
+CONSEQUENCE = ("; so ", ", so ", "so ask", "so offer", "so treat", "so never", "so do not", "use this",
+               "treat this", "which is why")
 BULLET = re.compile(r"^\s*(?:[-*]|\d+\.)\s+")
 QUOTE = re.compile(r'"([^"]*)"|“([^”]*)”')
 
@@ -53,6 +55,8 @@ def lint_guide(path) -> list[str]:
             continue
         if BULLET.match(line) and not line.rstrip().endswith(TAGS):
             problems.append(f"{name}:{n}: rule line has no source tag")
+        if BULLET.match(line) and line.rstrip().endswith("[verified]") and any(c in line for c in CONSEQUENCE):
+            problems.append(f"{name}:{n}: [verified] bullet carries a consequence or instruction; split it into a fact and a [design] bullet")
         for author in KNOWN_AUTHORS:
             if author in line and author not in headings:
                 problems.append(f"{name}:{n}: author {author} has no entry in sources.md")
@@ -77,6 +81,14 @@ def test_lint_flags_unlisted_author_and_variable(tmp_path):
     p.write_text("## Rules\n- Pattison says so [verified]\n- ok ${CLAUDE_PLUGIN_ROOT} [design]\n")
     out = lint_guide(p)
     assert any("Pattison" in m for m in out) and any("CLAUDE_PLUGIN_" in m for m in out)
+
+
+def test_lint_flags_verified_bullet_with_instruction(tmp_path):
+    p = tmp_path / "g.md"
+    p.write_text("## Rules\n- Cliches are stock, so ask the writer about them [verified]\n"
+                 "- Cliches are stock. [verified]\n- Ask the writer about them. [design]\n")
+    out = lint_guide(p)
+    assert len(out) == 1 and "g.md:2" in out[0] and "consequence" in out[0]
 
 
 def test_lint_ignores_fenced_code(tmp_path):
