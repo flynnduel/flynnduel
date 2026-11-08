@@ -128,6 +128,8 @@ $ songtools prosody song --section "Verse 1" --line 1
              "stress_pattern": ["0101010001", "0101010101"], "matches": false}]
 ```
 
+Flag rules, by weight: `INVERSION` (strong, 100: an unstressed syllable on a stronger beat than its word's primary stress), `STRESSED_OFFBEAT` (10), `SECONDARY_INVERSION` (8: a word's secondary stress on a stronger beat than its own primary, as in "IN-se-cu-ri-ties" with "in" on the downbeat and "cu" on beat 3; never raised for a word with no primary stress, such as a demoted function word like "before"), `UNSTRESSED_DOWNBEAT` (6), `LAPSE` (5), `FUNCTION_DOWNBEAT` (3) and `EMPTY_DOWNBEAT` (1). Proposals avoid all of them where they can. [design]
+
 If any syllable's pronunciation was guessed, that syllable and the top-level `estimated` are `true`. Always repeat the limit sentence in `limit`. A confirmed setting goes into `melody.md` only after the writer agrees. [design]
 
 ### chord

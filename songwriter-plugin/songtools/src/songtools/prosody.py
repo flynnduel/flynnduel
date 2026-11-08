@@ -20,6 +20,10 @@ LIMIT = ("Scoring is a simplified version of Hayes (2005), whose model matched "
 RULES: dict[str, tuple[int, Literal["strong", "soft"]]] = {
     "INVERSION": (100, "strong"),
     "STRESSED_OFFBEAT": (10, "soft"),
+    # A word's secondary stress on a stronger beat than its own primary (Pattison's
+    # "insecurities" case). Soft: weaker than a stressed off-beat, since secondary
+    # stress is real stress, but stronger than an unstressed polysyllable on a downbeat.
+    "SECONDARY_INVERSION": (8, "soft"),
     "UNSTRESSED_DOWNBEAT": (6, "soft"),
     "LAPSE": (5, "soft"),
     "FUNCTION_DOWNBEAT": (3, "soft"),
@@ -197,6 +201,10 @@ def score(syls: list[Syl], slots: list[int], line_slots: int = 16) -> tuple[int,
                 found.append(("INVERSION", j, slots[j],
                               f"unstressed '{syls[j].label}' sits on a stronger beat than "
                               f"stressed '{syls[top].label}' in '{syls[j].word}'"))
+            elif syls[j].stress == 2 and strength(effs[j]) > strength(effs[top]):
+                found.append(("SECONDARY_INVERSION", j, slots[j],
+                              f"secondary stress '{syls[j].label}' sits on a stronger beat than "
+                              f"primary '{syls[top].label}' in '{syls[j].word}'"))
     for i, (x, s, nxt) in enumerate(zip(syls, slots, nxts)):
         for rule in _local_rules(x, s, nxt, i == n - 1):
             msg = {
@@ -227,7 +235,8 @@ def score(syls: list[Syl], slots: list[int], line_slots: int = 16) -> tuple[int,
 # (M, reached): M is a guess of the strongest strength among the word's stress-1
 # syllables (0 = word has no INVERSION constraint). Stress-1 syllables must not
 # exceed M and one must equal it (checked at the word's last syllable); every
-# stress-0 syllable stronger than M costs 100 immediately. Exactly one guess is
+# stress-0 syllable stronger than M costs 100 immediately, and every stress-2
+# syllable stronger than M costs SECONDARY_INVERSION's weight. Exactly one guess is
 # valid for any slot list, so the DP is exact. State per syllable: (slot, M, reached).
 # Ties: the stated cost leaves anticipations free, so equally scored settings are
 # ranked first by fewest anticipated (syncopated) syllables, then by the
@@ -283,6 +292,8 @@ def propose(syls: list[Syl], bars: int = 2) -> list[int]:
                 reached = reached or g == m
             elif st == 0 and g > m:
                 extra = RULES["INVERSION"][0] * _TIE
+            elif st == 2 and g > m:
+                extra = RULES["SECONDARY_INVERSION"][0] * _TIE
             if last_in_word[i] and not reached:
                 return None
         return extra, (m, reached)

@@ -71,7 +71,39 @@ def _skill_params():
 # Skill-authoring standards (writing-skills; Anthropic best practices): the body stays under
 # 500 lines, and the description says when to use the skill without summarizing its process.
 MAX_BODY_LINES = 500
-WORKFLOW_WORDS = re.compile(r"\b(then|runs|dispatches|steps?)\b", re.I)
+# Workflow-summary patterns, not bare words: music descriptions legitimately say
+# "half step", "vocal runs", "runs long" or "and then the chorus".
+_VERBS = r"(?:run|check|write|draft|ask|read|measure|dispatch)\w*"
+WORKFLOW_WORDS = re.compile(
+    r"\bthen,? " + _VERBS
+    + r"|\bsteps? \d"
+    + r"|\bdispatch\w*"
+    + r"|\bruns? (?:the|a|an|each|every) (?:\w+ )?(?:tools?|checks?|scripts?|scans?)\b",
+    re.I)
+
+
+def parse_frontmatter(fm_text: str) -> dict[str, str]:
+    """Top-level keys of simple YAML frontmatter, including block (> |) and multi-line plain scalars."""
+    fm: dict[str, str] = {}
+    key, style, parts = None, None, []
+
+    def close():
+        if key is not None:
+            sep = "\n" if style and style.startswith("|") else " "
+            fm[key] = sep.join(p for p in parts if p).strip().strip('"')
+
+    for line in fm_text.splitlines():
+        if line[:1] in (" ", "\t") and key is not None:
+            parts.append(line.strip())
+            continue
+        if ":" in line:
+            close()
+            k, v = line.split(":", 1)
+            key, v = k.strip(), v.strip()
+            style = v if v in (">", "|", ">-", "|-", ">+", "|+") else None
+            parts = [] if style else [v]
+    close()
+    return fm
 
 
 def check_skill_text(text: str, name: str) -> list[str]:
@@ -81,11 +113,7 @@ def check_skill_text(text: str, name: str) -> list[str]:
     if not m:
         return ["missing frontmatter"]
     fm_text, body = m.groups()
-    fm = {}
-    for line in fm_text.splitlines():
-        if ":" in line and not line.startswith(" "):
-            k, v = line.split(":", 1)
-            fm[k.strip()] = v.strip().strip('"')
+    fm = parse_frontmatter(fm_text)
     if fm.get("name") != name:
         errs.append("name != folder")
     desc = fm.get("description", "")
@@ -194,13 +222,44 @@ def test_helper_rejects_body_over_500_lines():
     assert any("500 lines" in e for e in errs), errs
 
 
-@pytest.mark.parametrize("words", ["then", "Then", "runs", "dispatches", "step", "steps"])
-def test_helper_rejects_description_that_summarises_workflow(words):
-    text = f"---\nname: x\ndescription: Use when testing lyrics, {words} the checks.\n---\n" + RB
-    errs = check_skill_text(text, "x")
+def _desc(desc: str) -> str:
+    return f"---\nname: x\ndescription: {desc}\n---\n" + RB
+
+
+@pytest.mark.parametrize("desc", [
+    "Use when drafting lyrics; reads the song, then runs the checks.",
+    "Use when drafting lyrics, then check each line.",
+    "Use when editing. Then write the notes.",
+    "Use when editing: step 1 measure, step 2 note.",
+    "Use when planning; dispatches a subagent per section.",
+    "Use when checking rhyme; runs the tool on every line.",
+    "Use when checking rhyme and run a check per verse.",
+])
+def test_helper_rejects_description_that_summarises_workflow(desc):
+    errs = check_skill_text(_desc(desc), "x")
     assert any("workflow" in e for e in errs), errs
 
 
-def test_helper_workflow_words_match_whole_words_only():
-    text = "---\nname: x\ndescription: Use when a stepparent rerunsthen writes lyrics.\n---\n" + RB
-    assert check_skill_text(text, "x") == []
+@pytest.mark.parametrize("desc", [
+    "Use when a melody moves by a half step or a whole step.",
+    "Use when vocal runs crowd the line or the song runs long.",
+    "Use when the verse builds and then the chorus drops.",
+    "Use when a writer steps away from a song and comes back.",
+])
+def test_helper_allows_music_words_in_description(desc):
+    assert check_skill_text(_desc(desc), "x") == []
+
+
+@pytest.mark.parametrize("style", [">", "|", ">-", "|-"])
+def test_helper_reads_block_scalar_descriptions(style):
+    good = f"---\nname: x\ndescription: {style}\n  Use when testing\n  block descriptions.\n---\n" + RB
+    assert check_skill_text(good, "x") == []
+    bad = f"---\nname: x\ndescription: {style}\n  Use when testing;\n  then run the checks.\n---\n" + RB
+    assert any("workflow" in e for e in check_skill_text(bad, "x"))
+    wrong = f"---\nname: x\ndescription: {style}\n  Helps with lyrics.\n---\n" + RB
+    assert "bad description" in check_skill_text(wrong, "x")
+
+
+def test_helper_reads_plain_multiline_description():
+    bad = "---\nname: x\ndescription: Use when testing,\n  then run the checks.\n---\n" + RB
+    assert any("workflow" in e for e in check_skill_text(bad, "x"))

@@ -51,7 +51,7 @@ Draft:
 - **Shape.** Match the section you are writing for: measure its neighbours with `stability` instead of judging line lengths by eye.
 - **Self-audit, every draft of any size.** Write the candidate lines under their `## Section` heading to `${CLAUDE_PLUGIN_DATA}/draft-check/lyrics.md`, run `cliche --strict`, `stability` and `rhyme` on its end words, and rewrite or drop anything that hits. Re-run until clean. A draft that has not been audited is not shown.
 - **Show** the draft (2–4 versions where a choice matters), one line on which material each image came from, and "self-audit: cliche --strict clean". Ask at most one question.
-- **Silence.** No flags, no "one small note", no comment on the writer's stock lines or rhymes, even ones you noticed while reading. If the writer asks a direct question about a line, answer it.
+- **Silence.** No flags, no "one small note", no comment on the writer's stock lines or rhymes, even ones you noticed while reading. The self-audit checks only your own draft; rule 4 bars running checks on the writer's lines. If the writer asks a direct question about a line, answer it.
 - Drafts go into `lyrics.md` only when the writer says so (see Changing lyrics.md).
 
 ## Editing mode
@@ -62,26 +62,29 @@ Measure first, then speak. Copy this checklist:
 Edit:
 - [ ] Tools run for what was asked (cliche, stability, pov, rhyme, prosody)
 - [ ] estimated / undetermined results reported as such
-- [ ] Kept lines excluded from notes
+- [ ] Kept lines not re-flagged for the issue they were kept over
 - [ ] Each note: location, observation, mechanism, listener effect, basis, 2-4 options
 - [ ] No line of the writer's overwritten
 ```
 
 **Which tool.** Rhyme, stock language or cliche: `rhyme`, `cliche --strict` (strict-only hits are weaker evidence; repeat each hit's `source` tag). Section shape: `stability`. Pronouns or voice: `pov`. Syllables, scansion, stress or "how does it sit on the tune": `prosody`; it reads `melody.md` when the line is there.
 
-**Note format** (critique.md): location; observation (the measured result); mechanism (what it does, in concrete terms); listener effect; basis ("Pattison:", "prosody (Hayes, simplified):", the hit's `source`); options, two to four, one of them "leave it". Lead with the highest-level issue; about three notes unless the writer asks for more.
+**Lenses** (`lenses` in `## Core`). `pattison` is the default. With `webb` on, rhyme notes also give the strict reading from `rhyme WORD1 WORD2 --lens webb` and name it ("Webb strict rhyme: false rhyme"). Commercial heuristics (title timing, title in the chorus) appear only when `commercial` is on.
+
+```
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools rhyme WORD1 WORD2 --lens webb
+```
+
+**Note format:** location; observation (the measured result); mechanism (what it does, in concrete terms); listener effect; basis ("Pattison:", "prosody (Hayes, simplified):", the hit's `source`); options, two to four, one of them "leave it". Lead with the highest-level issue. At most three notes, and only what the question needs, unless the writer asks for more.
 
 **Counts and unknown words.**
 - A syllable count is the length of `prosody`'s `syllables` list. If any syllable is `estimated`, say the count is estimated ("6, estimated: Señor is not in the dictionary"), never a bare number.
 - A `rhyme` result of `undetermined` is reported as undetermined. Your ear may be offered as a question to the writer ("do you say seh-NYOR?"), never as the result.
 - Then offer to add the word to `songs/pronunciations.txt`: one line per word, CMU phones with stress digits (`señor S EY0 N Y AO1 R`). Write it only after the writer confirms how they say it, then re-run with `--pron songs/pronunciations.txt` placed before the subcommand.
 
-**Reading `prosody`.** The grid has 8 slots per 4/4 bar: slot 0 and 8 are downbeats (strongest), 4 is beat 3, 2 and 6 are beats 2 and 4, odd slots are off-beats. Report every flag, and also check each `syllables` entry's `stress` (1 primary, 2 secondary, 0 unstressed) against its slot yourself, because the flags are ranked, not exhaustive:
-- a function word or an unstressed syllable on a downbeat;
-- a word's secondary stress (2) or unstressed syllable on a stronger beat than the same word's primary stress (1); the tool flags only the unstressed case, so check the secondary one yourself;
-- a word-final unstressed syllable on a downbeat.
+**Reading `prosody`.** The grid has 8 slots per 4/4 bar: slot 0 and 8 are downbeats (strongest), 4 is beat 3, 2 and 6 are beats 2 and 4, odd slots are off-beats. Report the top flags relevant to what was asked, strongest first, each in the tool's own terms (its `message`). The flags are the measurement: do not add stress findings of your own. If you hear something the tool did not flag, put it to the writer as a question.
 
-Explain each as the word's natural stress fighting the beat, quote the tool's `notation`, and state the `limit` sentence once. Soft flags get explained too; "common in pop" or any genre is not a reason to wave one off. Options per line: the tool's `best_slots` setting, moving one or two syllables (re-score with `--slots`), swapping one word, or leaving it. Never rewrite the whole line unasked, and never change `melody.md` until the writer agrees to a setting.
+Explain each reported flag as the word's natural stress fighting the beat, quote the tool's `notation`, and state the `limit` sentence once. Soft flags get explained too; "common in pop" or any genre is not a reason to wave one off. Options per line: the tool's `best_slots` setting, moving one or two syllables (re-score with `--slots`), swapping one word, or leaving it. Never rewrite the whole line unasked, and never change `melody.md` until the writer agrees to a setting.
 
 **The writer revised a line and you think it is weaker.** Say so with mechanism and basis (run `cliche --strict` on it: a named emotion or stock pair is a measured observation). Options: keep the new line; restore the previous one (from `drafts/`); combine the new directness with the old image; leave it for now. Never overwrite the writer's line, even when told "fix anything".
 
@@ -95,14 +98,14 @@ When the writer keeps a flagged line ("keep it", "it stays"):
 2. Verify with the `drafts diff ... --song` parse call above; fix the entry if it exits 2.
 3. Confirm in one line and move on.
 
-For the rest of the session, a kept line is left out of all notes and reviews, including "top notes" on the whole song: no re-flag, no re-argument, no praise of having kept it. Re-check it only if the lines around it change. It returns at `/critique` and `/finalcheck`, not here.
+For the rest of the session, a kept line is not re-flagged or re-argued for the issue it was kept over, in any note or review, including "top notes" on the whole song. A different, new issue on that line (for example once its melody is set or the lines around it change) is raised like any other note, saying the line is kept for the earlier issue. The kept issue returns, listed separately, at `/critique` and `/finalcheck`.
 
 ## Changing lyrics.md
 
 Only when the writer agrees to a change, or has told you to go ahead:
 
-1. Snapshot first: `drafts snapshot <song>`. Not `cp`; the toolkit numbers the versions.
-2. Make only the agreed change. Never alter the line the writer just wrote or a kept line.
+1. Snapshot first: `drafts snapshot <song>`. Not `cp`; the toolkit numbers the versions. Edit only after its JSON shows the new `drafts/lyrics-vN.md` path. If the call fails or is blocked, fix the call and run it again; do not touch `lyrics.md` meanwhile.
+2. Make only the agreed change. Never alter the writer's line or a kept line unless the writer asks for that change.
 3. Removed material goes to the cut pool with `drafts cut`.
 4. Report each change as old → new so the writer can reverse it.
 
@@ -116,12 +119,13 @@ Each of these was said by an agent without this skill:
 | "The toolkit doesn't know Señor, so I judged the rhyme by ear." | Report `undetermined`; your ear is a question for the writer. |
 | "Yes, it reads that way to me", "the line that sounds machine-made", "language models produce this kind of line" | Never. Name the stock images; give options. |
 | "Understood, I won't touch it in any draft." (kept line, nothing written) | Memory ends with the session. Write the entry to `song.md` and verify it. |
-| "Kept line, but it supports the song, so it's my top note." | Kept lines stay out of notes this session. |
+| "Kept line, but it supports the song, so it's my top note." | Not re-argued for the issue it was kept over. Only a new issue is raised. |
 | "Lines run 8 to 10 syllables, close to verse 1", "it sits fine in your range" | Measured with the toolkit, or not said. |
 | "The scan didn't run; my read is it would only flag X." | Fix the call and re-run it. Never predict a tool's result. |
 | "The cliche scan didn't catch 'neon', so this is my judgment." | Stock language needs `cliche --strict`. |
 | "The draft reads clean, no need to scan it." | Every draft passes `cliche --strict` before it is shown. |
 | "That one is soft and common in pop, so leave it", "only a function word, which is minor" | Explain the mechanism, give options; the writer decides, not a genre. |
 | "Snapshotting with `cp lyrics.md drafts/...`" | `drafts snapshot`. |
+| "The snapshot didn't run, so I'll edit and put it back afterwards." | No snapshot path, no edit. |
 | "'Lost and lonely' is easy to hear as a cliché." (no scan) | Run `cliche --strict` and quote the hit and its source. |
 | "I'll help now; the folder can come later." | Offer the song folder in the same reply. |

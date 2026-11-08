@@ -143,7 +143,7 @@ def _brute(s, bars):
 
 
 @pytest.mark.parametrize("text", ["the river", "unconditionally", "she ran away",
-                                  "before the river", "bad guy"])
+                                  "before the river", "bad guy", "insecurities"])
 def test_propose_is_exact_and_lexicographic(text):
     s = syls(text)
     slots = propose(s, bars=1)
@@ -273,3 +273,31 @@ def test_cli_non_increasing_slots(tmp_path, capsys):
     assert main(["prosody", d, "--section", "Verse 2", "--line", "1",
                  "--slots", "0 4 4 6"]) == 2
     assert "strictly increasing" in json.loads(capsys.readouterr().err)["error"]
+
+
+# SECONDARY_INVERSION: a word's secondary stress (2) on a stronger beat than its own primary (1).
+def test_secondary_inversion_flagged():                   # Pattison, "insecurities" (verified)
+    s = syls("insecurities")                              # in(2) se(0) CU(1) ri(0) ties(0)
+    assert [x.stress for x in s] == [2, 0, 1, 0, 0]
+    _, flags = score(s, [0, 2, 4, 5, 6])                  # "in" on the downbeat, "cu" on beat 3
+    hits = [f for f in flags if f.rule == "SECONDARY_INVERSION"]
+    assert len(hits) == 1 and hits[0].syllable == 0 and hits[0].severity == "soft"
+    assert hits[0].weight == 8 and "in" in hits[0].message and "cu" in hits[0].message
+
+
+def test_secondary_not_flagged_when_primary_is_as_strong():
+    s = syls("insecurities")
+    _, flags = score(s, [-3, -2, 0, 1, 2])                # "cu" takes the downbeat
+    assert not [f for f in flags if f.rule == "SECONDARY_INVERSION"]
+
+
+def test_secondary_not_flagged_without_a_primary():
+    s = syls("before the river")                          # be-FORE demoted to secondary
+    assert s[1].stress == 2
+    _, flags = score(s, [-1, 0, 2, 4, 5])                 # "fore" on the downbeat, no primary in word
+    assert not [f for f in flags if f.rule == "SECONDARY_INVERSION"]
+
+
+def test_proposal_avoids_secondary_inversion():
+    r = check(syls("all your insecurities"), None)
+    assert not [f for f in r.flags if f.rule == "SECONDARY_INVERSION"]
