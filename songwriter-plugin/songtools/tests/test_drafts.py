@@ -88,3 +88,29 @@ def test_cli_errors(tmp_path, capsys):
     assert "lyrics.md" in capsys.readouterr().err
     assert main(["drafts", "diff", str(tmp_path / "no.md"), str(tmp_path / "no2.md")]) == 2
     assert "error" in capsys.readouterr().err
+
+
+def test_inserting_above_a_kept_line_does_not_flag_it():
+    kept = [KeptLine("Down to the river", "x", "r", "d")]
+    ch = diff("## Verse\nDown to the river\nI go\n", "## Verse\nA new first line\nDown to the river\nI go\n", kept)
+    assert ch and not any(c.kept_changed for c in ch)
+
+
+def test_kept_line_moved_out_of_a_removed_section_is_not_flagged():
+    kept = [KeptLine("Down to the river", "x", "r", "d")]
+    ch = diff("## Bridge\nDown to the river\n", "## Verse\nDown to the river\n", kept)
+    assert not any(c.kept_changed for c in ch)
+
+
+def test_kept_line_moved_to_another_existing_section_is_flagged():
+    kept = [KeptLine("Down to the river", "x", "r", "d")]
+    ch = diff("## Verse\nDown to the river\n## Chorus\nHey\n", "## Verse\nOther\n## Chorus\nHey\nDown to the river\n",
+              kept)
+    assert [c.kept_changed for c in ch if c.section == "Verse"] == [True]
+
+
+def test_cli_diff_parse_error_names_the_file(tmp_path, capsys):
+    (tmp_path / "old.md").write_text("## Verse\nA\n")
+    (tmp_path / "new.md").write_text("## Verse\n[G broken\n")
+    assert main(["drafts", "diff", str(tmp_path / "old.md"), str(tmp_path / "new.md")]) == 2
+    assert "new.md:2:" in json.loads(capsys.readouterr().err)["error"]

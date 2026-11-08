@@ -7,7 +7,9 @@ JSON shapes (CLI):
                       "kept_changed_count": int, "basis": str}
 Sections are matched by name (repeated names by occurrence), lines by 1-based index within the
 section; an added line has old = null, a removed line new = null. Lines compare by lyric text
-(inline chords ignored). Kept-line matching ignores case and punctuation.
+(inline chords ignored). Kept-line matching ignores case and punctuation; a changed line that held a
+kept line is flagged only when the kept text no longer appears in the same section of the new draft
+(anywhere in the new draft if that section is gone).
 """
 
 import argparse
@@ -75,26 +77,30 @@ def _norm(s: str) -> str:
     return " ".join(re.sub(r"[^\w\s]", "", s.lower().replace("_", "")).split())
 
 
-def _by_section(text: str) -> dict[tuple[str, int], list[str]]:
+def _by_section(text: str, file: str) -> dict[tuple[str, int], list[str]]:
     out: dict[tuple[str, int], list[str]] = {}
     seen: dict[str, int] = {}
-    for sec in parse_lyrics(text):
+    for sec in parse_lyrics(text, file):
         n = seen[sec.name] = seen.get(sec.name, 0) + 1
         out[(sec.name, n)] = [ln.lyric for ln in sec.lines]
     return out
 
 
-def diff(old_text: str, new_text: str, kept: list[KeptLine]) -> list[Change]:
+def diff(old_text: str, new_text: str, kept: list[KeptLine], old_file: str = "old",
+         new_file: str = "new") -> list[Change]:
     kept_norm = {_norm(k.text) for k in kept}
-    old, new = _by_section(old_text), _by_section(new_text)
+    old, new = _by_section(old_text, old_file), _by_section(new_text, new_file)
+    everywhere = {_norm(line) for lines in new.values() for line in lines}
     changes = []
     for key in [*old, *(k for k in new if k not in old)]:
         a, b = old.get(key, []), new.get(key, [])
+        still_there = {_norm(line) for line in b} if key in new else everywhere
         for i in range(max(len(a), len(b))):
             o = a[i] if i < len(a) else None
             n = b[i] if i < len(b) else None
             if o != n:
-                changes.append(Change(key[0], i + 1, o, n, o is not None and _norm(o) in kept_norm))
+                lost = o is not None and _norm(o) in kept_norm and _norm(o) not in still_there
+                changes.append(Change(key[0], i + 1, o, n, lost))
     return changes
 
 
@@ -126,7 +132,7 @@ def _h_cut(args: argparse.Namespace):
 def _h_diff(args: argparse.Namespace):
     kept = parse_song_md(_read(args.song), str(args.song)).kept if args.song else []
     old_text, new_text = _read(args.old), _read(args.new)
-    changes = diff(old_text, new_text, kept)
+    changes = diff(old_text, new_text, kept, str(args.old), str(args.new))
     return {"changes": [asdict(c) for c in changes],
             "kept_changed_count": sum(c.kept_changed for c in changes), "basis": BASIS}, to_text
 
