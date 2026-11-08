@@ -228,8 +228,9 @@ def analyze(chords: list[str], key: str | None = None) -> HarmonyAnalysis:
     numerals = [numeral(c, tonic) for c in parsed]
     system = _classify(parsed, tonic, mode)
     notes = _notes(parsed, numerals, tonic)
-    if key is None and cands[1][2] == top[2] and cands[1][0] == top[0]:
-        notes.append(f"Mode is ambiguous: {tonic} {cands[1][1]} fits equally well; "
+    tied = next((c for c in cands[1:] if c[2] == top[2] and c[0] == top[0]), None) if key is None else None
+    if tied:
+        notes.append(f"Mode is ambiguous: {tonic} {tied[1]} fits equally well; "
                      f"{mode} is chosen because listeners lean major (Richards).")
     if dual:
         notes.append(f"Ambiguous key: also reads as {dual['tonic']} {dual['mode']}; "

@@ -28,7 +28,7 @@ def test_axis_loop_dual_reading_major_bias():
     a = analyze(["C", "G", "Am", "F"])
     assert a.key.tonic == "C" and a.key.mode == "major"
     assert a.dual_reading and a.dual_reading["tonic"] == "A"
-    assert a.dual_reading["mode"] == "minor" and a.dual_reading["numerals"][0] == "i"
+    assert a.dual_reading["mode"] == "minor" and a.dual_reading["numerals"] == ["bIII", "bVII", "i", "bVI"]
 
 
 def test_blues_and_power_chord_systems():
@@ -57,6 +57,7 @@ def test_cadence_note_and_ambiguity_flag():
     a = analyze(["G", "C", "D", "G"])
     assert any(n.startswith("V–I is still the most common chorus-ending cadence (32%)") for n in a.notes)
     assert not any("double-plagal" in n for n in a.notes)
+    assert any("Mode is ambiguous" in n for n in analyze(["C", "F", "C"]).notes)
 
 
 def test_explicit_key_and_bad_key():
