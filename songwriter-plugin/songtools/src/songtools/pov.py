@@ -16,7 +16,8 @@ _YOU = frozenset("you your yours yourself yourselves you're you've you'll you'd 
 _THIRD = frozenset("he him his she her hers they them their theirs".split())
 _GENERIC = re.compile(
     r"\b(?:you never know|you know|you can't|you gotta|you have to|you get)\b")
-_QUOTED = re.compile(r'"[^"]*"|“[^”]*”')
+# Single-line only: an unbalanced quote must not swallow the lines after it.
+_QUOTED = re.compile(r'"[^"\n]*"|“[^”\n]*”')
 _WORD = re.compile(r"[\w']+")
 
 Pov = Literal["direct_address", "second_narrative", "first_narrative", "third_narrative"]

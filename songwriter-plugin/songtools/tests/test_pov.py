@@ -49,3 +49,11 @@ def test_cli_json(tmp_path, capsys):
     assert out["song"]["pov"] == "direct_address"
     assert out["sections"]["Verse 2"]["pov"] == "second_narrative"
     assert "Pattison" in out["basis"]
+
+
+def test_unbalanced_quote_does_not_cross_lines():
+    assert classify_pov('I said "hello\nyou walk alone\nshe said "bye').pov == "direct_address"
+    secs = parse_lyrics('## Verse 1\nI said "hello\nI walked her home\n## Chorus\nShe said "bye\nI walk alone\n')
+    r = classify_sections(secs)
+    assert r["song"].i_count == 3 and r["song"].third_count == 2
+    assert r["song"].pov == r["sections"]["Verse 1"].pov == "first_narrative"

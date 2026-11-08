@@ -79,3 +79,23 @@ def test_extra_entry_missing_text(tmp_path):
     extra.write_text('{"phrases": [{"source": "x"}]}')
     with pytest.raises(SongtoolsError):
         load_cliches(extra=extra)
+
+
+@pytest.mark.parametrize("content,msg", [
+    ('{"bogus": []}', "unknown list 'bogus'"),
+    ('{"phrases": [{"text": 5}]}', "non-empty string 'text'"),
+    ('{"phrases": [{"text": ""}]}', "non-empty string 'text'"),
+    ('{"phrases": [{"text": "  "}]}', "non-empty string 'text'"),
+    ('{"phrases": ["plain"]}', "non-empty string 'text'"),
+    ('{"phrases": [{"text": "a", "source": 3}]}', "'source' must be a string"),
+    ('{"rhyme_pairs": [{"pair": "love/dove"}]}', "two non-empty strings"),
+    ('{"rhyme_pairs": [{"pair": ["love"]}]}', "two non-empty strings"),
+    ('{"rhyme_pairs": [{"pair": ["love", 2]}]}', "two non-empty strings"),
+    ('{"rhyme_pairs": [{"pair": ["love", ""]}]}', "two non-empty strings"),
+])
+def test_extra_validation(tmp_path, content, msg):
+    extra = tmp_path / "bad.json"
+    extra.write_text(content)
+    with pytest.raises(SongtoolsError) as ei:
+        load_cliches(extra=extra)
+    assert msg in ei.value.message

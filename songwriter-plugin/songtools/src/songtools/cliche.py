@@ -41,17 +41,37 @@ def _read_json(path: Path) -> dict:
     return data
 
 
+_LISTS = ("rhyme_pairs", "phrases", "abstract", "stock_image", "emotion_naming")
+
+
+def _nonempty(v) -> bool:
+    return isinstance(v, str) and bool(v.strip())
+
+
+def _check_entry(key: str, e, file: str) -> None:
+    if key == "rhyme_pairs":
+        ok = isinstance(e, dict) and isinstance(e.get("pair"), list) \
+            and len(e["pair"]) == 2 and all(_nonempty(w) for w in e["pair"])
+        if not ok:
+            raise SongtoolsError(file, None, "each 'rhyme_pairs' entry needs 'pair': "
+                                 "a list of two non-empty strings")
+    elif not (isinstance(e, dict) and _nonempty(e.get("text"))):
+        raise SongtoolsError(file, None, f"each {key!r} entry needs a non-empty string 'text'")
+    if "source" in e and not isinstance(e["source"], str):
+        raise SongtoolsError(file, None, f"{key!r} entry 'source' must be a string")
+
+
 def load_cliches(path: Path | None = None, extra: Path | None = None) -> dict:
     """Load the data file (default data/cliches.json); entries of `extra` are appended per list."""
     data = _read_json(path or data_dir() / "cliches.json")
     if extra is not None:
         for key, entries in _read_json(extra).items():
+            if key not in _LISTS:
+                raise SongtoolsError(str(extra), None, f"unknown list {key!r}")
             if not isinstance(entries, list):
                 raise SongtoolsError(str(extra), None, f"{key!r} must be a list")
             for e in entries:
-                need = "pair" if key == "rhyme_pairs" else "text"
-                if not isinstance(e, dict) or need not in e:
-                    raise SongtoolsError(str(extra), None, f"each {key!r} entry needs {need!r}")
+                _check_entry(key, e, str(extra))
                 e.setdefault("source", "user list")
             data.setdefault(key, []).extend(entries)
     return data
