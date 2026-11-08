@@ -84,7 +84,7 @@ def test_lint_ignores_fenced_code(tmp_path):
     assert lint_guide(p) == []
 
 
-@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody", "harmony", "guitar", "arrangement"])   # extended by Tasks 3-5
+@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody", "harmony", "guitar", "arrangement", "critique", "process"])   # extended by Tasks 3-5
 def test_guide_is_clean(guide):
     assert lint_guide(PLUGIN_ROOT / f"guides/{guide}.md") == []
 
@@ -132,3 +132,11 @@ def test_music_guides_sections():
     for x in ["## Voicings", "## Tunings", "## Capo", "## Feel"]: assert x in g
     for x in ["## Layers", "## Energy", "## Road map", "## Checks"]: assert x in a
     assert "left to the players" in a.lower()
+
+
+def test_critique_and_process():
+    c = (PLUGIN_ROOT/"guides/critique.md").read_text(); p = (PLUGIN_ROOT/"guides/process.md").read_text()
+    for x in ["## Critical Response Process", "## Note format", "## Craft versus taste", "## Final check"]: assert x in c
+    assert c.count("\n| ") >= 11          # 10-step final-check table + header
+    for x in ["## Entry points", "## Receive, then edit", "## Getting unstuck", "## Versions and cuts"]: assert x in p
+    for e in ["riff", "guitar song", "lyric", "progression", "title", "brief", "bank", "co-write"]: assert e in p.lower()
