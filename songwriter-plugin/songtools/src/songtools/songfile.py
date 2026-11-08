@@ -131,10 +131,11 @@ def parse_lyrics(text: str, file: str = "lyrics.md") -> list[Section]:
 
 
 def end_word(line: Line) -> str:
-    for token in reversed(line.lyric.lower().replace("’", "'").split()):
-        word = re.sub(r"[^\w']", "", token).lstrip("'").replace("_", "")
-        if re.search(r"\w", word):
-            return word
+    for token in reversed(line.lyric.lower().replace("\u2019", "'").split()):
+        for piece in reversed(re.split("[\u2014\u2013\\-\u2026]+", token)):
+            word = re.sub(r"[^\w']", "", piece).lstrip("'").replace("_", "")
+            if re.search(r"\w", word):
+                return word
     return ""
 
 

@@ -82,3 +82,41 @@ def test_melody_bad_token():
     with pytest.raises(SongtoolsError) as e:
         parse_melody_md("## Verse 1\n3: i/x\n")
     assert (e.value.file, e.value.line) == ("melody.md", 2)
+
+
+def _end(lyric):
+    return end_word(parse_lyrics(f"## Verse\n{lyric}\n")[0].lines[0])
+
+
+@pytest.mark.parametrize("lyric,expected", [
+    ("Down To The RIVER", "river"),
+    ("down to the river—oh", "oh"),
+    ("down to the river--oh", "oh"),
+    ("Heart-Break!", "break"),
+    ("stray ] bracket here]", "here"),
+    ("and then...", "then"),
+    ("and then (maybe)", "maybe"),
+    ("wait…", "wait"),
+    ("[G] [C]", ""),
+    ("so — ", "so"),
+])
+def test_end_word_messy_text(lyric, expected):
+    assert _end(lyric) == expected
+
+
+def test_empty_chord_bracket_error():
+    with pytest.raises(SongtoolsError) as e:
+        parse_lyrics("## Verse\nfine\nbad [] chord\n")
+    assert (e.value.file, e.value.line) == ("lyrics.md", 3)
+
+
+def test_lyric_before_heading_error():
+    with pytest.raises(SongtoolsError) as e:
+        parse_lyrics("oops\n## Verse\nx\n")
+    assert (e.value.file, e.value.line) == ("lyrics.md", 1)
+
+
+def test_malformed_kept_line_error():
+    with pytest.raises(SongtoolsError) as e:
+        parse_song_md('# T\n## Kept lines\n- no quotes | cliche | r | d\n')
+    assert (e.value.file, e.value.line) == ("song.md", 3)
