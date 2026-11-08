@@ -65,7 +65,7 @@ Links: https://www.mtosmt.org/issues/mto.20.26.3/mto.20.26.3.lavengood.pdf
 ## Tweedy
 Read: American Songwriter pieces quoting his book, plus NPR.
 Status: verified via American Songwriter for core habits; as reported for cut-ups and his checklist.
-Links: https://americansongwriter.com/how-to-write-one-song-jeff-tweedy-book-interview/ ; https://www.npr.org/transcripts/764237225
+Links: https://americansongwriter.com/how-to-write-one-song-jeff-tweedy-book-interview/ ; https://www.npr.org/transcripts/949583300
 
 ## Zollo
 Read: Zollo Blog excerpts on American Songwriter and a revision column.
@@ -83,9 +83,9 @@ Status: verified for the rewrite checks (pronouns on the loose, time jumpers, mi
 Links: https://americansongwriter.com/songwriter-u-art-of-revision/
 
 ## Stolpe
-Read: Berklee Online write-ups of her courses.
-Status: verified for the writing-from-the-title and destination-writing material.
-Links: https://online.berklee.edu/takenote/simple-tools-for-writing-from-the-title/ ; https://online.berklee.edu/takenote/songwriting-tips-try-destination-writing/
+Read: Berklee Online write-ups of her courses, including the feedback, bridge-writing and "Hard Place" articles.
+Status: verified for the writing-from-the-title and destination-writing material, the listener feedback questions, the bridge levers and the contrast-within-sections example.
+Links: https://online.berklee.edu/takenote/simple-tools-for-writing-from-the-title/ ; https://online.berklee.edu/takenote/songwriting-tips-try-destination-writing/ ; https://online.berklee.edu/takenote/how-to-get-better-feedback-on-your-songs/ ; https://online.berklee.edu/takenote/writing-bridges-for-your-songs-can-be-much-easier/ ; https://online.berklee.edu/takenote/songwriters-toolbox-3-lessons-h-e-r-s-hard-place-can-teach-us-about-songwriting/
 
 ## Murphy
 Read: summary pages only for his title-within-60-seconds finding.
@@ -186,3 +186,38 @@ Links: https://mtosmt.org/issues/mto.21.27.1/mto.21.27.1.hudson.html
 Read: the chapters on verse-chorus form, AABA and strophic form, pop/rock harmony and the intro to popular-music form.
 Status: verified. A textbook, so cited for definitions of section jobs, not as research.
 Links: https://viva.pressbooks.pub/openmusictheory/chapter/verse-chorus-form/ ; https://viva.pressbooks.pub/openmusictheory/chapter/aaba-form/ ; https://openmusictheory.github.io/popRockHarmony.html
+
+## Hunter
+Read: the NPR Fresh Air 1988 transcript of Robert Hunter on writing with Jerry Garcia.
+Status: verified for his account of trading starter ideas and of lyrics and changes passing both ways.
+Links: https://www.npr.org/transcripts/764237225
+
+## Seskin
+Read: an American Songwriter profile (Rand Bishop) on his Nashville co-writing and bank of uncut songs.
+Status: verified for the profile. No source was found for title-first writing by him; chorus-first advice is from podcast notes only (as reported).
+Links: https://americansongwriter.com/songwriter-u-makin-stuff-up-outside-looking-in/
+
+## Covach
+Read: known only through de Clercq and a Hudson-quoted passage; his primer was not reachable.
+Status: as reported. The simple verse-chorus definition is verified through de Clercq; his five-type list is secondhand.
+Links: https://mtosmt.org/issues/mto.17.23.3/mto.17.23.3.de_clercq.html ; https://mtosmt.org/issues/mto.21.27.1/mto.21.27.1.hudson.html
+
+## Kachulis
+Read: the Berklee Online Songwriting: Melody course page (syllabus titles only).
+Status: verified for the syllabus titles; no course content was read.
+Links: https://online.berklee.edu/courses/songwriting-melody
+
+## Zocher
+Read: a Berklee Online article on acoustic guitar techniques (strumming touch, open-tuning shapes).
+Status: verified.
+Links: https://online.berklee.edu/takenote/acoustic-guitar-techniques-to-move-past-beginner-level/
+
+## Berklee Online course pages
+Read: the Arranging 1: Rhythm Section page, Pattison's Lyric Writing: Writing Lyrics to Music syllabus, and the Songwriting: Melody page.
+Status: verified for syllabus and framing text only; lesson content was not read.
+Links: https://online.berklee.edu/courses/arranging-1-rhythm-section ; https://online.berklee.edu/courses/lyric-writing-writing-lyrics-to-music ; https://online.berklee.edu/courses/songwriting-melody
+
+## Wikipedia
+Read: the pages on guitar tunings, list of guitar tunings, DADGAD, Capo, Partial capo, Swing, Strum, Counting, Nashville Number System, Hallelujah (Leonard Cohen song), Robert Hunter, Grateful Dead and Tessitura.
+Status: encyclopedia pages, not primary sources; the plugin cites them for mechanics and dates, tagged as the research notes tagged them.
+Links: https://en.wikipedia.org/wiki/Guitar_tunings ; https://en.wikipedia.org/wiki/Capo_(musical_device) ; https://en.wikipedia.org/wiki/Nashville_Number_System ; https://en.wikipedia.org/wiki/Hallelujah_(Leonard_Cohen_song) ; https://en.wikipedia.org/wiki/Robert_Hunter_(lyricist) ; https://en.wikipedia.org/wiki/Grateful_Dead

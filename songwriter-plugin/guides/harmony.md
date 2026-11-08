@@ -88,7 +88,8 @@ Key of G     chords:    G    F    C    G      Em
 ```
 
 - Roman numerals follow the bass, with flat signs for chromatic roots (flat-VII, flat-VI, flat-III); minor-key songs are labelled from the minor tonic. [verified]
-- Open Music Theory writes roots in uppercase regardless of quality in its older edition and lowercase for minor in its newer one, so no single convention is standard for pop; say which one is in use. [verified]
+- Open Music Theory writes roots in uppercase regardless of quality in its older edition, which is verified. [verified]
+- Its newer edition reportedly uses lowercase for minor, but that page could not be read, so no single convention is established for pop; say which one is in use. [as reported]
 - Nashville numbers count the root's scale degree with the tonic as 1, so a chart works in any key; minor is marked with a dash or an m, and "1/5" means the 1 chord over a 5 bass note. [verified]
 - Plain-English glosses help: flat-VII is the chord a whole step below home; a double plagal steps home in two fourths; plagal is the "amen" move; the Aeolian cadence is the minor-key climb home. [design]
 - For an ambiguous loop show both readings with a confidence, and use Richards's cues in order: melodic emphasis on tonic-triad notes, first and last chord, phrase-final notes, then the major-mode bias as tiebreaker. [verified]

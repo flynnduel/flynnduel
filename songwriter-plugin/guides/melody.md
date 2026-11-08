@@ -37,7 +37,8 @@ Attribution matters here. Perricone's Melody in Songwriting excerpt and his own 
 - Check: find melodic breaks (rests, long holds, repeated units) and ask whether each lyric clause crosses one, or each break splits a grammatical unit. [design]
 - Perricone's own definitions of front-heavy and back-heavy were not read, so name Pattison as the source and say only that Perricone uses the same terms. [as reported]
 - Stolpe's worked contrast pattern ties phrasing to feeling: short post-downbeat phrases for uncertainty, a long downbeat phrase for security, and two-bar pickup phrases for the chorus. [verified]
-- Line length and rhyme set stability in the lyric (see lyrics.md); melody and lyric should agree on whether a section is settled or moving. [verified]
+- Line length and rhyme set stability in the lyric (see lyrics.md). [verified]
+- Melody and lyric should agree on whether a section is settled or moving; that is Pattison's prosody idea applied by the plugin. [design]
 
 ## Prosody
 
@@ -62,7 +63,7 @@ Attribution matters here. Perricone's Melody in Songwriting excerpt and his own 
 - Ask about three numbers: the singer's comfortable low, comfortable high, and best-tone ceiling (the highest note sung with the tone wanted). [as reported]
 - Method: per section, find the lowest note, the highest note and a duration-weighted centre, keep keys whose peak is at or under the ceiling and whose low is at or above the floor, and rank by how the tessitura sits in the comfortable zone. The weighting is the research team's own method; no source quantifies tessitura this way. [design]
 - Warn when lowering the key to save a chorus peak pushes the verse lows out of reach. [design]
-- A capo only raises pitch and high positions can thin the tone; the fret-7 limit is a heuristic only (see guitar.md). [as reported]
+- A capo only raises pitch (non-primary sources). The fret-7 limit is an unsourced heuristic (see guitar.md). [unverified]
 - A typical comfortable span is about an octave for almost anyone and an octave to an octave and a third for most singers, from a search snippet. [as reported]
 - Perricone's octave-and-a-fifth guideline exists only in unofficial copies, and his own octave-and-a-sixth section shows it is not a cap. [as reported]
 - Vowel and singability advice is informal voice pedagogy that disagrees with itself; do not attribute it to the authors above. [unverified]

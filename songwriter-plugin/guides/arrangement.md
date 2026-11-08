@@ -9,7 +9,7 @@ Evidence is uneven. The layer vocabulary and energy trajectories are verified in
 - Owsinski names five arrangement elements in his Mixing Engineer's Handbook: foundation, pad, rhythm, lead and fills. Lavengood's article confirms the five names, not the book itself. [verified]
 - Lavengood maps them onto Moore's four functional layers (explicit beat, functional bass, harmonic filler, melodic), where lead is the melodic layer, and adds an optional novelty layer. Moore is known through her mapping only. [as reported]
 - The novelty layer carries pitch content but a non-melodic function, often as call and response, is not essential, works best sparingly in intros, outros and interludes, and has timbres that resist blending. [verified]
-- Lavengood's examples include the piccolo trumpet in "Penny Lane" and the tin whistle in "My Heart Will Go On". Her point is that layers describe what a part does in the texture, not its timbre. [verified]
+- Lavengood's examples include the piccolo trumpet in "Penny Lane" and the tin whistle in "My Heart Will Go On". The point is that layers describe what a part does in the texture, not its timbre. [verified]
 - Working vocabulary for the plugin: beat and functional bass are the foundation; harmonic filler is a pad, or a rhythm part when it plays a counter-figure; melodic is the lead; novelty is a fill or signature line. [design]
 - Default ceiling of four elements at once, with same-rhythm instruments counted as one and a fifth allowed briefly at a peak. [design]
 - Owsinski's limit of usually four simultaneous elements, rarely five, with same-rhythm instruments counting as one, is known only from blog snippets, and his posts vary between four and five. [as reported]
@@ -25,7 +25,7 @@ Evidence is uneven. The layer vocabulary and energy trajectories are verified in
 
 - Cobb's article situates section-by-section "sonic energy" in Butler, Nobile (initiation, buildup, arrival) and Osborn (riser, drop), with energy trajectories that build momentum across a verse, prechorus, chorus rotation. [verified]
 - Osborn, quoted by Cobb: Top-40 EDM songs almost never have a viable contrasting bridge, and producers must balance sonic contrast against thematic memorability; too little contrast makes a song repetitive. [verified]
-- Cobb studies late "groove switches" (a dramatic change of texture for the final large section) as another source of contrast, with Billie Eilish's "bad guy" among her cases. [verified]
+- Cobb studies late "groove switches" (a dramatic change of texture for the final large section) as another source of contrast, with Billie Eilish's "bad guy" among the cases. [verified]
 - So a bridge is optional: when none exists, offer a groove or texture switch. [design]
 - Berklee's core arranging course frames arranging as shaping a song's emotional contour through dynamics, articulation and texture. [verified]
 - Carter's "rebuild" (a breakdown at the bridge position, then layers returning toward the climax) is known only from an abstract. [unverified]
@@ -33,9 +33,10 @@ Evidence is uneven. The layer vocabulary and energy trajectories are verified in
 - Energy scale used by the plugin: 1 sparse, 2 settled, 3 building, 4 full, 5 peak. [design]
 - Levers for changing energy: add or remove a player, register, subdivision, drum voice, attack, vocal stack, stops and space, half-time or double-time, pad in or out, and a groove switch. [design]
 - Shapes to offer: staircase, breakdown and rebuild, slow burn, flat and intimate, jam bloom, late groove switch. [design]
-- Editable default for a pop or rock song, as a starting conversation: intro 2, verse 1 at 2, prechorus 3, chorus 1 at 4, verse 2 at 3, chorus 2 at 4, bridge at 2 or 5, final chorus 5, outro 2 to 3. [design]
+- One example among the shapes above, not a default for any genre: intro 2, verse 1 at 2, prechorus 3, chorus 1 at 4, verse 2 at 3, chorus 2 at 4, bridge at 2 or 5, final chorus 5, outro 2 to 3. Fit the shape to the song the writer describes. [design]
 - Chorus 1 should leave headroom: if it is already the peak, ask what the last chorus can add. [design]
-- The function terms initiation, buildup and arrival (with contrast and ending) explain why each section has its energy; see structure.md for the sources. [verified]
+- The function terms initiation, buildup and arrival (Nobile) explain why a section has its energy; see structure.md for the sources. [verified]
+- Contrast and ending are the plugin's own additions to that list, for sections that are neither building nor arriving. [design]
 
 ## Road map
 
@@ -54,7 +55,8 @@ PARTS COUNT: 2 of a default maximum of 4 (same rhythm counts as one)
 LEFT TO THE PLAYERS: exact bass line, drum pattern, voicings
 ```
 
-- Function: one of initiation, buildup, arrival, contrast or ending; the terms come from Nobile via Cobb. [verified]
+- Function: initiation, buildup and arrival come from Nobile via Cobb. [verified]
+- Function, additions: contrast and ending are the plugin's own labels. [design]
 - Who's in is written by role, not by written part: "bass: roots" is a role, a bass line is a part. [design]
 - Parts count is checked against the default ceiling of four, with same-rhythm instruments counted as one. [design]
 - Spoken cues are common usage and no standard: "kick it off from the 5", "hit the 4 on the way down" and "watch me for the 2" are the examples in Wikipedia's account of the Nashville system. [verified]
@@ -82,12 +84,12 @@ Critique pass for an arrangement, run on request. Each finding follows the usual
 - The same rhythm duplicated across guitar, keys and bass. [design]
 - A register clash with the vocal, or a crowded low end. [design]
 - A first chorus that is already at peak, leaving nowhere to go. [design]
-- Missing contrast: does each section change at least one lever? With no bridge, is there a groove or texture switch? [verified]
+- Missing contrast: does each section change at least one lever? With no bridge, is there a groove or texture switch? Cobb's groove-switch cases are the basis; the lever test is the plugin's. [design]
 - Fills or novelty lines outside the gaps in the vocal. [design]
 - Unmarked transitions between sections. [design]
 - Open-ended solos: give each a length, an owner, an exit cue and a landing. [design]
 - An undecided ending. [design]
 - The full band starting at bar one, or the band copying the writer's full strum. [design]
-- Forcing a bridge when a texture switch would do. [verified]
+- Forcing a bridge when a texture switch would do; Osborn's no-bridge finding and Cobb's groove switches show a bridge is optional. [design]
 - Room for the players: roles and feel specified, parts left open. A road map that has no "left to the players" content has started to dictate parts. [design]
 - Masking examples (a lead fill under every vocal phrase, a piano in the voice's range) and the mute test come from blog sources of uncertain attribution. [as reported]

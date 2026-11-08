@@ -8,12 +8,12 @@ The plugin offers a menu, never a template. No form is "the correct one", and th
 
 Each entry names the form, what it is, a source, and when it tends to fit. The "when it fits" lines are this plugin's synthesis; the sources describe the forms, not when to choose them.
 
-- Strophic or verse-refrain (AAA): repeated strophes, each a point where the song could satisfyingly end, more common in blues, early hip-hop and early rock and roll; it suits narrative songs where the story is the point. [verified]
-- Strophic, fit note: the choice of narrative songs (folk, country, blues) is a synthesis, not a finding. [design]
-- AABA (32-bar): the bridge withholds A, stresses non-tonic harmony, often ends on V and must be followed by A; a full AABA is normally repeated whole or as BA with no new lyrics after the first cycle. It suits melody-led songs with a title refrain. [verified]
-- Simple verse-chorus: verse and chorus share harmonic content, which fits groove or vamp songs; the label comes from Covach as reported by de Clercq. [verified]
-- Contrasting verse-chorus: verse and chorus differ in harmony and design, which fits songs that build toward a goal. [verified]
-- Verse, prechorus, chorus, postchorus: the order is fixed, the four make one cycle, and not all four need be present. [verified]
+- Strophic or verse-refrain (AAA): repeated strophes, each a point where the song could satisfyingly end, more common in blues, early hip-hop and early rock and roll (Open Music Theory). [verified]
+- When each form fits is the plugin's synthesis, not a finding: strophic for narrative songs where the story is the point, AABA for melody-led songs with a title refrain, simple verse-chorus for groove or vamp songs, contrasting verse-chorus for songs that build toward a goal. [design]
+- AABA (32-bar): the bridge withholds A, stresses non-tonic harmony, often ends on V and must be followed by A; a full AABA is normally repeated whole or as BA with no new lyrics after the first cycle (Open Music Theory). [verified]
+- Simple verse-chorus: verse and chorus share harmonic content; the label is Covach's, as reported by de Clercq. [verified]
+- Contrasting verse-chorus: verse and chorus differ in harmony and design; the type is Covach's, but his five-type list was read only secondhand. [as reported]
+- Verse, prechorus, chorus, postchorus: the order is fixed, the four make one cycle, and not all four need be present (Open Music Theory). [verified]
 - Compound AABA with an abridged last A (written AABA-prime): Temperley's default layout, as quoted by Hudson, is two verse-chorus pairs, then an instrumental or bridge, then a third pair or just a chorus; the final A is often shortened or altered, which is why Hudson proposes the prime label. [verified]
 - Compound AABA, scope: Temperley holds that virtually all verse-chorus songs are compound AABA, while Covach treats it as one subtype, so present this as an open disagreement, not a settled fact. [verified]
 - Verse-hook: the form of much hip-hop. Open Music Theory supports its paradigms; the corpus count behind it (Duinker) was read secondhand. [as reported]
@@ -87,7 +87,8 @@ Symmetry is the baseline that makes a deviation audible. The plugin suggests one
 - Mismatched line lengths and rhymes create pull: unequal lengths such as 3, 3 and 5 stresses feel unstable and tell the listener to keep going. [verified]
 - Principle of Sequence: once line 3 mimics line 1 we expect line 4 to mimic line 2, so a break in sequence is felt. [verified]
 - An interrupted bridge can enact an unresolved story: Pattison reads a three-line bridge that stops and jumps back to verse 1 as a character stuck going backwards. [verified]
-- Truncated or extended final line, as in the one-bar last line above. [verified]
+- Truncated final line, as in the one-bar last line above (Pattison). [verified]
+- Extended final lines are a natural counterpart but no source was read for them. [design]
 - Prechorus fragmentation: lyric and rest units shortening from 2+2 to 1+1, or an extended pause before the chorus. [verified]
 - Anti-telos chorus: the build projects a climax and the chorus withholds it at the song's lowest energy, then a drop or instrumental postchorus supplies the peak; sometimes the chorus plays twice, first low and then full. [verified]
 - Anthem postchorus, as above, moves the climax out of the chorus. [verified]

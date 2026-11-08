@@ -18,6 +18,7 @@ KNOWN_AUTHORS = [
     "Richards", "Nobile", "Summach", "Stroud", "Osborn", "Hayes", "Kaun", "Smith", "Lerman", "Dodson", "Stolpe",
     "Owsinski", "Moore", "Lavengood", "Cobb", "Greene", "Hober", "Rooksby", "Kostka", "Payne", "Tweedy", "Zollo",
     "Murphy", "Léveillé Gauvin", "Duinker", "Carter", "Matthews", "McCoy", "Williams",
+    "Hudson", "Hunter", "Seskin", "Covach", "Kachulis", "Zocher", "Wikipedia", "Berklee",
 ]
 BULLET = re.compile(r"^\s*(?:[-*]|\d+\.)\s+")
 QUOTE = re.compile(r'"([^"]*)"|“([^”]*)”')

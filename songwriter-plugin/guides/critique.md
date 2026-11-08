@@ -24,7 +24,8 @@ Lerman's official page gives four steps. The plugin follows them in order for a 
 
 - Pattison's critique sessions focus on the strengths of the lyric, with suggestions for the next step, and use the seminar tools to show how each would improve the lyric's impact. [verified]
 - His master classes work on already strong songs and target prosody between the intent of the song and its structure, rhyme, rhythm, point of view and phrasing. [verified]
-- Diagnose and demonstrate: name the mechanism, then try two to four concrete variants of the same lines side by side and let the writer choose by feel. [verified]
+- Diagnose and demonstrate: name the mechanism, then try several concrete variants of the same lines side by side and let the writer choose by feel, as Pattison does. [verified]
+- The plugin limits itself to two to four variants. [design]
 - In his Perth master-class write-up the class swapped lines so an image came first, noted that an aabb scheme stops motion four times across two verses, then tried abab, xxaa and abba with the same words to show different emotional journeys. [verified]
 - His own check taxonomy covers line counts and lengths, rhyme schemes, line rhythms, symmetry, motion, contrast between sections, point of view, tense and recoloring repetition. [verified]
 - His published critique of one hit song shows the diagnostic style: unstressed words on downbeats, secondary stresses of a long word landing on strong beats, and musical phrases that split one lyric idea. [verified]
@@ -49,7 +50,7 @@ Lerman's official page gives four steps. The plugin follows them in order for a 
 - Simon removes the irritant, Cohen cut polished verses to protect a song's tone, Newman keeps the critic smaller than the creator while drafting, and Browne loosened his perfect-rhyme rule under Zevon's influence. [verified]
 - Blume calls assuming the first melody is the strongest "just arrogance" and advises workshopping a work tape before paying for a demo. [verified]
 - Blume's interviewer disputes his title-in-the-chorus rule with counterexamples, so title placement is a market heuristic, not a craft law. [verified]
-- Blume's checklists, NSAI's criteria and Murphy's title timing were not read at source. [unverified]
+- Blume's checklists and NSAI's criteria were not read at source. [unverified]
 - Murphy's finding that the title should arrive within 60 seconds is known from summary pages only. [as reported]
 - Tell-lists of stock imagery that circulate as signs of machine writing are commentary without systematic evidence; use them only as a stock-language vocabulary. [as reported]
 
@@ -66,7 +67,8 @@ Basis:           the lens, named: "Pattison:", "corpus:", "Dodson:"
 Options:         two to four, including "leave it"
 ```
 
-- Name the mechanism the way Pattison does, in concrete terms, not "this line feels weak". [verified]
+- Pattison names mechanisms in concrete terms. [verified]
+- So name the mechanism in concrete terms, not "this line feels weak". [design]
 - Name the basis for every note and never present one as a universal rule. [design]
 - Offer two to four variants of the same lines and let the writer choose; one imposed rewrite is never the only option. [design]
 - Judge against the writer's goal and the song's own patterns, not one genre's rules; market heuristics appear only for a declared commercial goal and are labelled as such. [design]
@@ -100,7 +102,8 @@ The final check runs big to small, so no time goes into polishing a line in a ve
 
 - Zollo records that on replay certain lines or notes "seem irksome", and that is the song showing what is wrong; the irritant scan asks for exactly that and the writer decides what to do about it. [verified]
 - Status choices are working, done for now and done, and only the writer sets them; the plugin never declares a song finished. [design]
-- Writing done and demo done are separate milestones; Blume advises workshopping a work tape before investing in a demo. [verified]
+- Blume advises workshopping a work tape before investing in a demo. [verified]
+- Writing done and demo done as separate milestones is supported only by summary-level sources, so treat it as the plugin's rule. [design]
 - Webb sent off "Wichita Lineman" believing it was unfinished, and found a false rhyme in it when he later analysed his songs, which supports a "shipped but unfinished" state. [verified]
 - Each step reports pass, flag, or kept by choice; a flagged step lists its note in the format above. [design]
 - NSAI criteria, Davis's checklist and Blume's checklist stay excluded until verified. [design]
