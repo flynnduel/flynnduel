@@ -155,20 +155,34 @@ def from_song(sections: list[Section], record: SongRecord) -> ChordProSong:
 
 
 def _sounding_key(key: str, capo: int) -> str:
-    sharp = transpose(key, capo, "C")
-    flat = transpose(key, capo, "F")
+    try:
+        sharp = transpose(key, capo, "C")
+        flat = transpose(key, capo, "F")
+    except ValueError:
+        raise SongtoolsError(None, None, f"cannot transpose {{key: {key}}}: not a key like G or Em") from None
     return flat if flat in FLAT_KEYS else sharp
 
 
 def _shift_line(line: str, capo: int, key: str | None) -> str:
+    if line.startswith("{"):  # directive line: never transpose
+        return line
+
     def sub(m: re.Match) -> str:
         sym = m.group(1).strip()
-        return f"[{sym if is_no_chord(sym) else transpose(sym, capo, key)}]"
+        if is_no_chord(sym) or sym.startswith("*"):  # N.C. and ChordPro annotations
+            return m.group(0)
+        try:
+            return f"[{transpose(sym, capo, key)}]"
+        except ValueError:
+            raise SongtoolsError(None, None, f"cannot transpose chord [{sym}] in line: {line}") from None
     return re.sub(r"\[([^\]]*)\]", sub, line)
 
 
 def concert_pitch(song: ChordProSong) -> ChordProSong:
-    """Copy with every chord moved up by capo, {capo} removed and {key} set to the sounding key."""
+    """Copy with every chord moved up by capo, {capo} removed and {key} set to the sounding key.
+
+    [*Annotation] chords and directive lines pass through; other unparseable chords or keys raise.
+    """
     capo_text = song.meta.get("capo", "")
     try:
         capo = int(capo_text) if capo_text else 0
@@ -201,12 +215,13 @@ def _h_chart(args: argparse.Namespace):
     sections = parse_lyrics(_read(lyrics_path), file=str(lyrics_path))
     song = from_song(sections, record)
     out = d / "out"
-    out.mkdir(exist_ok=True)
-    written = [out / "chart.cho"]
-    written[0].write_text(write(song), encoding="utf-8")
+    outputs = [(out / "chart.cho", write(song))]
     if args.concert:
-        written.append(out / "chart-concert.cho")
-        written[1].write_text(write(concert_pitch(song)), encoding="utf-8")
+        outputs.append((out / "chart-concert.cho", write(concert_pitch(song))))
+    out.mkdir(exist_ok=True)  # only after every output built: a failure writes nothing
+    for path, body in outputs:
+        path.write_text(body, encoding="utf-8")
+    written = [p for p, _ in outputs]
     return {"written": [str(p) for p in written], "basis": BASIS}, to_text
 
 

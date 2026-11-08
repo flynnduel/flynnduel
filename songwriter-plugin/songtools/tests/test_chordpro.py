@@ -111,3 +111,25 @@ def test_chart_cli_without_concert_and_missing(tmp_path, capsys):
     (tmp_path / "lyrics.md").write_text("## Verse\n[G]a\n")
     assert main(["chart", str(tmp_path)]) == 0
     assert not (tmp_path / "out" / "chart-concert.cho").exists()
+
+
+def test_concert_annotation_passthrough_and_directive_lines_untouched():
+    s = parse("{key: G}\n{capo: 2}\n{soc}\n{comment: Play [G] softly}\n[*Riff]a [G]b\n{eoc}\n")
+    c = concert_pitch(s)
+    assert c.sections[0].lines == ["{comment: Play [G] softly}", "[*Riff]a [A]b"]
+
+
+def test_concert_bad_chord_and_key_raise():
+    with pytest.raises(SongtoolsError) as e:
+        concert_pitch(parse("{key: G}\n{capo: 2}\n{soc}\n[Hold]on\n{eoc}\n"))
+    assert "Hold" in str(e.value)
+    with pytest.raises(SongtoolsError) as e:
+        concert_pitch(parse("{key: G major}\n{capo: 2}\n{soc}\n[G]a\n{eoc}\n"))
+    assert "G major" in str(e.value)
+
+
+def test_chart_concert_failure_writes_nothing(tmp_path, capsys):
+    (tmp_path / "song.md").write_text("# R\n## Core\nkey: G\ncapo: 2\n")
+    (tmp_path / "lyrics.md").write_text("## Verse\n[Hold]on\n")
+    assert main(["chart", str(tmp_path), "--concert"]) == 2
+    assert not (tmp_path / "out" / "chart.cho").exists()
