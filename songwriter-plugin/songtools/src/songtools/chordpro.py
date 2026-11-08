@@ -12,9 +12,9 @@ directives are kept as unknown and their body as plain lines.
 Capo: {key} stays the shape key; the band hears it `capo` semitones higher. concert_pitch
 transposes every chord up by capo, drops {capo} and sets {key} to the sounding key.
 
-CLI: songtools chart SONG_DIR [--concert] -> {"written": [paths], "basis": str}.
-There is no --pdf flag yet: PDF rendering arrives in Task 15, which adds its flag and output
-to _h_chart (the paths in "written" are the extension point).
+CLI: songtools chart SONG_DIR [--concert] [--pdf] -> {"written": [paths], "basis": str}.
+--pdf also renders out/chart.pdf (and out/chart-concert.pdf with --concert) via songtools.pdf.
+Every output is built in memory first; nothing is written if any build fails.
 """
 
 import argparse
@@ -215,12 +215,19 @@ def _h_chart(args: argparse.Namespace):
     sections = parse_lyrics(_read(lyrics_path), file=str(lyrics_path))
     song = from_song(sections, record)
     out = d / "out"
-    outputs = [(out / "chart.cho", write(song))]
+    variants = [("chart", song)]
     if args.concert:
-        outputs.append((out / "chart-concert.cho", write(concert_pitch(song))))
+        variants.append(("chart-concert", concert_pitch(song)))
+    outputs = [(out / f"{name}.cho", write(s)) for name, s in variants]
+    if args.pdf:
+        from songtools.pdf import render_pdf_bytes  # lazy: reportlab only when asked
+        outputs += [(out / f"{name}.pdf", render_pdf_bytes(s)) for name, s in variants]
     out.mkdir(exist_ok=True)  # only after every output built: a failure writes nothing
     for path, body in outputs:
-        path.write_text(body, encoding="utf-8")
+        if isinstance(body, bytes):
+            path.write_bytes(body)
+        else:
+            path.write_text(body, encoding="utf-8")
     written = [p for p, _ in outputs]
     return {"written": [str(p) for p in written], "basis": BASIS}, to_text
 
@@ -229,4 +236,5 @@ def register(subparsers) -> None:
     p = subparsers.add_parser("chart", help="write a ChordPro chart from song.md and lyrics.md")
     p.add_argument("song_dir", type=Path, metavar="SONG_DIR")
     p.add_argument("--concert", action="store_true", help="also write out/chart-concert.cho (capo applied)")
+    p.add_argument("--pdf", action="store_true", help="also render PDF lead sheets (out/chart.pdf)")
     p.set_defaults(handler=_h_chart)
