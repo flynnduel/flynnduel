@@ -99,7 +99,56 @@ def test_truck_driver_lift():
 
 def test_analyze_song_skips_empty_sections():
     r = analyze_song({"Verse": [("G", 4), ("C", 4), ("D", 4), ("G", 4)], "Bridge": [("N.C.", 4)]})
-    assert list(r["sections"]) == ["Verse"] and r["skipped"] == ["Bridge"]
+    assert list(r["sections"]) == ["Verse"]
+    assert r["skipped"] == {"Bridge": {"reason": "no valid chords", "errors": []}}
+    r = analyze_song({"Verse": [("G", 4), ("C", 4)], "Bridge": [("H7", 4), ("N.C.", 4), ("Zz", 2)]})
+    assert r["skipped"]["Bridge"]["errors"] == ["H7", "Zz"]
+
+
+G = [("G", 4), ("C", 4), ("D", 4), ("G", 4)]
+C_CH = [("C", 4), ("F", 4), ("G", 4), ("C", 4)]
+
+
+def _lifts(r):
+    return [m for m in r["modulations"] if "truck-driver" in m]
+
+
+def test_pre_and_post_chorus_are_not_choruses():
+    r = analyze_song({"Verse": [("Bb", 4), ("F", 4), ("Gm", 4), ("Bb", 4)],
+                      "Pre-Chorus": [("Eb", 4), ("F", 4), ("Bb", 4)], "Chorus": C_CH,
+                      "Post-Chorus": [("D", 4), ("G", 4), ("A", 4), ("D", 4)]})
+    assert _lifts(r) == []
+
+
+def test_single_chorus_no_lift():
+    assert _lifts(analyze_song({"Verse": G, "Chorus": C_CH})) == []
+
+
+def test_non_lift_steps():
+    eb = [("Eb", 4), ("Ab", 4), ("Bb", 4), ("Eb", 4)]
+    assert _lifts(analyze_song({"Chorus 1": C_CH, "Chorus 2": eb})) == []
+    assert _lifts(analyze_song({"Chorus 1": C_CH, "Chorus 2": C_CH})) == []
+
+
+def test_lift_with_bridge_between_choruses():
+    d = [("D", 4), ("G", 4), ("A", 4), ("D", 4)]
+    r = analyze_song({"Chorus 1": C_CH, "Bridge": [("Am", 4), ("Dm", 4), ("E", 4), ("Am", 4)], "Chorus 2": d})
+    assert len(_lifts(r)) == 1 and "Chorus 1" in _lifts(r)[0] and "Chorus 2" in _lifts(r)[0]
+
+
+def test_ambiguous_chorus_gets_no_lift_claim():
+    axis = [("C", 4), ("G", 4), ("Am", 4), ("F", 4)]
+    d = [("D", 4), ("G", 4), ("A", 4), ("D", 4)]
+    r = analyze_song({"Chorus 1": axis, "Chorus 2": d})
+    assert r["sections"]["Chorus 1"]["dual_reading"] and _lifts(r) == []
+
+
+def test_possible_key_change_branch_and_ambiguity_gate():
+    e = [("E", 4), ("A", 4), ("B", 4), ("E", 4)]
+    r = analyze_song({"Verse": G, "Bridge": e})
+    assert r["modulations"] == ["possible key change: Verse in G major -> Bridge in E major"]
+    axis = [("C", 4), ("G", 4), ("Am", 4), ("F", 4)]
+    assert analyze_song({"Verse": axis, "Bridge": e})["modulations"] == []
 
 
 def test_music21_oracle_numerals_in_major():

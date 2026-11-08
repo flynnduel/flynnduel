@@ -242,22 +242,38 @@ def analyze(chords: list[str], key: str | None = None) -> HarmonyAnalysis:
 
 
 def _is_chorus(name: str) -> bool:
-    return "chorus" in name.lower()
+    """A chorus itself: "Chorus", "Chorus 2", "Final Chorus" -- not "Pre-Chorus" / "Post-Chorus"."""
+    n = re.sub(r"[\s_-]+", " ", name.lower()).strip()
+    return "chorus" in n and not re.search(r"\b(pre|post) ?chorus\b", n)
+
+
+def _invalid_symbols(prog: list[tuple[str, float]]) -> list[str]:
+    bad = []
+    for sym, _ in prog:
+        if not is_no_chord(sym):
+            try:
+                parse_chord(sym)
+            except ValueError:
+                bad.append(sym)
+    return bad
 
 
 def analyze_song(progressions: dict[str, list[tuple[str, float]]]) -> dict:
     """Analyse each section, then list song-level modulations.
 
-    Returns {"sections": {name: analysis dict}, "modulations": [str], "skipped": [names with no chords],
-    "corpus": CORPUS, "basis": BASIS}.
+    Returns {"sections": {name: analysis dict}, "modulations": [str],
+    "skipped": {name: {"reason": "no valid chords", "errors": [invalid symbols]}},
+    "corpus": CORPUS, "basis": BASIS}. A truck-driver lift is claimed only between the last two
+    choruses (pre/post-choruses excluded) when both have an unambiguous tonic (no dual reading);
+    "possible key change" between consecutive sections follows the same gate.
     """
     sections: dict[str, HarmonyAnalysis] = {}
-    skipped: list[str] = []
+    skipped: dict[str, dict] = {}
     for name, prog in progressions.items():
         try:
             sections[name] = analyze([c for c, _ in prog])
         except SongtoolsError:
-            skipped.append(name)
+            skipped[name] = {"reason": "no valid chords", "errors": _invalid_symbols(prog)}
     mods: list[str] = []
     names = list(sections)
     choruses = [n for n in names if _is_chorus(n)]
@@ -265,16 +281,16 @@ def analyze_song(progressions: dict[str, list[tuple[str, float]]]) -> dict:
     if len(choruses) >= 2:
         prev, last = choruses[-2], choruses[-1]
         d = (_pc(sections[last].key.tonic) - _pc(sections[prev].key.tonic)) % 12
-        if d in (1, 2):
+        if d in (1, 2) and not (sections[prev].dual_reading or sections[last].dual_reading):
             lift_pair = (prev, last)
             mods.append(f"truck-driver lift (Everett 3b): {prev} in {sections[prev].key.tonic} -> "
                         f"{last} in {sections[last].key.tonic} (+{d} semitone{'s' if d > 1 else ''})")
     for a, b in zip(names, names[1:]):
         ka, kb = sections[a], sections[b]
-        if (a, b) == lift_pair or _pc(ka.key.tonic) == _pc(kb.key.tonic):
+        if _pc(ka.key.tonic) == _pc(kb.key.tonic) or ka.dual_reading or kb.dual_reading:
+            continue  # same tonic, or an ambiguous reading: do not claim a key change
+        if (a, b) == lift_pair:
             continue
-        if ka.dual_reading or kb.dual_reading or min(ka.confidence, kb.confidence) <= 0.65:
-            continue  # ambiguous readings: do not claim a key change
         mods.append(f"possible key change: {a} in {ka.key.tonic} {ka.key.mode} -> "
                     f"{b} in {kb.key.tonic} {kb.key.mode}")
     return {"sections": {n: asdict(a) for n, a in sections.items()}, "modulations": mods,
@@ -301,7 +317,9 @@ def to_text(result: dict) -> str:
         for name, a in result["sections"].items():
             out += [f"[{name}]"] + block(a, "  ")
         out += [f"Modulation: {m}" for m in result["modulations"]]
-        out += [f"Skipped (no chords): {', '.join(result['skipped'])}"] if result["skipped"] else []
+        for n, info in result["skipped"].items():
+            bad = f"; invalid symbols: {' '.join(info['errors'])}" if info["errors"] else ""
+            out.append(f"Skipped {n}: {info['reason']}{bad}")
         return "\n".join(out)
     return "\n".join(block(result))
 
