@@ -79,3 +79,14 @@ def test_rank_common_before_rare():
 def test_word_class():
     assert word_class("the") == "function" and word_class("before") == "function"
     assert word_class("river") == "content"
+
+
+@pytest.mark.parametrize("word", ["I'm", "I’m", "it's", "they’re", "we'd", "that's", "let's", "'cause",
+                                  "’cause", "then", "Then,"])
+def test_pronoun_auxiliary_contractions_are_function_words(word):
+    assert word_class(word) == "function"
+
+
+@pytest.mark.parametrize("word", ["don't", "can't", "won't", "ain't", "just", "cause"])
+def test_negative_contractions_and_content_stay_content(word):
+    assert word_class(word) == "content"

@@ -110,3 +110,8 @@ def test_question_mark_does_not_hide_real_instability():
     s = analyze_section(sec("I walked out in the night\nThe river took the day\nAnd begged the zorbletastic\n"), LEX)
     assert s.rhyme_scheme.endswith("?")
     assert s.verdict == "unstable" and any("odd" in r for r in s.reasons)
+
+
+def test_contractions_do_not_count_as_stresses():
+    assert stresses_in("it's a long way home", LEX) == stresses_in("a long way home", LEX) == 3
+    assert stresses_in("’cause it’s home", LEX) == 1

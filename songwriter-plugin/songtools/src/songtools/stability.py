@@ -45,7 +45,8 @@ class Contrast:
 
 
 def _words(lyric: str) -> list[str]:
-    return [w.strip("'") for w in _WORD.findall(lyric.lower().replace("’", "'")) if w.strip("'")]
+    # keep a leading apostrophe so word_class can tell 'cause from cause
+    return [w.rstrip("'") for w in _WORD.findall(lyric.lower().replace("’", "'")) if w.strip("'")]
 
 
 def stresses_in(lyric: str, lex: Lexicon) -> int:

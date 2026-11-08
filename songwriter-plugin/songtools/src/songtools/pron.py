@@ -115,4 +115,8 @@ def _function_words() -> frozenset[str]:
 
 
 def word_class(word: str) -> Literal["function", "content"]:
-    return "function" if _normalize(word) in _function_words() else "content"
+    """Curly apostrophes count as straight ones; a leading-apostrophe entry ('cause) matches only
+    that spelling, so "cause" stays content."""
+    words = _function_words()
+    raw = word.translate(_QUOTES).lower().strip(_PUNCT)
+    return "function" if raw in words or _normalize(word) in words else "content"
