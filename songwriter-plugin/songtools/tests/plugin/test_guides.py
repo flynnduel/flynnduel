@@ -84,7 +84,7 @@ def test_lint_ignores_fenced_code(tmp_path):
     assert lint_guide(p) == []
 
 
-@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody"])   # extended by Tasks 3-5
+@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody", "harmony", "guitar", "arrangement"])   # extended by Tasks 3-5
 def test_guide_is_clean(guide):
     assert lint_guide(PLUGIN_ROOT / f"guides/{guide}.md") == []
 
@@ -121,3 +121,14 @@ def test_structure_and_melody_sections():
     for h in ["## Singability", "## Phrasing", "## Prosody", "## Key and range", "## Limits"]:
         assert h in m
     assert "70%" in m          # the Hayes limit is stated
+
+
+def test_music_guides_sections():
+    h = (PLUGIN_ROOT/"guides/harmony.md").read_text()
+    g = (PLUGIN_ROOT/"guides/guitar.md").read_text()
+    a = (PLUGIN_ROOT/"guides/arrangement.md").read_text()
+    for x in ["## Tonal systems", "## Base rates", "## Option menu", "## Pitfalls"]: assert x in h
+    assert "32%" in h and "18.5%" in h
+    for x in ["## Voicings", "## Tunings", "## Capo", "## Feel"]: assert x in g
+    for x in ["## Layers", "## Energy", "## Road map", "## Checks"]: assert x in a
+    assert "left to the players" in a.lower()
