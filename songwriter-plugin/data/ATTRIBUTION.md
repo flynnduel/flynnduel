@@ -8,3 +8,4 @@
   (https://creativecommons.org/licenses/by-sa/4.0/). The share-alike terms apply
   to `word_rank.tsv`: any redistribution or adaptation of that file must credit
   wordfreq and be released under CC BY-SA 4.0 or a compatible license.
+- `tunings.json` - guitar tunings per Wikipedia (Guitar tunings), verified.
