@@ -14,7 +14,7 @@ import mido
 
 from songtools.chords import NOTE_PC, is_no_chord, parse_chord
 from songtools.cli import SongtoolsError
-from songtools.songfile import parse_music_md, parse_song_md
+from songtools.songfile import file_error, parse_music_md, parse_song_md, read_text
 
 BASIS = "reference track of the writer's own chords (mido)"
 TICKS = 480
@@ -68,9 +68,7 @@ def to_text(result: dict) -> str:
 
 
 def _read(path: Path) -> str:
-    if not path.is_file():
-        raise SongtoolsError(str(path), None, f"{path.name} not found")
-    return path.read_text(encoding="utf-8")
+    return read_text(path, path.name)
 
 
 def _h_midi(args: argparse.Namespace):
@@ -103,6 +101,8 @@ def _h_midi(args: argparse.Namespace):
                           key=record.core.get("key") or None, time=record.core.get("time") or "4/4")
     except ValueError as e:
         raise SongtoolsError(str(song_path), None, f"cannot build MIDI: {e}") from None
+    except OSError as e:
+        raise file_error(d / "out" / "guide.mid", "cannot write MIDI", e) from None
     return {"path": str(path), "tempo": tempo, "chords": len(progression),
             "beats": sum(b for _, b in progression), "basis": BASIS}, to_text
 

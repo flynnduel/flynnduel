@@ -330,12 +330,9 @@ def _handler(args: argparse.Namespace):
     if args.music:
         if args.key:
             raise SongtoolsError(None, None, "--key applies to CHORD... only; --music detects each section's key")
-        from songtools.songfile import parse_music_md
+        from songtools.songfile import parse_music_md, read_text
         path = Path(args.music)
-        try:
-            text = path.read_text(encoding="utf-8")
-        except OSError as e:
-            raise SongtoolsError(str(path), None, f"cannot read file: {e.strerror or e}") from None
+        text = read_text(path, "music file")
         return analyze_song(parse_music_md(text, str(path))), to_text
     result = asdict(analyze(args.chords, args.key))
     result["corpus"], result["basis"] = CORPUS, BASIS

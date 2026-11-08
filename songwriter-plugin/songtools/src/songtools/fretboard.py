@@ -357,14 +357,15 @@ def capo_options(chords: list[str], tuning: Tuning, max_fret: int = 7) -> list[C
 
 # --- CLI ---------------------------------------------------------------------------------------------
 
-def _capo(args) -> Capo:
+def _capo(args, tuning: Tuning) -> Capo:
     if not 0 <= args.capo <= 12:
         raise SongtoolsError(None, None, f"--capo must be 0-12, got {args.capo}")
     mask = getattr(args, "partial_capo", None)
     if mask is None:
         return Capo(args.capo)
-    if not re.fullmatch(r"[01]{6}", mask):
-        raise SongtoolsError(None, None, f"--partial-capo needs 6 characters of 0/1 (low to high), got {mask!r}")
+    n = len(tuning.strings)
+    if not re.fullmatch(rf"[01]{{{n}}}", mask):
+        raise SongtoolsError(None, None, f"--partial-capo needs {n} characters of 0/1 (low to high), got {mask!r}")
     if args.capo < 1:
         raise SongtoolsError(None, None, "--partial-capo needs --capo N (the fret, 1 or higher)")
     return Capo(args.capo, tuple(c == "1" for c in mask))
@@ -395,7 +396,8 @@ def _meta(args, tuning: Tuning, capo: Capo) -> dict:
 
 
 def _h_identify(args):
-    tuning, capo = load_tuning(args.tuning), _capo(args)
+    tuning = load_tuning(args.tuning)
+    capo = _capo(args, tuning)
     shape = _shape_arg(args)
     snd = sounding(shape, tuning, capo)
     return {"shape": args.shape, **_meta(args, tuning, capo), "sounding": snd,
@@ -404,7 +406,8 @@ def _h_identify(args):
 
 
 def _h_verify(args):
-    tuning, capo = load_tuning(args.tuning), _capo(args)
+    tuning = load_tuning(args.tuning)
+    capo = _capo(args, tuning)
     v = verify(_shape_arg(args), args.name, tuning, capo, args.band_bass, args.key)
     return {"shape": args.shape, "name": args.name, **_meta(args, tuning, capo), **asdict(v)}, to_text
 

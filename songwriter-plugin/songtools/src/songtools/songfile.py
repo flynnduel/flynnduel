@@ -2,6 +2,7 @@
 
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 from songtools.cli import SongtoolsError
 
@@ -46,6 +47,31 @@ class SongRecord:
     sections: dict[str, str]
     kept: list[KeptLine]
     splits: list[Split]
+
+
+def file_error(path: Path | str, action: str, e: Exception) -> SongtoolsError:
+    """A user-facing error for a file that could not be read or written; action e.g. "cannot read lyrics file"."""
+    if isinstance(e, UnicodeDecodeError):
+        reason = f"not valid UTF-8 ({e.reason})"
+    elif isinstance(e, FileNotFoundError):
+        reason = "not found"
+    elif isinstance(e, IsADirectoryError):
+        reason = "is a directory"
+    elif isinstance(e, NotADirectoryError):
+        reason = "a parent is not a directory"
+    elif isinstance(e, FileExistsError):
+        reason = "exists and is not a directory"
+    else:
+        reason = getattr(e, "strerror", None) or type(e).__name__
+    return SongtoolsError(str(path), None, f"{action}: {reason}")
+
+
+def read_text(path: Path | str, what: str = "file") -> str:
+    """Read a UTF-8 text file; any OS or decoding failure becomes a SongtoolsError naming the file."""
+    try:
+        return Path(path).read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as e:
+        raise file_error(path, f"cannot read {what}", e) from None
 
 
 def _numbered_lines(text: str):

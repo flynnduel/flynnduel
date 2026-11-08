@@ -9,6 +9,7 @@ from typing import Iterable, Literal
 from songtools.cli import SongtoolsError
 from songtools.paths import data_dir
 from songtools.phonemes import VOWELS
+from songtools.songfile import read_text
 
 
 @dataclass
@@ -50,12 +51,7 @@ def _estimate(word: str) -> Pron:
 
 def _parse(path: Path, strict: bool = False) -> dict[str, list[Pron]]:
     out: dict[str, list[Pron]] = {}
-    try:
-        text = path.read_text(encoding="utf-8")
-    except FileNotFoundError:
-        raise SongtoolsError(str(path), None, "pronunciation file not found") from None
-    except UnicodeDecodeError as e:
-        raise SongtoolsError(str(path), None, f"not valid UTF-8 ({e.reason})") from None
+    text = read_text(path, "pronunciation file")
     for n, line in enumerate(text.splitlines(), 1):
         line = line.split("#", 1)[0].strip()
         if not line:

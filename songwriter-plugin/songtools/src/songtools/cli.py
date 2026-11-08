@@ -31,6 +31,13 @@ class SongtoolsError(Exception):
         return f"{prefix}: {self.message}" if prefix else self.message
 
 
+class _Parser(argparse.ArgumentParser):
+    """Usage errors become SongtoolsError, so they print as {"error": ...} with exit code 2."""
+
+    def error(self, message: str):
+        raise SongtoolsError(None, None, f"{self.prog}: {message} (see {self.prog} -h)")
+
+
 def _version_handler(args: argparse.Namespace) -> tuple[dict, None]:
     return {"version": __version__}, None
 
@@ -41,7 +48,7 @@ def _register_version(subparsers) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="songtools")
+    parser = _Parser(prog="songtools")
     parser.add_argument("--text", action="store_true", help="readable text output")
     parser.add_argument("--pron", type=Path, default=None, metavar="FILE",
                         help="personal pronunciations file (env SONGTOOLS_PRON)")
@@ -54,10 +61,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
-    args = parser.parse_args(argv)
-    if args.pron is None and os.environ.get("SONGTOOLS_PRON"):
-        args.pron = Path(os.environ["SONGTOOLS_PRON"])
     try:
+        args = parser.parse_args(argv)
+        if args.pron is None and os.environ.get("SONGTOOLS_PRON"):
+            args.pron = Path(os.environ["SONGTOOLS_PRON"])
         # Handlers return (result, to_text); to_text may be None.
         result, to_text = args.handler(args)
         emit(result, args.text, to_text)

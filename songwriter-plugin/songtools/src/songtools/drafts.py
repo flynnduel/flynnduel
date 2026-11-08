@@ -17,7 +17,7 @@ from datetime import date
 from pathlib import Path
 
 from songtools.cli import SongtoolsError
-from songtools.songfile import KeptLine, parse_lyrics, parse_song_md
+from songtools.songfile import KeptLine, file_error, parse_lyrics, parse_song_md, read_text
 
 BASIS = "draft history and cut pool (design rule)"
 _VERSION_RE = re.compile(r"^lyrics-v(\d+)\.md$")
@@ -26,15 +26,20 @@ _VERSION_RE = re.compile(r"^lyrics-v(\d+)\.md$")
 def snapshot(song_dir: Path) -> Path:
     song_dir = Path(song_dir)
     src = song_dir / "lyrics.md"
-    if not src.is_file():
-        raise SongtoolsError(str(src), None, "lyrics.md not found")
+    try:
+        data = src.read_bytes()  # read before creating anything: a bad source writes nothing
+    except OSError as e:
+        raise file_error(src, "cannot read lyrics.md", e) from None
     drafts = song_dir / "drafts"
-    drafts.mkdir(exist_ok=True)
-    versions = [int(m.group(1)) for p in drafts.iterdir() if (m := _VERSION_RE.match(p.name))]
+    try:
+        drafts.mkdir(exist_ok=True)
+        versions = [int(m.group(1)) for p in drafts.iterdir() if (m := _VERSION_RE.match(p.name))]
+    except OSError as e:
+        raise file_error(drafts, "cannot use drafts directory", e) from None
     dest = drafts / f"lyrics-v{max(versions, default=0) + 1}.md"
     try:
         with open(dest, "xb") as f:  # exclusive create: never overwrite a version
-            f.write(src.read_bytes())
+            f.write(data)
     except OSError as e:
         raise SongtoolsError(str(dest), None, f"cannot write snapshot: {e.strerror}") from None
     return dest
@@ -46,12 +51,14 @@ def cut(song_dir: Path, text: str, reason: str, today: str) -> Path:
         path.parent.mkdir(exist_ok=True)
         entry = f"## {today} — {reason}\n{text}\n"
         if path.exists() and path.stat().st_size:
-            existing = path.read_text(encoding="utf-8")
-            entry = ("\n" if existing.endswith("\n") else "\n\n") + entry
+            with open(path, "rb") as f:  # last byte only: the pool need not be valid UTF-8
+                f.seek(-1, 2)
+                last = f.read(1)
+            entry = ("\n" if last == b"\n" else "\n\n") + entry
         with open(path, "a", encoding="utf-8") as f:  # append only
             f.write(entry)
     except OSError as e:
-        raise SongtoolsError(str(path), None, f"cannot write cut: {e.strerror}") from None
+        raise file_error(path, "cannot write cut", e) from None
     return path
 
 
@@ -92,10 +99,7 @@ def diff(old_text: str, new_text: str, kept: list[KeptLine]) -> list[Change]:
 
 
 def _read(path: Path) -> str:
-    try:
-        return Path(path).read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError) as e:
-        raise SongtoolsError(str(path), None, f"cannot read file: {getattr(e, 'strerror', None) or e}") from None
+    return read_text(path, Path(path).name)
 
 
 def to_text(result: dict) -> str:

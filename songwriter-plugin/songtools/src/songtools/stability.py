@@ -10,7 +10,7 @@ from songtools.cli import SongtoolsError
 from songtools.phonemes import VOWELS
 from songtools.pron import Lexicon, load_lexicon, word_class
 from songtools.rhyme import classify
-from songtools.songfile import Line, Section, end_word, parse_lyrics
+from songtools.songfile import Line, Section, end_word, parse_lyrics, read_text
 
 BASIS = "Pattison stability elements (verified)"
 
@@ -168,10 +168,7 @@ def _first(sections: list[Section], kind: str) -> tuple[Section | None, bool]:
 def _handler(args: argparse.Namespace):
     lex = load_lexicon(args.pron)
     path = args.lyrics_file
-    try:
-        text = path.read_text(encoding="utf-8")
-    except (FileNotFoundError, UnicodeDecodeError) as e:
-        raise SongtoolsError(str(path), None, f"cannot read lyrics file ({type(e).__name__})") from None
+    text = read_text(path, "lyrics file")
     sections = parse_lyrics(text, str(path))
     chosen = sections
     if args.section:

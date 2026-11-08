@@ -6,8 +6,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
-from songtools.cli import SongtoolsError
-from songtools.songfile import Section, parse_lyrics
+from songtools.songfile import Section, parse_lyrics, read_text
 
 BASIS = "Pattison four points of view (verified)"
 
@@ -70,10 +69,7 @@ def classify_sections(sections: list[Section]) -> dict:
 
 def _handler(args: argparse.Namespace):
     path = args.lyrics_file
-    try:
-        text = path.read_text(encoding="utf-8")
-    except (FileNotFoundError, UnicodeDecodeError) as e:
-        raise SongtoolsError(str(path), None, f"cannot read lyrics file ({type(e).__name__})") from None
+    text = read_text(path, "lyrics file")
     r = classify_sections(parse_lyrics(text, str(path)))
     return {"song": asdict(r["song"]),
             "sections": {k: asdict(v) for k, v in r["sections"].items()},

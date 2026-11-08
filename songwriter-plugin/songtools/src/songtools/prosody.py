@@ -8,7 +8,7 @@ from typing import Literal
 
 from songtools.cli import SongtoolsError
 from songtools.pron import Lexicon, load_lexicon, word_class
-from songtools.songfile import Section, parse_lyrics, parse_melody_md
+from songtools.songfile import Section, parse_lyrics, parse_melody_md, read_text
 
 BASIS = ("Hayes 2005 ranked constraints (simplified approximation); "
          "Pattison stress-to-beat rules (verified); Smith 2024 syncopation exemption")
@@ -401,10 +401,7 @@ def compare_lines(a: list[Syl], b: list[Syl]) -> dict:
 # ---------------------------------------------------------------- CLI
 
 def _read(path: Path) -> str:
-    try:
-        return path.read_text(encoding="utf-8")
-    except (FileNotFoundError, IsADirectoryError, UnicodeDecodeError) as e:
-        raise SongtoolsError(str(path), None, f"cannot read file ({type(e).__name__})") from None
+    return read_text(path, path.name)
 
 
 def _find_section(sections: list[Section], name: str, file: str) -> Section:

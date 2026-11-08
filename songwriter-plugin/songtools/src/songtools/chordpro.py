@@ -24,7 +24,7 @@ from pathlib import Path
 
 from songtools.chords import FLAT_KEYS, is_no_chord, transpose
 from songtools.cli import SongtoolsError
-from songtools.songfile import Section, SongRecord, parse_lyrics, parse_song_md
+from songtools.songfile import Section, SongRecord, file_error, parse_lyrics, parse_song_md, read_text
 
 BASIS = "ChordPro 6 directive subset (chordpro.org, verified)"
 
@@ -203,9 +203,7 @@ def to_text(result: dict) -> str:
 
 
 def _read(path: Path) -> str:
-    if not path.is_file():
-        raise SongtoolsError(str(path), None, f"{path.name} not found")
-    return path.read_text(encoding="utf-8")
+    return read_text(path, path.name)
 
 
 def _h_chart(args: argparse.Namespace):
@@ -222,12 +220,18 @@ def _h_chart(args: argparse.Namespace):
     if args.pdf:
         from songtools.pdf import render_pdf_bytes  # lazy: reportlab only when asked
         outputs += [(out / f"{name}.pdf", render_pdf_bytes(s)) for name, s in variants]
-    out.mkdir(exist_ok=True)  # only after every output built: a failure writes nothing
+    try:
+        out.mkdir(exist_ok=True)  # only after every output built: a failure writes nothing
+    except OSError as e:
+        raise file_error(out, "cannot create output directory", e) from None
     for path, body in outputs:
-        if isinstance(body, bytes):
-            path.write_bytes(body)
-        else:
-            path.write_text(body, encoding="utf-8")
+        try:
+            if isinstance(body, bytes):
+                path.write_bytes(body)
+            else:
+                path.write_text(body, encoding="utf-8")
+        except OSError as e:
+            raise file_error(path, "cannot write chart", e) from None
     written = [p for p, _ in outputs]
     return {"written": [str(p) for p in written], "basis": BASIS}, to_text
 

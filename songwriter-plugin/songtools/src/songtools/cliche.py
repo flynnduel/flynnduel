@@ -9,7 +9,7 @@ from typing import Literal
 
 from songtools.cli import SongtoolsError
 from songtools.paths import data_dir
-from songtools.songfile import Section, end_word, parse_lyrics
+from songtools.songfile import Section, end_word, parse_lyrics, read_text
 
 BASIS = "Pattison rhyme pairs (verified); other lists tagged per entry"
 
@@ -32,10 +32,11 @@ class ClicheHit:
 
 
 def _read_json(path: Path) -> dict:
+    text = read_text(path, "cliche file")
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
-        raise SongtoolsError(str(path), None, f"cannot read cliche file ({type(e).__name__})") from None
+        data = json.loads(text)
+    except json.JSONDecodeError as e:
+        raise SongtoolsError(str(path), e.lineno, f"cliche file is not valid JSON ({e.msg})") from None
     if not isinstance(data, dict):
         raise SongtoolsError(str(path), None, "cliche file must be a JSON object")
     return data
@@ -112,10 +113,7 @@ def scan(sections: list[Section], cliches: dict, strict: bool = False) -> list[C
 
 def _handler(args: argparse.Namespace):
     path = args.lyrics_file
-    try:
-        text = path.read_text(encoding="utf-8")
-    except (FileNotFoundError, UnicodeDecodeError) as e:
-        raise SongtoolsError(str(path), None, f"cannot read lyrics file ({type(e).__name__})") from None
+    text = read_text(path, "lyrics file")
     cliches = load_cliches(extra=args.extra)
     hits = scan(parse_lyrics(text, str(path)), cliches, args.strict)
     return {"hits": [asdict(h) for h in hits], "strict": args.strict, "basis": BASIS}, to_text
