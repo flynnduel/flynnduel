@@ -30,7 +30,8 @@ class SectionStability:
     lengths_matched: bool
     rhyme_scheme: str
     # per line: rhyme type against its partner (the most recent earlier line with the
-    # same scheme letter); None for x lines and first occurrences of a letter
+    # same scheme letter); None for x lines and first occurrences of a letter;
+    # "undetermined" for ? lines (end word pronunciation estimated)
     end_rhyme_types: list[str | None]
     verdict: Literal["stable", "unstable", "undetermined"]
     reasons: list[str]
@@ -80,7 +81,12 @@ def _sung(section: Section) -> list[Line]:
     return [l for l in section.lines if end_word(l)]
 
 
+def _estimated(word: str, lex: Lexicon) -> bool:
+    return all(p.estimated for p in lex.lookup(word))
+
+
 def _scheme(words: list[str], lex: Lexicon) -> str:
+    """Letters per line; x = no partner, ? = rhyme undetermined (estimated pronunciation)."""
     n = len(words)
     rhymes = [[False] * n for _ in range(n)]
     for i in range(n):
@@ -90,10 +96,13 @@ def _scheme(words: list[str], lex: Lexicon) -> str:
     letters: list[str] = []
     next_letter = iter("abcdefghijklmnopqrstuvwyz")  # x is reserved for unpartnered lines
     for i in range(n):
+        if _estimated(words[i], lex):
+            letters.append("?")
+            continue
         if not any(rhymes[i]):
             letters.append("x")
             continue
-        earlier = next((letters[j] for j in range(i) if rhymes[i][j] and letters[j] != "x"), None)
+        earlier = next((letters[j] for j in range(i) if rhymes[i][j] and letters[j] not in "x?"), None)
         letters.append(earlier or next(next_letter))
     return "".join(letters)
 
@@ -109,6 +118,9 @@ def analyze_section(section: Section, lex: Lexicon) -> SectionStability:
     scheme = _scheme(words, lex)
     partner_types: list[str | None] = []
     for i, letter in enumerate(scheme):
+        if letter == "?":
+            partner_types.append("undetermined")
+            continue
         j = next((k for k in range(i - 1, -1, -1) if scheme[k] == letter), None) \
             if letter != "x" else None
         partner_types.append(classify(words[j], words[i], lex).type if j is not None else None)
@@ -117,14 +129,19 @@ def analyze_section(section: Section, lex: Lexicon) -> SectionStability:
         reasons.append(f"odd phrase count ({len(lines)})")
     if not matched:
         reasons.append(f"phrase lengths not matched (stresses {stresses})")
-    if scheme in _OPEN_SCHEMES:
+    # With a ? line the scheme is not known, so the scheme-shape rules do not fire.
+    undetermined = "?" in scheme
+    if not undetermined and scheme in _OPEN_SCHEMES:
         reasons.append(f"open rhyme scheme ({scheme})")
-    if scheme.endswith("x"):
+    if not undetermined and scheme.endswith("x"):
         reasons.append("final line unrhymed (x)")
     if partner_types[-1] in ("assonance", "consonance"):
         reasons.append(f"final line rhymes by {partner_types[-1]} (remote rhyme)")
+    verdict = "unstable" if reasons else "undetermined" if undetermined else "stable"
+    for w in dict.fromkeys(w for w, letter in zip(words, scheme) if letter == "?"):
+        reasons.append(f"rhyme undetermined (estimated pronunciation): {w}")
     return SectionStability(section.name, len(lines), stresses, matched, scheme, partner_types,
-                            "unstable" if reasons else "stable", reasons)
+                            verdict, reasons)
 
 
 def _mode(values: list):

@@ -19,7 +19,8 @@ _GENERIC = re.compile(
 _QUOTED = re.compile(r'"[^"\n]*"|“[^”\n]*”')
 _WORD = re.compile(r"[\w']+")
 
-Pov = Literal["direct_address", "second_narrative", "first_narrative", "third_narrative"]
+# "undetermined": no pronouns at all, so no point of view can be read.
+Pov = Literal["direct_address", "second_narrative", "first_narrative", "third_narrative", "undetermined"]
 
 
 @dataclass
@@ -44,8 +45,10 @@ def classify_pov(text: str) -> PovResult:
         pov = "second_narrative"
     elif i:
         pov = "first_narrative"
-    else:
+    elif third:
         pov = "third_narrative"
+    else:
+        pov = "undetermined"
     return PovResult(pov, i, you, third, bool(_GENERIC.search(plain)))
 
 
@@ -53,7 +56,7 @@ def classify_sections(sections: list[Section]) -> dict:
     """{"song": PovResult, "sections": {name: PovResult}, "shift": bool}.
 
     Repeated section names get " (2)", " (3)" ... so none is lost. Sections with no
-    lines are omitted and do not count toward a shift.
+    lines are omitted; sections with no pronouns ("undetermined") do not count toward a shift.
     """
     per: dict[str, PovResult] = {}
     seen: dict[str, int] = {}
@@ -64,7 +67,7 @@ def classify_sections(sections: list[Section]) -> dict:
         key = s.name if seen[s.name] == 1 else f"{s.name} ({seen[s.name]})"
         per[key] = classify_pov("\n".join(l.lyric for l in s.lines))
     song = classify_pov("\n".join(l.lyric for s in sections for l in s.lines))
-    return {"song": song, "sections": per, "shift": len({r.pov for r in per.values()}) > 1}
+    return {"song": song, "sections": per, "shift": len({r.pov for r in per.values()} - {"undetermined"}) > 1}
 
 
 def _handler(args: argparse.Namespace):
@@ -78,6 +81,8 @@ def _handler(args: argparse.Namespace):
 
 def to_text(r: dict) -> str:
     def row(label: str, p: dict) -> str:
+        if p["pov"] == "undetermined":
+            return f"{label}: undetermined (no pronouns)"
         return (f"{label}: {p['pov']} (I {p['i_count']}, you {p['you_count']}, "
                 f"third {p['third_count']})" + (", generic you" if p["generic_you"] else ""))
     lines = [row("Song", r["song"])] + [row(k, v) for k, v in r["sections"].items()]

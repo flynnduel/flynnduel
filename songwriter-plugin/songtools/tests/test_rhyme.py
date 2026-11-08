@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from songtools.cli import main
@@ -91,3 +93,21 @@ def test_candidates_reject_bad_limit(n):
 
 def test_cli_rejects_bad_candidates_count(capsys):
     assert main(["rhyme", "cat", "--candidates", "0"]) == 2
+
+
+def test_undetermined_detail_names_the_missing_word():
+    assert "zorbletastic" in classify("cat", "zorbletastic", LEX).detail
+
+
+def test_cli_candidates_for_unknown_word_are_undetermined(capsys):
+    assert main(["rhyme", "zorbletastic", "--candidates", "5"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["undetermined"] is True and out["candidates"] == []
+    assert "zorbletastic" in out["reason"]
+    assert main(["rhyme", "cat", "--candidates", "5"]) == 0
+    assert json.loads(capsys.readouterr().out)["undetermined"] is False
+
+
+def test_cli_candidates_text_for_unknown_word(capsys):
+    assert main(["--text", "rhyme", "zorbletastic", "--candidates", "5"]) == 0
+    assert "undetermined" in capsys.readouterr().out

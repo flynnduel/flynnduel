@@ -57,3 +57,23 @@ def test_unbalanced_quote_does_not_cross_lines():
     r = classify_sections(secs)
     assert r["song"].i_count == 3 and r["song"].third_count == 2
     assert r["song"].pov == r["sections"]["Verse 1"].pov == "first_narrative"
+
+
+@pytest.mark.parametrize("text", ["", "Rain on the river all night long"])
+def test_no_pronouns_is_undetermined(text):
+    assert classify_pov(text).pov == "undetermined"
+
+
+def test_pronoun_free_section_is_excluded_from_shift():
+    secs = parse_lyrics("## Verse 1\nI walked home\n## Chorus\nRain on the river\n## Verse 2\nMy road is long\n")
+    r = classify_sections(secs)
+    assert r["sections"]["Chorus"].pov == "undetermined"
+    assert not r["shift"]
+
+
+def test_cli_text_marks_undetermined(tmp_path, capsys):
+    f = tmp_path / "lyrics.md"
+    f.write_text("## Verse 1\nRain on the river\n", encoding="utf-8")
+    assert main(["--text", "pov", str(f)]) == 0
+    out = capsys.readouterr().out
+    assert "Verse 1: undetermined (no pronouns)" in out and "third_narrative" not in out

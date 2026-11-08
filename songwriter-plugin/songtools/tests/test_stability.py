@@ -94,3 +94,19 @@ def test_estimated_end_word_skips_end_vowel():
     r = chorus_contrast(v, c, LEX)
     assert not any(d.startswith("end vowel") for d in r.differences)
     assert "end vowel not compared (estimated pronunciation)" in r.notes
+
+
+def test_estimated_end_word_is_question_mark_not_x():
+    s = analyze_section(sec("I walked out in the night\nThe river took the day\n"
+                            "I chased the golden light\nThe river took the zorbletastic\n"), LEX)
+    assert s.rhyme_scheme == "axa?"
+    assert "rhyme undetermined (estimated pronunciation): zorbletastic" in s.reasons
+    assert not any("unrhymed" in r or "open" in r for r in s.reasons)
+    assert s.verdict == "undetermined"
+    assert s.end_rhyme_types[-1] == "undetermined"
+
+
+def test_question_mark_does_not_hide_real_instability():
+    s = analyze_section(sec("I walked out in the night\nThe river took the day\nAnd begged the zorbletastic\n"), LEX)
+    assert s.rhyme_scheme.endswith("?")
+    assert s.verdict == "unstable" and any("odd" in r for r in s.reasons)

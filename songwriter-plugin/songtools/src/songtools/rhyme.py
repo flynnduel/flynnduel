@@ -95,9 +95,12 @@ def _order(t: str) -> int:
 def classify(a: str, b: str, lex: Lexicon) -> RhymeResult:
     na, nb = a.strip().lower(), b.strip().lower()
     pas, pbs = lex.lookup(a), lex.lookup(b)
-    if any(p.estimated for p in pas + pbs):
+    missing = [w for w, ps in ((a, pas), (b, pbs)) if all(p.estimated for p in ps)]
+    if missing:
+        names = " and ".join(dict.fromkeys(missing))
+        verb = "is" if len(set(missing)) == 1 else "are"
         return RhymeResult(a, b, "undetermined", False,
-                           "a word is not in the dictionary; add it to the personal pronunciations file")
+                           f"{names} {verb} not in the dictionary; add to the personal pronunciations file")
     best: tuple[str, str, bool] | None = None
     for x in pas:
         for y in pbs:
@@ -189,8 +192,11 @@ def _handler(args: argparse.Namespace):
         if args.candidates < 1:
             raise SongtoolsError(None, None, "--candidates must be at least 1")
         found = candidates(args.word, lex, limit=args.candidates)
+        unknown = all(p.estimated for p in lex.lookup(args.word))
         return {
-            "word": args.word, "lens": args.lens, "basis": BASIS,
+            "word": args.word, "lens": args.lens, "basis": BASIS, "undetermined": unknown,
+            "reason": (f"{args.word} is not in the dictionary; add it to the personal pronunciations "
+                       "file to find candidates") if unknown else None,
             "candidates": [{"word": c.word, "type": c.type, "rank": c.rank,
                             "verdict": lens_verdict(RhymeResult(args.word, c.word, c.type, False, ""),
                                                     args.lens)}
@@ -208,6 +214,8 @@ def _pair_text(r: dict) -> str:
 
 
 def _candidates_text(r: dict) -> str:
+    if r["undetermined"]:
+        return f"{r['word']}: undetermined - {r['reason']}"
     lines = [f"{r['word']}: {len(r['candidates'])} candidates ({r['lens']} lens)"]
     lines += [f"  {c['word']}\t{c['verdict']}" for c in r["candidates"]]
     return "\n".join(lines)
