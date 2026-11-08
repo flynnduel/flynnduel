@@ -153,6 +153,11 @@ def _index(lex: Lexicon):
 
 def candidates(word: str, lex: Lexicon, types: list[str] | None = None,
                limit: int = 50) -> list[Candidate]:
+    if limit < 1:
+        raise ValueError(f"limit must be at least 1, got {limit}")
+    bad = sorted(set(types or []) - set(STABILITY_RANK))
+    if bad:
+        raise ValueError(f"unsupported candidate types {bad}; choose from {sorted(STABILITY_RANK)}")
     wanted = set(types) if types else set(STABILITY_RANK)
     target = word.strip().lower()
     by_vowel, by_coda = _index(lex)
@@ -181,6 +186,8 @@ def _handler(args: argparse.Namespace):
     if args.word2 is None:
         if args.candidates is None:
             raise SongtoolsError(None, None, "give a second word, or --candidates N for one word")
+        if args.candidates < 1:
+            raise SongtoolsError(None, None, "--candidates must be at least 1")
         found = candidates(args.word, lex, limit=args.candidates)
         return {
             "word": args.word, "lens": args.lens, "basis": BASIS,

@@ -67,3 +67,27 @@ def test_cli_candidates(capsys):
 
 def test_cli_single_word_needs_candidates(capsys):
     assert main(["rhyme", "cat"]) == 2
+
+
+def test_homophone_is_identical():
+    assert classify("bear", "bare", LEX).type == "identical"
+
+
+def test_candidates_reject_unknown_or_identical_types():
+    for bad in (["identical"], ["perfect", "eye"], ["bogus"]):
+        with pytest.raises(ValueError):
+            candidates("cat", LEX, types=bad)
+
+
+def test_candidates_exclude_homophones():
+    assert "bare" not in [c.word for c in candidates("bear", LEX, limit=500)]
+
+
+@pytest.mark.parametrize("n", [0, -3])
+def test_candidates_reject_bad_limit(n):
+    with pytest.raises(ValueError):
+        candidates("cat", LEX, limit=n)
+
+
+def test_cli_rejects_bad_candidates_count(capsys):
+    assert main(["rhyme", "cat", "--candidates", "0"]) == 2
