@@ -13,7 +13,7 @@ from songtools.output import emit
 # Later tasks append module names (each exposes register(subparsers)).
 MODULES: tuple[str, ...] = ("songtools.rhyme", "songtools.stability", "songtools.pov", "songtools.cliche",
                              "songtools.prosody", "songtools.chords", "songtools.fretboard",
-                             "songtools.harmony")
+                             "songtools.harmony", "songtools.keyfit")
 
 
 class SongtoolsError(Exception):
