@@ -176,3 +176,13 @@ Links: https://en.wikipedia.org/wiki/Nashville_Number_System
 Read: Wikipedia summary naming Chas Williams as the Number System's historian and author, not originator.
 Status: as reported.
 Links: https://en.wikipedia.org/wiki/Nashville_Number_System
+
+## Hudson
+Read: MTO 27.1 article on compound AABA, including its quotations of Temperley's default layout.
+Status: verified for the quoted Temperley layout, the compound AABA-prime label and the 195-track metal count; Temperley and Covach are known through it.
+Links: https://mtosmt.org/issues/mto.21.27.1/mto.21.27.1.hudson.html
+
+## Open Music Theory
+Read: the chapters on verse-chorus form, AABA and strophic form, pop/rock harmony and the intro to popular-music form.
+Status: verified. A textbook, so cited for definitions of section jobs, not as research.
+Links: https://viva.pressbooks.pub/openmusictheory/chapter/verse-chorus-form/ ; https://viva.pressbooks.pub/openmusictheory/chapter/aaba-form/ ; https://openmusictheory.github.io/popRockHarmony.html

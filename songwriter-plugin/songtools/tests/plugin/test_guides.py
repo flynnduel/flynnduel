@@ -84,7 +84,7 @@ def test_lint_ignores_fenced_code(tmp_path):
     assert lint_guide(p) == []
 
 
-@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting"])   # extended by Tasks 3-5
+@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody"])   # extended by Tasks 3-5
 def test_guide_is_clean(guide):
     assert lint_guide(PLUGIN_ROOT / f"guides/{guide}.md") == []
 
@@ -112,3 +112,12 @@ def test_drafting_guide_covers_spec_section_8():
     for k in ["writer's material", "particular", "self-audit", "cliché pairs", "irregularity",
               "song's voice", "any size", "never"]:
         assert k in t, k
+
+
+def test_structure_and_melody_sections():
+    s = (PLUGIN_ROOT/"guides/structure.md").read_text(); m = (PLUGIN_ROOT/"guides/melody.md").read_text()
+    for h in ["## Form menu", "## Section jobs", "## Contrast", "## Hooks and titles", "## Asymmetry", "## Market heuristics"]:
+        assert h in s
+    for h in ["## Singability", "## Phrasing", "## Prosody", "## Key and range", "## Limits"]:
+        assert h in m
+    assert "70%" in m          # the Hayes limit is stated
