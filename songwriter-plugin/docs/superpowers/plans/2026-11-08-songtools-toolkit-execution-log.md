@@ -1,0 +1,111 @@
+# songtools build: rulings and deferred minors
+
+Execution log for Plan 1 (subagent-driven). Every decision made on the writer's behalf and every review finding deferred. Suite at finish: 403 passed.
+
+## Rulings
+
+- Pre-flight: Ruling: CLI group `guitar` (fretboard) kept separate from `chord` — module boundary matches plan files; spec table is descriptive — cost if wrong: rename in Plan 2.
+- Pre-flight: Ruling: draft tools live under `drafts {snapshot,cut,diff}` — groups related file ops — cost if wrong: alias in Plan 2.
+- Pre-flight: Ruling: T5 fixtures may be reworded (keeping the tested scheme/property) if CMU stress counts break "matched lengths"; rules may not change — cost if wrong: a weaker fixture.
+- Task 1: Ruling: handler contract is handler(args) -> (result_dict, to_text|None), set via set_defaults(handler=fn) — implementer's choice, equivalent to plan's dict+module to_text — cost if wrong: small refactor; carried to later dispatches.
+- Task 1: Ruling: commit attribution line names the model the implementer ran on (per its own system reminder) rather than global-constraints text — attribution should be accurate — cost if wrong: cosmetic.
+- Task 2: Ruling: end_word of a hyphenated compound returns the tail ("Heart-Break" -> "break") — the tail carries the rhyme — cost if wrong: rhyme checks on compound words.
+- Task 3: Ruling: rank test uses love < dardanelles and lugubrious is None (lugubrious absent from 58,954-word rank file) — brief value impossible with the data; behavior unchanged — cost if wrong: none
+- Task 3: Ruling: accept missing separate RED run (tests written with implementation) — tests exist and exercise behavior; reviewer judges adequacy — cost if wrong: a test that never failed
+- Task 4: Ruling: homophones (same onset + rhyme part, e.g. bear/bare) classify as identical — identity is not rhyme (Pattison) — cost if wrong: one rule
+- Task 4: Ruling: accept missing separate RED run — reviewer judges test adequacy — cost if wrong: untested-by-failure tests
+- Task 5: Ruling: abab fixture line 3 reworded ("I chased the golden light") because "every" is a function word — per pre-flight ruling — cost if wrong: none
+- Task 5: Ruling: chorus_contrast skips end-vowel comparison when either end word is estimated — never invent a result — cost if wrong: a missed contrast on unknown words
+- Tasks 6-7: Ruling: dispatched together to one implementer and reviewed as one unit — both small, independent, same shape (one module + data/test, one subcommand) — cost if wrong: a larger single review
+- Tasks 6-7: Ruling: re-graded reviewer Minor (POV quote stripping across newlines) to Important — a stray quote can flip the song-level POV a writer sees — cost if wrong: one small extra fix
+- Task 8: Ruling: proposal tie-break prefers fewest anticipated syllables, then lexicographically smallest slots — pure lexicographic order pulled syllables early via free anticipations and failed the brief test; scores unchanged — cost if wrong: different but equally scored proposals
+- Task 8: Ruling: INVERSION compares effective strengths (after anticipation) — raw strength would flag anticipated stressed syllables, contradicting test_anticipation_counts_as_beat — cost if wrong: missed inversions on anticipated syllables
+- Task 8: Ruling: re-graded unbounded slot values (hang on typo) from Minor to Important; bound slots to -3..63 and bars <= 8 — a hang is a user-facing failure — cost if wrong: rejects lines longer than 8 bars
+- Task 9: Ruling: names_for gains optional `key: str | None = None` (backward-compatible) to spell names in flat keys — plan signature had no key, which made flat-key names wrong (A#maj7) — cost if wrong: one extra parameter
+- Task 9: Ruling: re-graded transpose("N.C.") raising and rejection of common chart symbols (C+, C°7, Cø, C6/9, C7sus, C(9), Caug7) to Important — they would abort charts and progressions downstream (Review Focus 4) — cost if wrong: a small alias table
+- Task 10: Ruling: partial capo — clamped strings count frets from the capo, unclamped strings use physical frets (continuous with open) — keeps each string's numbering continuous — cost if wrong: shapes typed in the other convention read wrong under partial capos
+- Task 10: Ruling: re-graded capo-mask length check and --capo range validation from Minor to Important (silent wrong output / bad input) — cost if wrong: none
+- Task 11: Ruling: dual-reading window measured on confidence share (top/(top+other) - 0.5 <= 0.15), relative major/minor preferred — the brief's 15% score window could not yield the A-minor reading for C G Am F that its own test requires — cost if wrong: dual readings flagged more often
+- Task 11: Ruling: music21 oracle uses octaved pitches (bare names give an inversion figure) — test intent unchanged — cost if wrong: none
+- Task 11: Ruling: folded reviewer Minor (lift ignores ambiguity) into the Important lift fix — same code path, same false-positive risk — cost if wrong: none
+- Task 11: Ruling: "possible key change" gate uses dual_reading only (confidence <= 0.65 blocked every change because same-tonic mode ties depress confidence) — cost if wrong: key-change notes on weakly-keyed sections
+- Tasks 12-13: Ruling: dispatched together (key fitting + drafts) and reviewed as one unit — both small, independent — cost if wrong: larger single review
+- Task 14: Ruling: ChordPro annotations [*X] pass through concert transposition unchanged; other unparseable chords/keys raise SongtoolsError — annotations are legal ChordPro, other junk should be reported, not guessed — cost if wrong: user must fix odd chord tokens
+- Task 14: Ruling: re-graded transposition of chords inside {comment} directives to Important — it silently changes notes on the band's chart — cost if wrong: none
+- Task 15: Ruling: chart --pdf uses render_pdf_bytes (build all bytes, then write) instead of render_pdf — preserves Task 14's atomic write — cost if wrong: none
+- Task 16: Ruling: size budget measures the full runtime dependency closure plus shipped data, with the budget raised from 25 MB to 40 MB — the plan's 25 MB counted only direct packages (real footprint ~33 MB, mostly pillow which reportlab requires); spec's "~15 MB" estimate was wrong — cost if wrong: a larger install than the spec promised
+- Final: Ruling: harmony key choice — keep plan score formula, add tie-breaks (diatonic count, first-chord tonic, major-first) and prefer plain major/minor over same-pc-set modes unless outscored beyond the dual window — plan formula picked V-mixolydian for common loops — cost if wrong: modal songs read as major/minor first (dual reading still shows the mode)
+- Final: Ruling: declined-to-judge items stand as design: rhyme skill must call `cliche` for cliché pairs; `key` is called once per section by the skill; midi plays music.md sections once in file order; dev-only `locate` package licence (not shipped) noted for the user — cost if wrong: Plan 2 skill wiring
+
+## Deferred minors
+
+- Task 1: minor (deferred): GPL guard ignores long License text (>200 chars); consider regex + allowlist
+- Task 1: minor (deferred): no tests yet for --text output or --pron/SONGTOOLS_PRON precedence
+- Task 1: minor (deferred): SongtoolsError line-only/message-only branches untested
+- Task 2: minor (deferred): nested "[G [C]x" accepted as one chord symbol
+- Task 2: minor (deferred): single-quoted trailing word keeps apostrophe ('goodbye' -> goodbye')
+- Task 2: minor (deferred): nan/inf/negative accepted in progression beats and split percent
+- Task 2: minor (deferred): duplicate headings append/overwrite silently in music.md/melody.md/song.md
+- Task 2: minor (deferred): unrecognized lines in music.md / split / kept sections ignored silently
+- Task 2: minor (deferred): unclosed <!-- swallows rest of file; "## Verse in C#" loses trailing #
+- Task 2: minor (deferred): '|' inside kept-line reason gives generic error
+- Task 3: minor (deferred): function_words.txt lacks contractions/common words (don't, can't, I'm, it's, 'cause, then, just…); "one" listed as function word
+- Task 3: minor (deferred): rock'n'roll estimated as 2 syllables; "bin'" -> "bing"
+- Task 3: minor (deferred): _load cache keyed by path spelling; edits not picked up in-process
+- Task 3: minor (deferred): lookup returns shared mutable Pron objects
+- Task 3: minor (deferred): rank() None for rare CMU words — downstream sorts must handle None
+- Task 3: minor (deferred): phoneme tests miss voiced plosive/fricative, JH/CH, voiced(), family(vowel)
+- Task 3: minor (deferred): override errors other than missing/encoding (directory, permission) raise raw OSError; missing/encoding tests assert type only
+- Task 4: minor (deferred): additive/subtractive only detects consonants appended at the end (cat/cast -> assonance)
+- Task 4: minor (deferred): unstressed vowels compared strictly, so beautiful/dutiful -> assonance not perfect (multisyllable rhymes undercounted)
+- Task 4: minor (deferred): `rhyme A B --candidates N` ignores --candidates; identical guard ordered after undetermined
+- Task 4: minor (deferred): Webb lens reports "false rhyme" for identical/homophones — document in Plan 2 skill
+- Task 4: minor (deferred): _INDEX keyed by id(lex) — use WeakKeyDictionary
+- Task 4: minor (deferred): rhyme test gaps (cold-build timing, family negatives, multi-pron, limit/types, eye boundary, CLI single-word error)
+- Task 5: minor (deferred): stability test gaps (other open schemes, --section filtering assertion, tie-break path)
+- Task 5: minor (deferred): scheme letters exhaust past 26 distinct rhymes (StopIteration)
+- Task 5: minor (deferred): only FileNotFound/UnicodeDecode caught on file read; "1 phrases" grammar; Path import inside register
+- Task 5: minor (deferred): estimated-vowel note wording also covers no-stressed-vowel case
+- Tasks 6-7: minor (deferred): chord-only/pronoun-free sections count as third_narrative and can raise a false shift; add caveat in text output
+- Tasks 6-7: minor (deferred): test gaps (duplicate section suffix, --text outputs, --strict/--extra CLI, curly apostrophe entry)
+- Tasks 6-7: minor (deferred): strict mode double-hits (emotion_naming + abstract on same line)
+- Tasks 6-7: minor (deferred): duplicated file-read boilerplate; catches only FileNotFound/UnicodeDecode (shared helper catching OSError)
+- Tasks 6-7: minor (deferred): whole-word match misses inflections (whisper/whispers)
+- Task 8: minor (deferred): _TIE=1024 assumes < 1024 anticipations
+- Task 8: minor (deferred): non-integer --slots / melody.md count errors lack file:line prefix (parse_melody_md returns no line numbers)
+- Task 8: minor (deferred): score() doesn't validate line_slots > last slot (internal callers only)
+- Task 8: minor (deferred): proposals often start in pickup slots ("over the hill" -> [-3,-2,-1,0]); may read oddly — note in Plan 2 skill
+- Task 8: minor (deferred): EMPTY_DOWNBEAT flag's syllable index is a display heuristic
+- Task 9: minor (deferred): names_for ranks lossy "C6(no5)" above exact "Am/C" for {C,E,A}/C
+- Task 9: minor (deferred): Chord.tones omits slash bass while pcs includes it
+- Task 9: minor (deferred): FLAT_KEYS lacks Abm/Dbm; spell/transpose accept invalid keys; CLI names --bass outside notes unexplained
+- Task 9: minor (deferred): chord test gaps (negative/large semitones, determinism test name overstates, oracle compares pcs only)
+- Task 10: minor (deferred): verify note suppression uses `"bass" in n` string match
+- Task 10: minor (deferred): vsystem applies gap promotions sequentially; double-gap chords keep only the first promotion (undocumented, untested)
+- Task 10: minor (deferred): alt-tuning voicings filter by pc set + root lowest rather than identify()[0] (deviation from brief, arguably better)
+- Task 10: minor (deferred): _note_midi octave wrong for Cb/B#; _format_shape mixed separators
+- Task 10: minor (deferred): CLI --partial-capo is fixed at 6 chars; non-6-string tunings would raise raw ValueError
+- Task 11: minor (deferred): explicit key reports confidence 1.0 (user assertion, not measurement)
+- Task 11: minor (deferred): equal-score tonic tie broken silently by pc number
+- Task 11: minor (deferred): double-plagal note matches only exact bVII-IV-I numerals (not bVII7)
+- Task 11: minor (deferred): dual-reading window (approved deviation) is much looser than the brief's 15% — final review to weigh
+- Task 11: minor (deferred): confidence is depressed by same-tonic mode ties (G C D G = 0.524) — consider computing confidence across tonics
+- Tasks 12-13: minor (deferred): keyfit docstring says Ebm/Bbm spelled sharp (code correctly uses flats)
+- Tasks 12-13: minor (deferred): snapshot mkdir/iterdir outside try; dest created before read (empty version left on read failure)
+- Tasks 12-13: minor (deferred): cut reads cuts.md as UTF-8 (non-UTF-8 file -> traceback); reason/text with newlines or '## ' written raw
+- Tasks 12-13: minor (deferred): drafts diff parse errors report lyrics.md instead of real path; index matching noisy on inserted lines
+- Tasks 12-13: minor (deferred): test weaknesses (loose disjunction, raises(Exception), removed kept line, repeated sections, reversed ranges); ±6 shift duplicate key names
+- Task 14: minor (deferred): lyric line starting with '{' in an other-section re-parses as a directive (no escaping)
+- Task 14: minor (deferred): negative capo accepted; bad-capo error lacks file/line
+- Task 14: minor (deferred): start_of_tab/grid blocks split apart rather than refused (documented)
+- Task 15: minor (deferred): no test that a failed PDF build writes nothing; Lato lacks ♯/♭ glyphs
+- Task 15: minor (deferred): un-notatable key silently drops key_signature; tempo 96.5 truncated; empty progression writes silent MIDI; fractional-beat tick drift
+- Task 15: minor (deferred): very long {comment} cue not wrapped; dense chord-only row can exceed margin; {new_page} at top of empty page gives blank page; old pagination test uses weak count
+- Task 16: minor (deferred): e2e ids lambda convoluted
+- Task 16: minor (deferred): _with_basis duplicated in chords.py and fretboard.py; basis test covers two subcommands
+- Final: minor (deferred): capo search spells shapes with sharps (use keyed names)
+- Final: minor (deferred): rhyme candidates include possessive entries (cells')
+- Final: minor (deferred): estimator ignores accented vowels; digits estimate 1 syllable
+- Final: minor (deferred): concert-pitch errors lack file:line; midi tempo error lacks song.md prefix; N.C. reported as "invalid chord symbol"
+- Final: minor (deferred): JSON shapes inconsistent across commands — document all shapes in README for Plan 2; README error-contract wording
+- Final: minor (deferred): Lato lacks ♯/♭/CJK; paths.data_dir assumes source layout (needs SONGTOOLS_DATA for wheel installs)
