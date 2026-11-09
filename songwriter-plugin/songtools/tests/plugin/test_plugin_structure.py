@@ -11,8 +11,7 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[3]
 INVOKE = 'UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools'
 SKILLS = ["newsong", "idea", "structure", "lyrics", "melody", "chords", "arrange", "chart", "critique", "finalcheck", "bank"]
 # Skills not written yet; each skill task removes its own name from this set.
-SKILLS_PENDING = {"newsong", "idea", "structure", "melody", "chords", "arrange", "chart", "critique",
-                  "finalcheck", "bank"}
+SKILLS_PENDING = {"newsong", "idea", "structure", "melody", "chords", "arrange", "chart", "bank"}
 
 
 def real_subcommands() -> list[str]:
@@ -44,6 +43,13 @@ def test_rulebook_has_the_nine_rules_and_uv_fallback():
                    "Music is coached", "No genre bias", "never say a line sounds like AI", "State limits",
                    "Kept is not silenced", "install uv"]:
         assert phrase.lower() in t.lower(), phrase
+
+
+def test_rulebook_folder_tree_lists_pronunciations_file():
+    t = (PLUGIN_ROOT / "guides/rulebook.md").read_text()
+    tree = t.split("## Song folder", 1)[1].split("```")[1]
+    assert "pronunciations.txt" in tree
+    assert "--pron" in tree
 
 
 def test_guides_have_no_plugin_variables():

@@ -15,6 +15,12 @@ transposes every chord up by capo, drops {capo} and sets {key} to the sounding k
 CLI: songtools chart SONG_DIR [--concert] [--pdf] -> {"written": [paths], "basis": str}.
 --pdf also renders out/chart.pdf (and out/chart-concert.pdf with --concert) via songtools.pdf.
 Every output is built in memory first; nothing is written if any build fails.
+
+songtools chart SONG_DIR --check writes nothing. It compares, per section, the inline chords of
+lyrics.md (consecutive repeats collapsed) with the music.md progression (collapsed): a section
+matches when its lyric chords are the progression played one or more whole times. Sections
+without inline chords are not compared. It also reports whether out/chart.cho exists and is
+older than lyrics.md or song.md (the files a chart is built from).
 """
 
 import argparse
@@ -206,11 +212,78 @@ def _read(path: Path) -> str:
     return read_text(path, path.name)
 
 
+CHECK_BASIS = "inline chords in lyrics.md against music.md progressions (exact symbol match; design rule)"
+
+
+def _collapse(chords: list[str]) -> list[str]:
+    out: list[str] = []
+    for c in chords:
+        if not out or out[-1] != c:
+            out.append(c)
+    return out
+
+
+def _plays_through(lyric: list[str], prog: list[str]) -> bool:
+    if not prog:
+        return False
+    for k in range(1, len(lyric) + 1):
+        played = _collapse(prog * k)
+        if played == lyric:
+            return True
+        if len(played) > len(lyric):
+            return False
+    return False
+
+
+def _chart_check(d: Path, sections: list[Section]):
+    from songtools.songfile import parse_music_md
+    music_path = d / "music.md"
+    music = {name: _collapse([c for c, _ in prog])
+             for name, prog in parse_music_md(_read(music_path), file=str(music_path)).items()}
+    result: dict[str, dict] = {}
+    for s in sections:
+        lyric = _collapse([c for line in s.lines for _, c in line.chords])
+        if not lyric:
+            continue
+        prog = music.get(s.name)
+        result[s.name] = {
+            "lyrics": lyric, "music": prog,
+            "matches": prog is not None and _plays_through(lyric, prog),
+            "only_lyrics": sorted(set(lyric) - set(prog or []), key=lyric.index),
+            "only_music": sorted(set(prog or []) - set(lyric), key=(prog or []).index),
+        }
+    only_lyrics = [n for n in result if n not in music]
+    only_music = [n for n in music if n not in {s.name for s in sections}]
+    chart = d / "out" / "chart.cho"
+    if chart.exists():
+        built_from = max((d / "lyrics.md").stat().st_mtime, (d / "song.md").stat().st_mtime)
+        chart_info = {"exists": True, "older_than_lyrics": chart.stat().st_mtime < built_from}
+    else:
+        chart_info = {"exists": False, "older_than_lyrics": None}
+    out = {"sections": result, "only_in_lyrics": only_lyrics, "only_in_music": only_music,
+           "matches": all(v["matches"] for v in result.values()) and not only_lyrics and not only_music,
+           "chart": chart_info, "basis": CHECK_BASIS}
+
+    def text(r: dict) -> str:
+        lines = [f"{n}: {'matches' if v['matches'] else 'differs'} (lyrics {' '.join(v['lyrics'])}; "
+                 f"music {' '.join(v['music']) if v['music'] else 'none'})" for n, v in r["sections"].items()]
+        if r["only_in_music"]:
+            lines.append("only in music.md: " + ", ".join(r["only_in_music"]))
+        c = r["chart"]
+        lines.append("chart: " + ("none" if not c["exists"] else "older than lyrics" if c["older_than_lyrics"] else "current"))
+        return "\n".join(lines)
+    return out, text
+
+
 def _h_chart(args: argparse.Namespace):
     d = Path(args.song_dir)
+    if args.check and (args.concert or args.pdf):
+        raise SongtoolsError(None, None, "--check writes nothing; do not combine it with --concert or --pdf")
     song_path, lyrics_path = d / "song.md", d / "lyrics.md"
     record = parse_song_md(_read(song_path), file=str(song_path))
     sections = parse_lyrics(_read(lyrics_path), file=str(lyrics_path))
+    if args.check:
+        return _chart_check(d, sections)
     song = from_song(sections, record)
     out = d / "out"
     variants = [("chart", song)]
@@ -241,4 +314,6 @@ def register(subparsers) -> None:
     p.add_argument("song_dir", type=Path, metavar="SONG_DIR")
     p.add_argument("--concert", action="store_true", help="also write out/chart-concert.cho (capo applied)")
     p.add_argument("--pdf", action="store_true", help="also render PDF lead sheets (out/chart.pdf)")
+    p.add_argument("--check", action="store_true",
+                   help="write nothing; compare lyrics.md inline chords with music.md and report chart staleness")
     p.set_defaults(handler=_h_chart)

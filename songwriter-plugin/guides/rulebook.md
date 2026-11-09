@@ -82,6 +82,7 @@ Songs live in the writer's project at `songs/<title>/`, never inside the plugin.
 ```
 songs/
 ├── _bank/ideas.md        tagged, dated ideas from /bank
+├── pronunciations.txt    personal pronunciations (CMU phones), passed as --pron
 └── <title>/
     ├── song.md           the song record
     ├── lyrics.md         "## Verse 1" headings; optional inline chords [G]word
@@ -94,7 +95,7 @@ songs/
     └── out/              generated: chart.cho, chart.pdf, guide.mid
 ```
 
-All files are plain Markdown; HTML comments are ignored. Before `lyrics.md` changes, snapshot with `drafts snapshot`; removed material goes to `cuts/` with `drafts cut`. [design]
+All song files are plain Markdown; HTML comments are ignored. `songs/pronunciations.txt` is the one plain-text file: one word per line in CMU phones with stress digits (`señor S EY0 N Y AO1 R`), shared by every song and passed to the toolkit as `--pron songs/pronunciations.txt` before the subcommand. Before `lyrics.md` changes, snapshot with `drafts snapshot`; removed material goes to `cuts/` with `drafts cut`. [design]
 
 `song.md`:
 

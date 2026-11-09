@@ -133,3 +133,70 @@ def test_chart_concert_failure_writes_nothing(tmp_path, capsys):
     (tmp_path / "lyrics.md").write_text("## Verse\n[Hold]on\n")
     assert main(["chart", str(tmp_path), "--concert"]) == 2
     assert not (tmp_path / "out" / "chart.cho").exists()
+
+
+def _check_song(tmp_path, lyrics, music):
+    (tmp_path / "song.md").write_text("# R\n## Core\nkey: G\ncapo: 2\n")
+    (tmp_path / "lyrics.md").write_text(lyrics)
+    if music is not None:
+        (tmp_path / "music.md").write_text(music)
+
+
+def _run_check(tmp_path, capsys):
+    assert main(["chart", str(tmp_path), "--check"]) == 0
+    return json.loads(capsys.readouterr().out)
+
+
+def test_chart_check_matching_sections_write_nothing(tmp_path, capsys):
+    _check_song(tmp_path, "## Verse 1\n[G]one [C]two\n[G]three [D]four\n[G]five [C]six\n[G]seven [D]eight\n",
+                "## Verse 1\nprogression: G:4 C:4 G:4 D:4\n")
+    out = _run_check(tmp_path, capsys)
+    v = out["sections"]["Verse 1"]
+    assert v["lyrics"] == ["G", "C", "G", "D", "G", "C", "G", "D"] and v["music"] == ["G", "C", "G", "D"]
+    assert v["matches"] is True and v["only_lyrics"] == [] and v["only_music"] == []
+    assert out["matches"] is True and not (tmp_path / "out").exists()
+    assert out["chart"] == {"exists": False, "older_than_lyrics": None}
+    assert out["basis"]
+
+
+def test_chart_check_reports_mismatch_and_missing_sections(tmp_path, capsys):
+    _check_song(tmp_path, "## Verse 1\n[G]a [C]b\n[D]c\n\n## Chorus\n[C]d [Em]e\n\n## Bridge\nno chords here\n",
+                "## Verse 1\nprogression: G:4 C:4 G:4 D:4\n\n## Outro\nprogression: G:8\n")
+    out = _run_check(tmp_path, capsys)
+    v = out["sections"]["Verse 1"]
+    assert v["lyrics"] == ["G", "C", "D"] and v["matches"] is False
+    assert out["sections"]["Chorus"]["music"] is None and out["sections"]["Chorus"]["matches"] is False
+    assert out["only_in_lyrics"] == ["Chorus"] and out["only_in_music"] == ["Outro"]
+    assert "Bridge" not in out["sections"]  # a section with no inline chords is not compared
+    assert out["matches"] is False
+
+
+def test_chart_check_chord_sets_and_repeats_collapse(tmp_path, capsys):
+    _check_song(tmp_path, "## Verse\n[G]a [G]b [Am]c\n", "## Verse\nprogression: G:4 C:4\n")
+    v = _run_check(tmp_path, capsys)["sections"]["Verse"]
+    assert v["lyrics"] == ["G", "Am"] and v["only_lyrics"] == ["Am"] and v["only_music"] == ["C"]
+
+
+def test_chart_check_stale_chart(tmp_path, capsys):
+    import os
+    _check_song(tmp_path, "## Verse\n[G]a\n", "## Verse\nprogression: G:4\n")
+    assert main(["chart", str(tmp_path)]) == 0
+    capsys.readouterr()
+    chart = tmp_path / "out" / "chart.cho"
+    os.utime(chart, (1_000_000, 1_000_000))
+    out = _run_check(tmp_path, capsys)
+    assert out["chart"] == {"exists": True, "older_than_lyrics": True}
+    os.utime(chart, (4_000_000_000, 4_000_000_000))
+    assert _run_check(tmp_path, capsys)["chart"]["older_than_lyrics"] is False
+
+
+def test_chart_check_without_music_md_is_an_error(tmp_path, capsys):
+    _check_song(tmp_path, "## Verse\n[G]a\n", None)
+    assert main(["chart", str(tmp_path), "--check"]) == 2
+    assert "music.md" in capsys.readouterr().err
+
+
+def test_chart_check_excludes_writing_flags(tmp_path, capsys):
+    _check_song(tmp_path, "## Verse\n[G]a\n", "## Verse\nprogression: G:4\n")
+    assert main(["chart", str(tmp_path), "--check", "--pdf"]) == 2
+    assert not (tmp_path / "out").exists()

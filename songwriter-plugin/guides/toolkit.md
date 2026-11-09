@@ -251,7 +251,7 @@ $ songtools drafts diff song/drafts/lyrics-v2.md song/drafts/lyrics-v3.md --song
 
 ### chart
 
-`chart SONG_DIR [--concert] [--pdf]`
+`chart SONG_DIR [--concert] [--pdf]`, `chart SONG_DIR --check`
 
 Writes ChordPro lead charts from `lyrics.md` and `song.md`. `--concert` also writes the concert-pitch version with the capo applied; `--pdf` renders PDF lead sheets. [design]
 
@@ -262,6 +262,19 @@ $ songtools chart song --concert --pdf
 ```
 
 Charts hold the writer's own chords and lyrics only. [design]
+
+`chart SONG_DIR --check` writes nothing. Per section it compares the inline chords in `lyrics.md` (consecutive repeats collapsed) with the `music.md` progression: a section `matches` when its lyric chords are the progression played one or more whole times. It also says whether `out/chart.cho` exists and is older than `lyrics.md` or `song.md`. It needs `music.md`, and cannot be combined with `--concert` or `--pdf`. [design]
+
+```
+$ songtools chart song --check
+{"sections": {"Chorus": {"lyrics": ["C", "G", "D", "Em", "C", "G", "D", "G"], "music": ["C", "G", "D", "Em"],
+   "matches": false, "only_lyrics": [], "only_music": []}, ...},
+ "only_in_lyrics": [], "only_in_music": [], "matches": false,
+ "chart": {"exists": false, "older_than_lyrics": null},
+ "basis": "inline chords in lyrics.md against music.md progressions (exact symbol match; design rule)"}
+```
+
+A section without inline chords is not compared. Symbols are matched exactly, so `G` and `G/B` differ; a mismatch is a question for the writer (which file is right?), not an error. [design]
 
 ### midi
 
