@@ -120,3 +120,44 @@ def test_malformed_kept_line_error():
     with pytest.raises(SongtoolsError) as e:
         parse_song_md('# T\n## Kept lines\n- no quotes | cliche | r | d\n')
     assert (e.value.file, e.value.line) == ("song.md", 3)
+
+
+# `songtools song SONG_MD`: parse check for song.md alone (no lyrics file needed), so a skill
+# that writes `## Core` fields (/idea, /structure) can verify the file still parses.
+def test_song_cli_reads_core_kept_and_splits(tmp_path, capsys):
+    import json
+    from songtools.cli import main
+    p = tmp_path / "song.md"
+    p.write_text("# Workshop\n\n## Core\nkey: G\ncentral image: a pencil line on the doorframe\n"
+                 "form: verse-chorus: V C V C B C\n\n## Kept lines\n"
+                 '- "I left it there" | keep | plain | 2026-11-09\n\n## Split sheet\n- Ann | lyrics | 100\n')
+    assert main(["song", str(p)]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["title"] == "Workshop"
+    assert out["core"]["central image"] == "a pencil line on the doorframe"
+    assert out["core"]["form"] == "verse-chorus: V C V C B C"
+    assert out["kept"] == [{"text": "I left it there", "flag": "keep", "reason": "plain", "date": "2026-11-09"}]
+    assert out["splits"] == [{"name": "Ann", "roles": ["lyrics"], "percent": 100.0}]
+
+
+def test_song_cli_rejects_core_line_without_colon(tmp_path, capsys):
+    import json
+    from songtools.cli import main
+    p = tmp_path / "song.md"
+    p.write_text("# U\n\n## Core\nkey: G\nthe point is loss\n")
+    assert main(["song", str(p)]) == 2
+    err = json.loads(capsys.readouterr().err)["error"]
+    assert "song.md:5" in err and "key: value" in err
+
+
+def test_song_cli_missing_file(tmp_path, capsys):
+    from songtools.cli import main
+    assert main(["song", str(tmp_path / "nope.md")]) == 2
+
+
+def test_song_cli_text_output(tmp_path, capsys):
+    from songtools.cli import main
+    p = tmp_path / "song.md"
+    p.write_text("# U\n\n## Core\nform: strophic\n")
+    assert main(["--text", "song", str(p)]) == 0
+    assert "form: strophic" in capsys.readouterr().out

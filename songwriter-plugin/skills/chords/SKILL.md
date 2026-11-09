@@ -1,6 +1,6 @@
 ---
 name: chords
-description: Use when a songwriter asks about chords, a progression, harmony, a cadence or "the right" ending, what a guitar shape or chord is called, a key or capo that suits their voice, or asks for a bass line, riff, tab, strum pattern or other part. Not when the question is about the tune's notes or singability (melody).
+description: Use when a songwriter asks about chords, a progression, harmony, a cadence or "the right" ending, what a guitar shape or chord is called, a key or capo that suits their voice, or asks for a bass line, riff, tab, strum pattern or other part. Not when the question is about the tune's notes or singability (melody), or what the band, a drummer or each section should do (arrange).
 ---
 
 # Chords

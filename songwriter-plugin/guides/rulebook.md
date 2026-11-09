@@ -40,6 +40,7 @@ Tags: each rule, check and prompt bullet ends with [verified], [as reported], [u
 
 - Commercial heuristics (title in the chorus, title timing, length) apply only when the writer has declared a commercial goal. Otherwise judge the song by what it is trying to do. No cadence or form is "the correct one". [design]
 - Do: "You've said this is a radio target, so: Pattison and the commercial lens agree the title arrives late." [design]
+- Declared style (`style` in `## Core`, or the writer saying "this is a soul ballad"): no style is ever assumed, and a declared one changes only the examples for that song. Use only the style-specific findings already in the guides, each with its basis and tag; never invent a convention or say "common in <style>" without that basis. Where the guides have nothing on that style for the question, say so plainly ("the research behind this plugin has nothing specific to that style on this", naming the style) and give the style-neutral guidance. A style declared in chat is offered for saving to `style:`, never written unasked. [design]
 - Break: "Real songs put the title in the first line of the chorus." [design]
 
 ### 7. Stock language is craft, never say a line sounds like AI
@@ -73,6 +74,7 @@ Tags: each rule, check and prompt bullet ends with [verified], [as reported], [u
 - Mode (`mode` in `## Core`): `drafting` (quiet; see rule 4) or `editing` (checks and critique allowed). The writer switches it. [design]
 - Lenses (`lenses` in `## Core`, comma-separated): `pattison` is on by default; `webb` (strict rhyme: homophones and identical words are false rhyme) and `commercial` (title timing, title in chorus) are off until the writer turns them on. [design]
 - Status (`status` in `## Core`): `working`, `done for now` or `done`. Only the writer sets it. Claude never declares a song finished. [design]
+- Style (`style` in `## Core`): free text the writer chooses (`style: country`), absent by default. Only the writer declares it; see rule 6. [design]
 - Entry point (`entry` in `## Core`): which of the eight starts the song began from: riff or groove, finished guitar song, lyric, chord progression, title, brief or commission, banked idea, co-write exchange. [design]
 
 ## Song folder
@@ -121,7 +123,7 @@ status: working
 - Ann Writer | lyrics, melody | 100
 ```
 
-`## Core` keys the toolkit reads: `key`, `capo`, `tempo`, `time`, `voice low`, `voice high`. Keys the skills add: `entry`, `mode` (`drafting` or `editing`), `lenses` (default `pattison`; also `webb`, `commercial`) and `status` (`working`, `done for now`, `done`). Other idea fields (point, singer, listener, central image, title) may also live in `## Core`. [design]
+`## Core` keys the toolkit reads: `key`, `capo`, `tempo`, `time`, `voice low`, `voice high`. Keys the skills add: `entry`, `mode` (`drafting` or `editing`), `lenses` (default `pattison`; also `webb`, `commercial`), `status` (`working`, `done for now`, `done`) and `style` (the writer's declared style, absent unless declared; rule 6). `/idea` adds the idea fields `point`, `singer`, `listener`, `moment`, `central image`, `unresolved`, `pov` and `title`; `/structure` adds `form`. Every `## Core` entry is one `key: value` line; check the file with `songtools song <song>/song.md` after writing one. [design]
 
 `lyrics.md`: `## Section` headings (Verse, Chorus, Pre-chorus, Bridge), one lyric line per line, chords inline in square brackets before the syllable they fall on:
 

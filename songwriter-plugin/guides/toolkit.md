@@ -253,6 +253,19 @@ $ songtools drafts diff song/drafts/lyrics-v2.md song/drafts/lyrics-v3.md --song
 
 `kept_changed` true means a kept line was altered: ask before leaving it that way. With `--song` the result also has `kept_missing`, the kept lines that appear nowhere in the new draft (case, punctuation and inline chords ignored); diffing `lyrics.md` against itself gives just that presence check. `index` is the line's position in the section. These commands write to the song folder; snapshot before changing `lyrics.md`. [design]
 
+### song
+
+`song SONG_MD`
+
+Reads `song.md` on its own (no lyrics file needed) and prints what the parser sees: the title, every `## Core` key and value, the kept lines, the split sheet and the names of any other sections. Run it after writing a `## Core` field: exit 0 means the file still parses; exit 2 names the bad line (a `## Core` line without `key: value`, a malformed kept line or split entry). [design]
+
+```
+$ songtools song song/song.md
+{"title": "Porch Light Left On", "core": {"key": "G", "capo": "2", ..., "form": "verse-chorus with bridge"},
+ "kept": [{"text": "The porch light hums a tune for no one", "flag": "keep", "reason": "sets the whole scene",
+           "date": "2026-11-01"}], "splits": [], "sections": []}
+```
+
 ### chart
 
 `chart SONG_DIR [--concert] [--pdf]`, `chart SONG_DIR --check`

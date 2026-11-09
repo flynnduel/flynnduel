@@ -288,3 +288,24 @@ def parse_melody_md(text: str, file: str = "melody.md") -> dict[tuple[str, int],
 
 def format_melody_entry(index: int, syllables: list[tuple[str, int]]) -> str:
     return f"{index}: " + " ".join(f"{label}/{slot}" for label, slot in syllables)
+
+
+# `songtools song SONG_MD`: read song.md on its own and print what the parser sees.
+def _song_handler(args):
+    from dataclasses import asdict
+    path = args.song_md
+    rec = parse_song_md(read_text(path, "song file"), Path(path).name)
+    return {"title": rec.title, "core": rec.core, "kept": [asdict(k) for k in rec.kept],
+            "splits": [asdict(s) for s in rec.splits], "sections": list(rec.sections)}, _song_text
+
+
+def _song_text(r: dict) -> str:
+    lines = [f"# {r['title']}"] + [f"{k}: {v}" for k, v in r["core"].items()]
+    lines.append(f"kept lines: {len(r['kept'])}; split sheet entries: {len(r['splits'])}")
+    return "\n".join(lines)
+
+
+def register(subparsers) -> None:
+    p = subparsers.add_parser("song", help="parse song.md and print its core, kept lines and splits")
+    p.add_argument("song_md", type=Path)
+    p.set_defaults(handler=_song_handler)

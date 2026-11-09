@@ -14,7 +14,7 @@ from songtools.output import emit
 MODULES: tuple[str, ...] = ("songtools.rhyme", "songtools.stability", "songtools.pov", "songtools.cliche",
                              "songtools.prosody", "songtools.chords", "songtools.fretboard",
                              "songtools.harmony", "songtools.keyfit", "songtools.drafts",
-                             "songtools.chordpro", "songtools.midi")
+                             "songtools.chordpro", "songtools.midi", "songtools.songfile")
 
 
 class SongtoolsError(Exception):
