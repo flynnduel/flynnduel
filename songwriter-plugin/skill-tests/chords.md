@@ -183,3 +183,21 @@ Fresh GREEN runs with the new skill (grep of each reply for common, classic, typ
 | H6 | g6 | pass: same statement; fixed lines with 1,052 / 788 transitions and root shares; no banned word. |
 | H7 | g5 | pass: pop entries quoted with source and tag; fixed lines "(general corpus, not pop): V ... 32% of 200 sectional endings (de Clercq & Temperley) [verified]". |
 | H7 | g6 | pass: "common-practice harmony" appears only inside the quoted Everett finding (allowed); every frequency in the fixed line. |
+
+
+## Declared-style fix round 3 (principle, not a word list)
+
+Changes to `skills/chords/SKILL.md` Declared style item 3: under a declared style ANY frequency, ranking or prevalence claim ("most", "top", "biggest", "use most", "favourite", "go-to", plus the earlier words, as examples) appears only in the fixed `How common (general corpus, not <style>)` line or inside a quoted `styles.md` finding; Why and Feel lines say what the progression does. Any source named anywhere in an option or its notes carries its tag from the guide. Two red-flag rows added: "the move into the tonic that corpus songs use most at chorus ends" (H6-g5) and untagged "Spicer's ..." / "Temperley's ..." (found in fix-round-3 runs H6-g8 Option D Why and H5-g7 plagal-stop note).
+
+Superseded mark: H6 g5 was scored "pass" in fix round 2; it is a fail (Option A Why: "the move into the tonic that corpus songs use most at chorus ends", a ranking in a Why line). H6 g6, H5 g5, g6 and H7 g5, g6 were re-read for rankings and untagged sources and stand as pass.
+
+Strict re-reads (full reply read, not grepped):
+
+| Run | Result |
+|---|---|
+| H6 g7 | pass: Why/Feel lines describe the move only ("it ends on V, then I, so the last bar resolves by the pull of the dominant"); every figure in the fixed line; no source named. (Run before the source-tag clause.) |
+| H6 g8 | fail (source clause): Option D Why "(Spicer's \"emergent tonic\")" untagged. Otherwise clean. |
+| H5 g7 | fail (source clause): "(Temperley's plagal stop)" named without a tag. Otherwise clean; Everett quoted with source and tag. |
+| H6 g9 (after source clause) | pass: three options with tool rows; Why/Feel say only what the chords do; frequencies only in the fixed line ("no counted rate for this progression as a whole. Root shares are I 32.8%, IV 22.6%, V 16.3%"; "IV→I is the corpus's top transition (1,162)" inside the fixed line); no source named. |
+| H6 g10 | pass on the rule but incomplete: states the research has nothing specific to bossa nova, offers no options yet and asks which song and section (H6.b not shown). |
+| H5 g8 (after source clause) | pass: Everett Type 4 quoted with source and tag, "nothing specific to blues on turnarounds"; four tool-run options; Why/Feel only describe motion; every figure in the fixed line, "(general corpus, not blues)"; "those percentages come from a general rock corpus, not from blues". |
