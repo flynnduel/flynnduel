@@ -148,4 +148,4 @@ Each of these was said or done by an agent without this skill, unless marked:
 | Four or five numbered questions, "You can answer only the ones you remember" | At most one question, about what the files cannot tell. |
 | "Want to start with `/idea`? One question to open it: ..." (said with this skill) | One question per reply. The offer is the question. |
 | Notes on the bridge and the chorus wording on a resume nobody asked to critique | No critique on a resume. Name the next stage. |
-| `progression: Am F C G` at the top of music.md (an early version of this skill; `harmony --music` then fails with "progression before any '## Section' heading") | Beat-less changes go on a `changes:` line. `progression:` lines are `/chords`'s. |
+| `progression: Am, F, C, G` at the top of music.md (an early version of this skill; `harmony --music` then fails with "progression before any '## Section' heading") | Beat-less changes go on a `changes:` line. `progression:` lines are `/chords`'s. |

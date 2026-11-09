@@ -4,7 +4,7 @@ Method: writing-skills RED → GREEN → REFACTOR (see `.superpowers/sdd/2026-11
 
 Each scenario runs in a fresh scratch project (`scratchpad/skilltests/chart/<scenario>-<tag>/`). Setup is a copy of `songtools/tests/fixtures/sample_song` at `songs/porch-light-left-on/`, with `## Core` extended by `entry: lyric`, `mode: editing`, `lenses: pattison`, `status: working` and `title: Porch Light Left On`, then edited as each scenario says. "Idea fields" means the scenario also adds `point`, `singer`, `listener`, `moment`, `central image`, `unresolved`, `pov` and `form`.
 
-Test subject: a fresh `claude -p --model sonnet` session in the scratch project. Edits are allowed only inside that folder; Bash is limited to `uv run` / toolkit calls (including the `UV_PROJECT_ENVIRONMENT=... uv run` form, checked to be allowed: no run had a permission denial) and simple read-only commands (`ls`, `cat`, `grep`, `find`, `date`, `mkdir`). Every subject gets this line: "You are helping a songwriter in this folder. The toolkit is available as `uv run --frozen --project /home/user/flynnduel/songwriter-plugin/songtools songtools`." RED subjects get nothing more than that line and the writer's message, and the plugin folder is not added as a working directory, so they cannot read the guides. GREEN subjects also get the SKILL.md text, with `${CLAUDE_PLUGIN_ROOT}` replaced by the plugin path and `${CLAUDE_PLUGIN_DATA}` by a scratch path, introduced as "The writer invoked the /chart skill." Multi-turn scenarios resume the same session; the writer's turns are scripted in advance, and the project folder is copied after every turn.
+Test subject: a fresh `claude -p --model sonnet` session in the scratch project. Edits are allowed only inside that folder; Bash is limited to commands that start with `uv run` or `UV_PROJECT_ENVIRONMENT=` (the toolkit forms) and to `ls`, `mkdir`, `printf`, `echo` and `date`. `cat`, `grep`, `find`, `head`, `tail`, Glob and Grep are disallowed (files are read with the Read tool), and a compound command (`;`, `&&`, `cd`, a pipe, a shell variable) is refused whatever it starts with. Permission denials did happen: 25 of the 26 runs recorded in Task 10's first round had at least one. Most were refused `cat`, `grep`, `find` or compound commands, which the subject redid with Read or as a plain command. Three GREEN runs had a toolkit call refused: B1-g1 and B1-g2 ran `song` with `${CLAUDE_PLUGIN_DATA}` left unsubstituted in the promotion turn, and N1-g3 added `; echo exit $?`; each re-ran the same call in an allowed form and got its result. RED subjects had compound toolkit calls refused (`... | tail`, `$T chart ...`, `cd ... &&`) and re-ran them plain; RED attempts to list or read the plugin folder were refused by design. A plain toolkit call in either allowed form was never refused. The fix round's denials are listed with its results below. Every subject gets this line: "You are helping a songwriter in this folder. The toolkit is available as `uv run --frozen --project /home/user/flynnduel/songwriter-plugin/songtools songtools`." RED subjects get nothing more than that line and the writer's message, and the plugin folder is not added as a working directory, so they cannot read the guides. GREEN subjects also get the SKILL.md text, with `${CLAUDE_PLUGIN_ROOT}` replaced by the plugin path and `${CLAUDE_PLUGIN_DATA}` by a scratch path, introduced as "The writer invoked the /chart skill." Multi-turn scenarios resume the same session; the writer's turns are scripted in advance, and the project folder is copied after every turn.
 
 Each criterion is judged from the subject's tool calls, its replies and a diff of the project folder before and after. The evidence below is a summary; full transcripts are not kept in the repo. Today's date in every run is 2026-11-09.
 
@@ -57,3 +57,29 @@ First runs were cut off by a usage limit and re-run unchanged.
 ## REFACTOR
 
 Changed the capo convention to "Name its key: read the `{key: ...}` line ... and give the value", with a red-flag row for the g2 wording. Re-run: K1-g3 and K1-g4 a✓ b✓ c✓ d✓ e✓ ("The concert key is A", g4 "read from the `{key: A}` line"); K1e-g3 a✓ b✓ c✓ (error quoted, four options including leave it, concert key to be read once written).
+
+## Fix round 1 (review findings)
+
+**Toolkit fix (test-first).** Review re-graded the missing glyphs: the PDF printed `B` for `B♭`, a wrong chord on the band's chart, and an instruction to the agent does not fix the file. `chart` now writes `♯` and `♭` as `#` and `b` in every `.cho` and PDF (chords, key, title, lyric text), `chart --check` treats `B♭` and `Bb` as the same symbol, and `midi` reports and notates the key the same way. RED: 4 new tests in `tests/test_pdf.py` and `tests/test_chordpro.py` failed, then one each for `--check` and the `midi` key. GREEN: full suite 526 passed. `midi` also gained tests for a flat-key and a minor-key concert track and a capo with no key; those passed as written.
+
+K1.e is replaced, since the old one described the workaround:
+
+- K1.e (fix round) No accidental is lost: `out/chart.cho` and `out/chart.pdf` show `Bb` where the files have `B♭`; the reply says in one line how it prints; no song file is changed and no respelling is asked for.
+
+### K2: no progression lines (added)
+
+- Setup: as K1 without the flat, but `music.md` holds only `tuning: standard` and `changes: Em C G D` (what /newsong writes for beat-less changes).
+- Writer: as K1.
+- Pass criteria:
+  - K2.a The charts are made from `lyrics.md` and reported as in K1.
+  - K2.b `midi` reports `"chords": 0`: the reply says there is no guide track and why, does not present the silent file as one, and points to `/chords`.
+  - K2.c No progression is invented; `music.md` is unchanged.
+
+| Run | Result | Evidence |
+|---|---|---|
+| K1 GREEN f2 | a✓ b✓ c✓ d✓ e✓ | Ran `chart --check` (all four sections match), `chart --concert --pdf`, `midi`, `midi --concert`; listed both charts and both tracks; "shape chords, as the guitarist plays them with the capo on 2", concert chart "for bass, keys, horns and anyone not using the capo. The concert key is A, read from the `{key: A}` line"; `guide.mid` "sounds 2 semitones lower than the band". "your B♭ in the bridge prints as `Bb` in the chart files. Nothing is dropped, and your song files are unchanged." Checked by the judge: `chart.cho` has `[Bb]promise`, `chart-concert.cho` has `[C]promise`, neither has a `♭`, and `pdftotext chart.pdf` shows `Bb`. |
+| K2 RED old2 (skill and guides at `eec373f`) | a✓ b~ c✓ | A weak baseline: it did say "The guide tracks are empty, so don't bring them to rehearsal" from `chords: 0`. But it also ran `midi --concert` and listed both silent files with a key and tempo each ("`guide-concert.mid` (key A, tempo 96) would sound with the band"), and named no skill for the progressions. |
+| K2 GREEN f2 | a✓ b✓ c✓ | "The charts are written, but there's no guide track yet. Your `music.md` has no `progression:` lines, so the MIDI file came out silent." Skipped `midi --concert`; "`/chords` can write the progressions." `music.md` unchanged. It reported the `--check` mismatch (no progression for any section) as a question. |
+
+Denials: K1-f2 one (`grep -n "key" .../chart-concert.cho`, redone with Read); K2-f2 two (`ls -R songs | head -50`, the same `grep`). No toolkit call was refused. One run each. The respelling path (`drafts snapshot` before any chord edit) and `midi --concert --tempo BPM` are in the skill but were not exercised by a scenario.
+

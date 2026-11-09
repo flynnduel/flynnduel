@@ -53,3 +53,4 @@ Each of these was done by an agent without this skill:
 | "Banked" by creating `songs/salt-in-the-coffee/song.md` with `status: seed` | The bank is one line in `songs/_bank/ideas.md`. No folder. |
 | A new `songs/ideas.md` with `- **Salt in the Coffee** (title): ...`, no date | Exactly `- YYYY-MM-DD [tag] text` in `songs/_bank/ideas.md`. |
 | Promoted with five numbered questions, or with `tone: wry breakup (from the banked idea; not confirmed)` in Core | Promotion goes through `/newsong`: `entry: banked idea`, only the writer's facts saved. |
+| "Maybe a wry breakup thing" saved as `wry breakup thing` (an early version of this skill) | The writer's exact words, hedges included. |
