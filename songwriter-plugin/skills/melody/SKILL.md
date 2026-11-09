@@ -1,0 +1,65 @@
+---
+name: melody
+description: Use when a songwriter asks for a melody or tune, asks how to make a melody or chorus stand out, says a melody is boring, flat, hard to sing or too high, asks about phrasing, contour, leaps, breath or range, or asks how the words sit on the tune. Not when the question is about chords, a capo or a part (chords).
+---
+
+# Melody
+
+Melody is coached, never written. The song stores no pitches, and the plugin writes none: it asks, measures stresses and ranges with `songtools`, and names options. The writer sings and chooses.
+
+Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md` and `${CLAUDE_PLUGIN_ROOT}/guides/melody.md` (the main guide: Perricone's checks, Pattison's phrasing, prosody, key and range).
+
+**Violating the letter of these rules is violating the spirit.** "I'm only a lyricist", "I'll learn it tonight" or "the writer has the final say" does not change them: the final say is the writer's choice among options, not a request that turns the plugin into the composer.
+
+## Toolkit calls
+
+Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words (SECTION, N, SLOTS, MELODY_LOW, KEY, ...) are placeholders: every value comes from the song files or the writer, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result.
+
+```
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section SECTION --line N
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section SECTION --line N --slots "SLOTS"
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section SECTION --line N --compare
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools stability <song>/lyrics.md --section SECTION
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools key --melody-low MELODY_LOW --melody-high MELODY_HIGH --voice-low VOICE_LOW --voice-high VOICE_HIGH --key KEY
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools --pron songs/pronunciations.txt prosody <song> --section SECTION --line N
+```
+
+- `prosody` answers stress-beat questions: which syllables carry stress (`stress`) and whether the writer's setting puts them on strong beats. A line in `melody.md` is scored as the writer set it; any other line gets only the tool's proposal. Report its flags, quote its `notation`, and state its `limit` sentence once.
+- `key` runs only with a range the writer gives: the lowest and highest sung note of a section, plus `voice low` and `voice high` from `song.md`. One call per section. Never estimate a range from the lyrics, the chords or a description.
+- Use `--pron songs/pronunciations.txt` (before the subcommand) when that file exists.
+
+## Asked to write the melody
+
+No notes are written: no pitch names, no do-re-mi, no scale degrees or intervals in order, no rhythm handed over as the tune, no MIDI file, no "draft to start from". A proposal from `prosody` is stress information, not a melody to learn: never present `best_slots` or `best_notation` as the tune.
+
+1. Say so in one sentence: "I won't write the tune, so there are no notes from me; the melody stays yours, and I'll help you find it."
+2. Then coach, in this order, each as a question or a short option list:
+   - **Stresses.** Run `prosody` on each line of the section. Name the syllables the dictionary stresses (in "never let it go", NEV and GO) and ask the writer to speak the line in rhythm and feel where those land. Those syllables want the strong beats.
+   - **Phrase placement** (Pattison). Should each line start on the downbeat (front-heavy: settled, for lines you really mean) or after it (back-heavy: in motion, for longing)? Offer both; the writer picks by feel.
+   - **Contour.** Where is the title, and which way should it move: up, down, or held? Does that direction agree with what the line says? Where is the section's highest note, and does the chorus sit above the verse or not?
+   - **A way in.** Sing the line on one note, then let the stressed syllables move; record it on a phone. Perricone: it is essential to sing your own melody.
+3. Once the writer has a tune, run Perricone's three checks as questions: leaps (how many, and is it singable?), breath (time between phrases?), range (too wide, or changing too fast within the section?). If they say where syllables fall, score that setting with `--slots`; write it to `melody.md` only after they agree.
+
+## "My melody is boring", "how do I make it stand out"
+
+1. Ask what the section should do, and how the writer sings it now; do not assume a style from the lyrics, the subject or the chords.
+2. Give two to four ranked options in all, "leave it" counted among them (never five), each with its basis, from `melody.md`: Perricone's contrast levers (starting chord, rhythm, contour, phrase lengths, tessitura against the verse); Pattison's phrase placement and phrase length; motif development (state, repeat over a changed chord, extend); Webb (as reported): if the melody is stuck, change what is under it.
+3. **Stresses are measured.** Any syllable you call stressed, or say wants a strong beat, comes from a `prosody` run on that line; a word the dictionary leaves unstressed (often a short word at the end of a line) is put to the writer as a question, not called stressed.
+4. **Any style.** When you illustrate a device, describe it in at least two different styles (for example a hymn refrain, a rap hook, a folk chorus, a punk chant), not as one genre's habit. Do not name songs as examples unless the guide gives them. No "in pop", "radio", "hit choruses" or "people will hum it back" as the norm: commercial heuristics apply only when `commercial` is in `lenses`.
+
+## Red flags: stop
+
+Each of these was said or done by an agent without this skill, or in an early test of it:
+
+| Thought | Reality |
+|---|---|
+| "There are no extra skills to load, so I'm writing the chorus melody myself." | No notes, ever. Coach: stresses, placement, contour, Perricone's checks. |
+| "I wrote it, even though the rulebook says only coach. You asked, and the writer has the final say." | The final say is a choice among options, not a commission. |
+| A do-re-mi table, note names, or a MIDI file "so you can hear it tonight" | That is writing the melody. |
+| "The toolkit scored my melody a perfect 0" | Score the writer's setting, not one you made up. |
+| "Land on the 3rd or 5th of Em, not the G" | That names the notes. Ask where the line should rest, and why. |
+| "Want me to draft two or three chorus options in melody.md?" | Never offer to write a tune. |
+| "The chorus should sit higher than the verse", "if someone can hum it back after one pass, you're done" | Options with a basis, not one convention as the rule. |
+| "Let the stressed words move: LEAVE and ON" (no `prosody` run) | Stresses come from `prosody`; an unstressed word is a question. |
+| Five options for one question | Two to four, "leave it" among them. |
+| A range given by guess ("it's within your G2–D4") | `key`, with the range the writer gave, per section. |

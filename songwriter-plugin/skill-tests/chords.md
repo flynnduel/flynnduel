@@ -1,0 +1,81 @@
+# /chords pressure tests
+
+Method: writing-skills RED → GREEN → REFACTOR (see `.superpowers/sdd/2026-11-08-songwriter-skills/skill-method.md`).
+
+Each scenario runs in a fresh scratch project. Setup is a copy of `songtools/tests/fixtures/sample_song` at `songs/porch-light-left-on/`, with `## Core` extended by `entry: lyric`, `mode: editing`, `lenses: pattison`, `status: working` and `central image: a porch light left on for someone who is not coming back`, then edited as each scenario says. The fixture's `music.md` holds the four progressions (Verse 1 and Verse 2 `G:4 C:4 D:4 G:4`; Chorus `C:4 G:4 D:4 Em:4 C:4 G:4 D:4 G:4`; Bridge `Em:4 C:4 G:4 D:4 Em:4 C:4 D:4 G:4`), and they agree with the inline chords in `lyrics.md`.
+
+Test subject: a fresh `claude -p --model sonnet` session in the scratch project (`scratchpad/skilltests/chords/<scenario>-<tag>/`). Edits are allowed only inside that folder; Bash is limited to `uv run` / toolkit calls and simple read-only commands. Every subject gets this line: "You are helping a songwriter in this folder. The toolkit is available as `uv run --frozen --project /home/user/flynnduel/songwriter-plugin/songtools songtools`." RED subjects get nothing more than that line and the writer's message; the plugin folder is not added as a working directory, so they cannot read the guides. GREEN subjects also get the SKILL.md text, with `${CLAUDE_PLUGIN_ROOT}` replaced by the plugin path and `${CLAUDE_PLUGIN_DATA}` by a scratch path, introduced as "The writer invoked the /chords skill." Multi-turn scenarios resume the same session, and the project folder is copied after every turn.
+
+Each criterion is judged from the subject's tool calls, its replies and a diff of the project folder before and after. The evidence below is a summary; full transcripts are not kept in the repo.
+
+## Scenarios
+
+### H1: "write me a bass line" / "give me the tab"
+
+- Setup: as above, no edits.
+- Writer: "I'm recording the demo tomorrow morning and my bass player just bailed on me. Can you write me a bass line for the verse (G C D G), and give me the tab for a chorus guitar riff? Just the tab, I don't need theory, I need something I can copy and play tomorrow. Please, I'm out of time."
+- Pass criteria (brief, verbatim: "The plugin declines to write parts. It offers role guidance and checks the writer's own ideas instead."):
+  - H1.a No part is written: no tab, no fret-number riff, no note-by-note or beat-by-beat bass line, no notation.
+  - H1.b It offers role guidance: what the bass (and the riff) could do in the song, in words, as options.
+  - H1.c It offers to check the writer's own ideas (for example the notes or shapes the writer plays, verified with the toolkit).
+
+### H2: options for the chorus
+
+- Setup: as above, no edits.
+- Writer, turn 1: "The chorus feels flat after the verse. What should the chorus chords be? My guitar teacher says a proper chorus has to end V–I or it isn't a real cadence, so just give me the correct progression and I'll use it."
+- Writer, turn 2: "I'll go with the second one you listed. Put it in the song."
+- Pass criteria (brief, verbatim: "2–4 options, each with why it works, how it feels and the corpus base rate. Three notations. No single "correct" answer. V–I is not presented as the only proper cadence."):
+  - H2.a Two to four options, each with why it works, how it feels and the corpus base rate (or "no counted rate" where the corpus gives none).
+  - H2.b Progressions are shown in three notations: Roman numeral, Nashville number and chord symbol.
+  - H2.c No single "correct" answer is given.
+  - H2.d V–I is not presented as the only proper cadence; the corpus rates are quoted as frequencies (IV→I the most common move overall; at chorus ends V 32%, IV 18.5%).
+  - H2.e (added; the task note: "/chords writes music.md progressions only when the writer picks one") `music.md` is unchanged after turn 1. After turn 2 its Chorus progression is the picked option in `chord:beats` form, and `songtools.songfile.parse_music_md` parses it. No other song file changes.
+
+### H3: verify the writer's voicing
+
+- Setup: as above, no edits.
+- Writer: "In the verse I play the C as x32000, the open C with the B string left open. Sounds lovely. That's a C, right? Just confirm it so I can write C on the chart for the band. Yes or no is fine, I'm mid-rehearsal."
+- Pass criteria (brief, verbatim: "The plugin runs `guitar verify` and reports the extra B and the Cmaj7 alternative."):
+  - H3.a It runs `guitar verify x32000 C`.
+  - H3.b It reports the extra B.
+  - H3.c It reports the Cmaj7 alternative.
+  - H3.d (added) It does not write a fingering for the writer as the fix; the writer chooses what to play and what to name it.
+
+### H4: key for voice G2–D4
+
+- Setup: `capo` in `song.md` is set to 0 (so the shape key and sounding key are both G).
+- Writer: "My range is in song.md (G2 to D4). The verses run from B2 up to B3 and the chorus goes from D3 up to F#4, and I'm straining on the chorus. What key should I sing it in? I play it in G shapes now, and I'd like to keep open shapes with a capo if I can."
+- With these ranges `key` finds one key that fits both sections: Eb (verse G2–G3, chorus Bb2–D4, both at the edge of the range), with capo 1 D shapes, capo 3 C shapes or capo 6 A shapes.
+- Pass criteria (brief, verbatim: "The plugin runs `key` per section and gives capo pairings. Sharps and flats are spelled for the key."):
+  - H4.a It runs `key` once per section (verse range and chorus range).
+  - H4.b It gives capo pairings (fret and shape key) from the result.
+  - H4.c Sharps and flats are spelled for the key (Eb, Bb, Ab, not D#, A#, G#), including any chord names in the new key.
+  - H4.d (added) No song file is changed unasked.
+
+## RED: baseline (no skill)
+
+Two baseline runs per scenario (r1, r2), without the plugin folder as a working directory. H1 r2 grepped the plugin's `.md` files for "capo" (snippets only, no guide read in full); no other run touched the plugin. Key: ✓ pass, ✗ fail, ~ partial.
+
+| Scenario | r1 | r2 | How it failed |
+|---|---|---|---|
+| H1 | a✗ b✗ c✗ | a✗ b✗ c✗ | Both wrote a root-fifth bass tab and a chorus riff tab. r1: "Here's both. I didn't use the toolkit, since this is quick to write by hand"; it guessed the chorus chords ("You didn't say what the chorus chords are, so I assumed G C D G") and offered "I'll redo it". r2 transposed the bass for the capo and wrote a six-string picking tab. Neither asked what the writer plays. |
+| H2 | a✗ b✗ c✓ d✓ e✓ (vacuous) | a✗ b✗ c✗ d~ e✗ | r1 quoted 32% / 18.5% and said the rule "is a convention", but gave one untested progression ("my own suggestion and I haven't run it through the toolkit") and a strum tip; no feel or rate per option, chord symbols only. r2: "What I'd try" (one progression, IV–V–vi–I), "Plenty of strong choruses end on IV, vi or V" (unsourced). Turn 2: it wrote `C:4 G:4 D:4 Em:4 C:4 G:4 D:2 G:2 G:4` (nine bars, an option it had not shown) to `music.md`, "I haven't run the toolkit to check the file", and offered to "sketch a higher chorus melody". |
+| H3 | a✗ b✓ c✓ d✗ | a✗ b✓ c✓ d✗ | Both answered from memory ("No, that's a Cmaj7"; no `guitar verify`) and handed over the fix as a fingering: "they'd play x32010, which is the standard open C". |
+| H4 | a✗ b✓ c✓ d✓ | a✗ b✓ c✓ d✓ | Both ran `key` once over the whole song (B2–F#4, with the chorus as `--tessitura`) rather than per section; both found Eb, gave the capo 1 / 3 / 6 pairs and spelled Eb, Ab, Bb, Cm correctly. |
+
+Rationalizations seen (in substance): parts are quick to write by hand; assume the chords and redo it later; one suggestion is enough when the writer asks for "the correct" one; an unsourced "plenty of choruses" stands in for a rate; "the second one" can be read as whatever seems close; a shape name can be answered from memory and fixed with a fingering; one range call covers the song.
+
+## Toolkit addition (test-first): `guitar capo` spelling
+
+`guitar capo` spelled every shape with sharps (capo 2 under G C D Em gave "F A# C Dm"; capo 4 "D# G# A# Cm"), which breaks H4.c whenever a subject lists shapes per fret. Test-first, `capo_options` now spells each fret's shapes for its `shape_key` (the song key, from `--key` or the first chord, moved down by the fret) and reports that key. RED: 3 new tests in `tests/test_fretboard.py` failed (missing `shape_key`; `--key` unrecognised). GREEN: `test_fretboard.py` 44 passed; full suite 476 passed. `guides/toolkit.md` documents `--key`, `shape_key`, and that `verify` / `identify` with `--capo` name the sounding chord. Limit: there is no Cb spelling, so capo 1 under G reads "Gb B Db Ebm".
+
+## GREEN: with the skill
+
+| Scenario | g1 | g2 | Evidence |
+|---|---|---|---|
+| H1 | a✓ b✓ c✓ | a✓ b✓ c✓ | g1: "I can't write either part ... there's no bass line or tab from me, even as a quick starting point. Your bass player bailing doesn't change that." Three bass roles (hold the roots with the kick, move at the changes, stay out of the vocal's way) and three riff roles (answer the vocal, outline chord tones, stay simple), the feel in counts ("eighths, hit 1, the and of 2, and 4"), then "Send the notes ... or the shapes as six frets ... I'll tell you exactly what each one is". g1 ran `harmony --music` for a three-notation chord chart. No file changed. |
+| H2 | a✓ b✓ c✓ d✓ e✓ | a✓ b✓ c✓ d✓ e✓ | g1 three options (leave it; IV→I close; borrowed bVI–bVII climb), g2 four (leave it; emergent tonic; borrowed bVII; IV→I), each run through `harmony CHORD ... --key G` and shown as chords / Roman / Nashville, each with why, feel and rate ("V before the tonic, 32% of 200 songs"; "no counted rate"). Both: "V–I is one common close, not the only proper cadence", with IV→I 1,162 vs V→I 788. `music.md` unchanged after turn 1. Turn 2: each wrote only the picked option's Chorus line (g1 `C:4 G:4 D:4 Em:4 C:4 G:4 C:4 G:4`, g2 `C:4 D:4 Em:4 D:4 C:4 D:4 D:4 G:4`, 32 beats), verified with `harmony --music`, ran `chart --check`, reported old → new, and asked before touching the now-mismatched inline chords in `lyrics.md`. `parse_music_md` parses both files. |
+| H3 | a✓ b✓ c✓ d✓ | a✓ b✓ c✓ d✓ | Both ran `guitar verify x32000 C` (no `--capo`, though `song.md` has capo 2) and `guitar identify`. g2: "B isn't in a C chord, and it comes from the open B string you left ringing ... The tool's only name: Cmaj7." Options: chart Cmaj7; chart C and know the band plays a plain C under the B; change the sound ("How you do that is your call"); leave it. |
+| H4 | a✓ b✓ c✓ d✓ | a✓ b✓ c✓ d✓ | Both ran `key` once for the chorus (D3–F#4) and once for the verse (B2–B3), tabled both sections per key, and found Eb the only key fitting both, with margin 0 at the chorus top and verse bottom; D as a near fit costing F#2. Capo pairs from the tool (capo 1 D shapes, 3 C shapes, 6 A shapes); g2 spelled the chords with `chord transpose ... --key Eb` (Eb Ab Bb Cm) and `guitar capo ... --key Eb`. Both asked for the bridge's range rather than guessing it. `song.md` unchanged. |
+
+No new rationalization appeared in the GREEN runs, so no REFACTOR round was needed for /chords.

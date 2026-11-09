@@ -23,7 +23,7 @@ import re
 from dataclasses import asdict, dataclass
 from functools import lru_cache
 
-from songtools.chords import (FLAT_KEYS, NOTE_PC, SHARPS, is_no_chord, names_for, parse_chord, spell,
+from songtools.chords import (FLAT_KEYS, FLATS, NOTE_PC, SHARPS, is_no_chord, names_for, parse_chord, spell,
                               transpose)
 from songtools.cli import SongtoolsError
 from songtools.paths import data_dir
@@ -324,6 +324,7 @@ def voicings(name: str, tuning: Tuning, limit: int = 8) -> list[str]:
 @dataclass
 class CapoOption:
     fret: int
+    shape_key: str | None
     shapes: list[str]
     open_shapes: int
     note: str
@@ -339,17 +340,44 @@ def _is_open(name: str, tuning: Tuning) -> bool:
     return any(0 in s for s in _generated(tuple(tuning.strings), name))
 
 
-def capo_options(chords: list[str], tuning: Tuning, max_fret: int = 7) -> list[CapoOption]:
+def _reference_key(chords: list[str], key: str | None) -> tuple[int, bool] | None:
+    """(tonic pc, minor) from --key, else from the first real chord (minor when its quality is m...)."""
+    if key is not None:
+        k = key.strip().replace("♯", "#").replace("♭", "b")
+        minor = k.endswith("m") and len(k) > 1
+        root = k[:-1] if minor else k
+        if root not in NOTE_PC:
+            raise SongtoolsError(None, None, f"not a key name: {key!r}")
+        return NOTE_PC[root], minor
+    for ch in chords:
+        if not is_no_chord(ch):
+            c = parse_chord(ch)
+            return NOTE_PC[c.root], c.quality.startswith("m") and not c.quality.startswith("maj")
+    return None
+
+
+def _shape_key_name(pc: int, minor: bool) -> str:
+    """Conventional key name: the flat spelling when that is a flat key (F, Bb, ... Dm, Gm, ...), else sharp."""
+    suffix = "m" if minor else ""
+    flat = FLATS[pc % 12] + suffix
+    return (flat if flat in FLAT_KEYS else SHARPS[pc % 12] + suffix)
+
+
+def capo_options(chords: list[str], tuning: Tuning, max_fret: int = 7, key: str | None = None) -> list[CapoOption]:
+    """Shapes at each capo fret, spelled for the shape key: the song key (--key, or the first chord)
+    moved down by the fret, so capo 2 under G-key chords gives F-key shapes (Bb, not A#)."""
     for ch in chords:
         if not is_no_chord(ch):
             try:
                 parse_chord(ch)
             except ValueError as e:
                 raise SongtoolsError(None, None, str(e)) from None
+    ref = _reference_key(chords, key)
     out = []
     for fret in range(max_fret + 1):
-        shapes = [transpose(ch, -fret) for ch in chords]
-        out.append(CapoOption(fret, shapes, sum(_is_open(s, tuning) for s in shapes),
+        shape_key = None if ref is None else _shape_key_name(ref[0] - fret, ref[1])
+        shapes = [transpose(ch, -fret, shape_key) for ch in chords]
+        out.append(CapoOption(fret, shape_key, shapes, sum(_is_open(s, tuning) for s in shapes),
                               _SOFT_NOTE if fret >= 7 else ""))
     out.sort(key=lambda o: (-o.open_shapes, o.fret))
     return out
@@ -425,7 +453,8 @@ def _h_joni(args):
 def _h_capo(args):
     t = load_tuning(args.tuning)
     return {"chords": args.chords, "tuning": t.name,
-            "options": [asdict(o) for o in capo_options(args.chords, t, args.max_fret)]}, to_text
+            "key": args.key,
+            "options": [asdict(o) for o in capo_options(args.chords, t, args.max_fret, args.key)]}, to_text
 
 
 def _h_voicings(args):
@@ -437,7 +466,8 @@ def to_text(result: dict) -> str:
     if "options" in result:
         lines = []
         for o in result["options"]:
-            lines.append(f"capo {o['fret']}: {' '.join(o['shapes'])} ({o['open_shapes']} open)"
+            sk = f" ({o['shape_key']} shapes)" if o.get("shape_key") else ""
+            lines.append(f"capo {o['fret']}{sk}: {' '.join(o['shapes'])} ({o['open_shapes']} open)"
                          + (f" - {o['note']}" if o["note"] else ""))
         return "\n".join(lines)
     if "voicings" in result:
@@ -497,6 +527,8 @@ def register(subparsers) -> None:
     p = sub.add_parser("capo", help="capo positions ranked by open shapes")
     p.add_argument("chords", nargs="+", metavar="CHORD")
     p.add_argument("--max-fret", type=int, default=7)
+    p.add_argument("--key", default=None, metavar="KEY",
+                   help="song key that names the shape key (default: the first chord)")
     _common(p, capo=False)
     p.set_defaults(handler=_with_basis(_h_capo))
 

@@ -159,7 +159,7 @@ $ songtools chord parse Am7/G
 
 `guitar identify SHAPE`, `guitar verify SHAPE NAME`, `guitar vsystem NOTE [NOTE ...]`, `guitar joni [--tuning NOTES]`, `guitar capo CHORD [CHORD ...]`, `guitar voicings NAME`
 
-Fretboard checks. `identify` and `verify` take `--key`, `--tuning NAME_OR_NOTES`, `--capo N` and `--partial-capo MASK` (six characters of 0 or 1, low string to high, 1 = clamped; needs `--capo`); `verify` also takes `--band-bass` (a bass player covers the root). A shape is six frets such as `x32010` (x = muted) or a quoted `'x 10 12 12 12 10'`. Frets are relative to the capo. `capo` takes `--max-fret` and `--tuning`; `voicings` takes `--limit` and `--tuning`. [design]
+Fretboard checks. `identify` and `verify` take `--key`, `--tuning NAME_OR_NOTES`, `--capo N` and `--partial-capo MASK` (six characters of 0 or 1, low string to high, 1 = clamped; needs `--capo`); `verify` also takes `--band-bass` (a bass player covers the root). A shape is six frets such as `x32010` (x = muted) or a quoted `'x 10 12 12 12 10'`. Frets are relative to the capo. `capo` takes `--max-fret`, `--tuning` and `--key` (the song key; without it the first chord is taken as the key); `voicings` takes `--limit` and `--tuning`. [design]
 
 ```
 $ songtools guitar identify x32010
@@ -171,12 +171,14 @@ $ songtools guitar verify x32010 C
 {"shape": "x32010", "name": "C", "tuning": "standard", "capo": 0, "partial_capo": null,
  "ok": true, "missing": [], "extra": [], "alternatives": ["C"], "note": "", "basis": "..."}
 
-$ songtools guitar capo G C D
-{"chords": ["G", "C", "D"], "tuning": "standard",
- "options": [{"fret": 0, "shapes": ["G", "C", "D"], "open_shapes": 3, "note": ""},
-             {"fret": 5, "shapes": ["D", "G", "A"], "open_shapes": 3, "note": ""},
-             {"fret": 7, "shapes": ["C", "F", "G"], "open_shapes": 2,
-              "note": "soft heuristic: tone thins high on the neck (no source)"}, ...], "basis": "..."}
+$ songtools guitar capo G C D --key G
+{"chords": ["G", "C", "D"], "tuning": "standard", "key": "G",
+ "options": [{"fret": 0, "shape_key": "G", "shapes": ["G", "C", "D"], "open_shapes": 3, "note": ""},
+             {"fret": 5, "shape_key": "D", "shapes": ["D", "G", "A"], "open_shapes": 3, "note": ""},
+             {"fret": 3, "shape_key": "E", "shapes": ["E", "A", "B"], "open_shapes": 2, "note": ""},
+             {"fret": 7, "shape_key": "C", "shapes": ["C", "F", "G"], "open_shapes": 2,
+              "note": "soft heuristic: tone thins high on the neck (no source)"},
+             {"fret": 2, "shape_key": "F", "shapes": ["F", "Bb", "C"], "open_shapes": 1, "note": ""}, ...], "basis": "..."}
 
 $ songtools guitar voicings G --limit 2
 {"name": "G", "tuning": "standard", "voicings": ["320003", "355433"], "basis": "..."}
@@ -188,7 +190,7 @@ $ songtools guitar joni --tuning "D2 A2 D3 G3 A3 D4"
 {"tuning": "D2 A2 D3 G3 A3 D4", "strings": [38, 45, 50, 55, 57, 62], "code": "D75525", "basis": "..."}
 ```
 
-`verify` reports `ok` false with `missing` and `extra` notes when the shape does not sound the chord. `group` in `vsystem` is `null` when the voicing is not a four-note V-System voicing. `joni` needs notes with octaves; bare letters give an error. Shapes are facts about notes, not playing instructions: use them to check the writer's fingering, never to write one for them. A `note` that says "soft heuristic" has no source; say so. [design]
+`capo` spells each option's shapes for its `shape_key` (the song key moved down by the fret), so a capo under G-key chords gives Bb, not A#. `verify` and `identify` with `--capo` name the sounding chord; to check the name the writer gives a shape ("my C shape"), run them without `--capo`. `verify` reports `ok` false with `missing` and `extra` notes when the shape does not sound the chord. `group` in `vsystem` is `null` when the voicing is not a four-note V-System voicing. `joni` needs notes with octaves; bare letters give an error. Shapes are facts about notes, not playing instructions: use them to check the writer's fingering, never to write one for them. A `note` that says "soft heuristic" has no source; say so. [design]
 
 ### harmony
 

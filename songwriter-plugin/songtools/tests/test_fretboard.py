@@ -124,6 +124,33 @@ def test_capo_options_sorted_and_noted():
     assert opts[0].shapes == ["G", "C", "D"]
 
 
+def test_capo_shapes_spelled_for_shape_key():
+    # G C D Em sounding: capo 2 gives F-key shapes, capo 4 Eb-key shapes; flats, not A#/D#/G#.
+    opts = {o.fret: o for o in capo_options(["G", "C", "D", "Em"], STD)}
+    assert opts[2].shapes == ["F", "Bb", "C", "Dm"] and opts[2].shape_key == "F"
+    assert opts[4].shapes == ["Eb", "Ab", "Bb", "Cm"] and opts[4].shape_key == "Eb"
+    assert opts[5].shapes == ["D", "G", "A", "Bm"] and opts[5].shape_key == "D"
+    assert opts[0].shape_key == "G"
+
+
+def test_capo_key_option_names_the_reference_key():
+    # Without --key the first chord is the reference; --key overrides it (here the song is in Em).
+    opts = {o.fret: o for o in capo_options(["C", "G", "D", "Em"], STD, key="Em")}
+    assert opts[0].shape_key == "Em" and opts[2].shape_key == "Dm"
+    assert opts[2].shapes == ["Bb", "F", "C", "Dm"]
+    assert opts[3].shape_key == "C#m" and opts[3].shapes == ["A", "E", "B", "C#m"]
+
+
+def test_cli_capo_key_flag(capsys):
+    assert main(["guitar", "capo", "G", "C", "D", "--key", "G"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    by = {o["fret"]: o for o in out["options"]}
+    assert by[2]["shapes"] == ["F", "Bb", "C"] and by[2]["shape_key"] == "F"
+    assert main(["--text", "guitar", "capo", "G", "C", "D"]) == 0
+    assert "capo 2 (F shapes): F Bb C" in capsys.readouterr().out
+    assert main(["guitar", "capo", "G", "--key", "Hm"]) == 2
+
+
 def test_voicings_from_chords_db():
     assert "x32010" in voicings("C", STD)
     assert len(voicings("C", STD, limit=2)) == 2
