@@ -154,3 +154,32 @@ Not derived from any example in the skill. Writer: "This is a pop song. What cou
 | H6 | g4 | a✓ b✓ c✓ d✓: "Its style index has no bossa entry"; tool rows; "(de Clercq and Temperley, general, not bossa nova)". |
 | H6 | g1 re-scored under the new rule | b✗: "The two classic endings are V→I ... (32% of 200 songs)" had no "general, not bossa" label and used "classic"; fixed by the rule above, g3/g4 comply. |
 | H2 (no style) | g2 | unchanged: "V–I is one common close, not the only proper cadence", 32% of 200 songs and 18.5%, tool rows (IV I V vi IV I V I / 4 1 5 6m 4 1 5 1), four options incl. "leave it as it is", no style assumed. |
+
+
+## Declared-style fix round 2 (strict frequency rule)
+
+Rule added to `skills/chords/SKILL.md` (Declared style 3 and 4): with a style declared, every option's frequency goes only in the fixed line `How common (general corpus, not <style>): <tool figure>`; outside it (Why and Feel included) "common", "most common", "classic", "typical", "standard", "usual" are banned except inside a quoted `styles.md` finding; every option goes through `harmony` before it is offered. Red-flag rows quote the leaks verbatim ("Feel: a firm, classic close." H7-g1:16; "one of the two common closes" H5-g3:12; "the most common chorus close in the corpus" H6-g3:11; "IV→I is the corpus's top transition (1,162), and the second most common chorus ending" H7-g2; "V is the most common chord before the tonic" H5-g3:14) and "I haven't run this one through the tool" (H5-g4).
+
+Strict re-score of the earlier style GREEN rows (any banned word outside the fixed line or any unlabelled frequency = fail). These supersede the earlier marks; the earlier rows above are kept:
+
+| Run | Strict result |
+|---|---|
+| H5 g1, g2 (first round) | superseded: written before the rule; scored fail on the fixed-line format (rates in prose). |
+| H5 g3 | fail (superseded mark ~): "one of the two common closes", "the most common chord before the tonic". |
+| H5 g4 | fail: option D not run through the tool. |
+| H6 g1, g2 | fail: g1 "two classic endings"; g2 no tool rows. |
+| H6 g3 | fail (earlier scored clean): "the most common chorus close in the corpus". |
+| H6 g4 | fail: "the most common single chord move in the corpus". |
+| H7 g1 | fail: "a firm, classic close". |
+| H7 g2 | fail: "the corpus's top transition ... second most common chorus ending". |
+
+Fresh GREEN runs with the new skill (grep of each reply for common, classic, typical, standard, usual, percent figures and "haven't run"; every figure sits inside a `How common (general corpus, not <style>)` line):
+
+| Scenario | Run | Strict result |
+|---|---|---|
+| H5 | g5 | pass: Everett Type 4 quoted with source and tag; four options, each with a tool-run progression; frequencies only in the fixed line (e.g. "V is 16.3% of all chord roots", "bVII is 8.1% of all chord roots", "no counted rate for verse ends"). |
+| H5 | g6 | pass: four options; fixed lines "V→I 788 transitions", "IV→I 1,162 transitions, I→V 710", "no counted rate for V→bVII". |
+| H6 | g5 | pass: states the research has nothing specific to bossa nova; fixed lines "(general corpus, not bossa nova): V ... 32% of 200 songs", "no counted rate" for the Spicer device. |
+| H6 | g6 | pass: same statement; fixed lines with 1,052 / 788 transitions and root shares; no banned word. |
+| H7 | g5 | pass: pop entries quoted with source and tag; fixed lines "(general corpus, not pop): V ... 32% of 200 sectional endings (de Clercq & Temperley) [verified]". |
+| H7 | g6 | pass: "common-practice harmony" appears only inside the quoted Everett finding (allowed); every frequency in the fixed line. |

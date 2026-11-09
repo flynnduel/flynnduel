@@ -104,3 +104,5 @@ Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md
 | M2 re-run | | g1 a✓ b✓: no style assumed, four options including "leave it", `prosody` and `stability` run. |
 
 Fix round 1: the melody red-flag row now quotes only recorded baseline phrases ("the classic soul-ballad release", "land that last word on the chord's third").
+
+Fix round 2: M3 re-run with the changed red-flag row, g3: pass on M3.a-d. "`styles.md` has one soul entry, and it's about harmony ... It says nothing about melody, so the research behind this plugin has nothing specific to soul on melody. The coaching below is style-neutral." No "classic", "typical" or "usually"; no notes written.
