@@ -10,8 +10,6 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[3]
 
 INVOKE = 'UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools'
 SKILLS = ["newsong", "idea", "structure", "lyrics", "melody", "chords", "arrange", "chart", "critique", "finalcheck", "bank"]
-# Skills not written yet; each skill task removes its own name from this set.
-SKILLS_PENDING: set[str] = set()
 
 
 def real_subcommands() -> list[str]:
@@ -67,11 +65,6 @@ def test_toolkit_guide_has_prosody_limit_and_behaviours():
     t = (PLUGIN_ROOT / "guides/toolkit.md").read_text()
     assert "Scoring is a simplified version of Hayes (2005), whose model matched listeners' preferred settings about 70% of the time on folk-song data." in t
     assert "## Behaviours to explain" in t
-
-
-def _skill_params():
-    return [pytest.param(n, marks=pytest.mark.xfail(reason="skill not written yet", strict=False))
-            if n in SKILLS_PENDING else n for n in SKILLS]
 
 
 # Skill-authoring standards (writing-skills; Anthropic best practices): the body stays under
@@ -175,7 +168,7 @@ def check_skill_text(text: str, name: str) -> list[str]:
     return errs
 
 
-@pytest.mark.parametrize("name", _skill_params())
+@pytest.mark.parametrize("name", SKILLS)
 def test_skill_frontmatter_and_invocation(name):
     path = PLUGIN_ROOT / "skills" / name / "SKILL.md"
     assert path.exists(), path
@@ -271,12 +264,29 @@ def test_helper_reads_plain_multiline_description():
     assert any("workflow" in e for e in check_skill_text(bad, "x"))
 
 
-def test_every_guide_is_loaded_by_a_skill():
-    """A guide no skill reads is dead weight (sources.md is the bibliography, read by people)."""
-    bodies = "\n".join(p.read_text() for p in (PLUGIN_ROOT / "skills").glob("*/SKILL.md"))
+def test_readme_lists_every_command():
+    t = (PLUGIN_ROOT / "README.md").read_text()
+    for s in SKILLS:
+        assert f"/{s}" in t
+    assert "install" in t.lower() and "uv" in t
+
+
+def test_readme_says_how_to_install_from_this_marketplace():
+    t = (PLUGIN_ROOT / "README.md").read_text()
+    for needle in ("/plugin marketplace add", "flynnduel/flynnduel", "claude/dazzling-feynman-furauz",
+                   "songwriter@flynnduel", "guides/sources.md"):
+        assert needle in t, needle
+
+
+def test_every_guide_is_used_by_some_skill():
+    """A guide no skill reads is dead weight."""
+    bodies = " ".join((PLUGIN_ROOT / f"skills/{s}/SKILL.md").read_text() for s in SKILLS)
     for g in (PLUGIN_ROOT / "guides").glob("*.md"):
-        if g.name != "sources.md":
-            assert f"${{CLAUDE_PLUGIN_ROOT}}/guides/{g.name}" in bodies, g.name
+        assert f"${{CLAUDE_PLUGIN_ROOT}}/guides/{g.name}" in bodies, g.name
+
+
+def test_skill_folders_are_exactly_the_eleven_commands():
+    assert sorted(p.name for p in (PLUGIN_ROOT / "skills").iterdir()) == sorted(SKILLS)
 
 
 def test_rulebook_style_rule_points_at_styles_index():

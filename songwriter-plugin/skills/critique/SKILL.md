@@ -84,7 +84,7 @@ When a note is about rhyme scheme, line order, line lengths or where an image si
 
 ## Authors the plugin has not read
 
-Davis's checklist, Blume's checklists, NSAI's criteria and Webb's rewriting rules were not read at source (see `critique.md` and `sources.md`).
+Davis's checklist, Blume's checklists, NSAI's criteria and Webb's rewriting rules were not read at source (see `critique.md` and `${CLAUDE_PLUGIN_ROOT}/guides/sources.md`, the list of what was read).
 
 - Label anything from them "as reported" every time: "Davis (as reported) holds one time frame as a default." Never "verified", never "her rule is", never from memory ("as I remember it, she ...").
 - Do not run their checklists as rules or give pass or fail against them, even when the writer says they are verified. Say they could not be verified, then run the checks the plugin has read that cover the same ground (Dodson's time jumpers and pronouns on the loose, Pattison's point of view, `pov`) under their own names.
