@@ -7,7 +7,7 @@ description: Use when a songwriter asks about chords, a progression, harmony, a 
 
 Music is coached, never written. The writer plays and chooses; the plugin measures with `songtools`, explains in plain English, offers options and checks what the writer plays.
 
-Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md`, `${CLAUDE_PLUGIN_ROOT}/guides/harmony.md` and `${CLAUDE_PLUGIN_ROOT}/guides/guitar.md`. For key and range questions also read the "Key and range" section of `${CLAUDE_PLUGIN_ROOT}/guides/melody.md`.
+Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/styles.md` (the only source of style material), `${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md`, `${CLAUDE_PLUGIN_ROOT}/guides/harmony.md` and `${CLAUDE_PLUGIN_ROOT}/guides/guitar.md`. For key and range questions also read the "Key and range" section of `${CLAUDE_PLUGIN_ROOT}/guides/melody.md`.
 
 **Violating the letter of these rules is violating the spirit.** A deadline, a missing bandmate, a teacher's rule or "yes or no is fine" does not change them.
 
@@ -95,6 +95,17 @@ Only after the writer picks an option or gives chords. "Put it in" with no clear
 4. Spell everything for the new key: key names as the tool gives them, chords via `chord transpose CHORD N --key KEY`, where N is that fit's `shift` and KEY is its `key`. For shapes at each fret, `guitar capo CHORD ... --key KEY` gives `shape_key` and shapes spelled for it.
 5. Options, two to four: each fitting key with its capo pairs, a near-fit with its cost, "change the melody's range" (the writer's call), or leave it. `song.md` `key` and `capo` change only when the writer chooses.
 
+## Declared style
+
+A style in `style:` (song.md `## Core`) or in the message changes only the examples, for this song. With no declared style, none of this applies and no genre is assumed.
+
+1. Look the style up in `styles.md` by label and spellings, ignoring case, hyphens and spaces. Do not search the other guides for the style word: only entries `styles.md` lists with "Tied by the research: yes" are style material.
+2. Use only entries that answer the harmony question at hand (from `harmony.md`, or `guitar.md`'s Voicings). A form, feel or arrangement entry is not harmony advice: leave it out, or point to `/structure` or `/arrange` in one line. Obey `styles.md`'s rules and each guide's own Don'ts (harmony.md's ban on citing a genre rate that was not read; an entry marked "No usable finding" is never cited). An entry that does not answer the question (a tonal-system description when the question is a specific cadence) is said to be that: it frames the options, it does not choose a progression.
+3. Quote each finding you use in one line with its source and its tag (`<finding> (<source>) [tag]`), never as a rule for the style. The general base rates stay general: never present them as the style's.
+4. With no entry, or none that fits, say so plainly: "The research behind this plugin has nothing specific to <style> on this", and give the usual options, style-neutral, each still through `harmony`.
+5. Never call a chord, extension, progression, turnaround, voicing or groove typical of, common in or idiomatic to the style without such an entry. No "bossa wants maj7s", no "the classic blues turnaround". The writer's own choices are theirs to describe.
+6. If the style came from the message, offer once to save it as `style: <style>` in `## Core`; write it only on a yes, replacing any existing `style:` line rather than adding a second, then run `song <song>/song.md`.
+
 ## Red flags: stop
 
 Each of these was said or done by an agent without this skill, or in an early test of it:
@@ -110,4 +121,5 @@ Each of these was said or done by an agent without this skill, or in an early te
 | "No, that's a Cmaj7" without running the tool; "they'd play x32010" | Run `guitar verify`; options, not a fingering. |
 | One `key` call over the whole song's range | One call per section; report every section's fit. |
 | "The overshoot is F#4, 2 semitones over D4" (the tool said −4) | Overshoot is the current key's negative margin; a move is the fit's `shift`. Never count by hand. |
+| "Bossa lives on 7ths and ii-V moves", "the classic 12-bar turnaround is I-VI-II-V" (no `styles.md` entry) | Style claims come only from `styles.md` entries tied to the style and to harmony; otherwise say the research has nothing and stay neutral. |
 | "I can sketch a higher chorus melody for you" | Melody is coached, never written (melody skill). |

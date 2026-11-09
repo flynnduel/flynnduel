@@ -80,3 +80,25 @@ GREEN (fixed skill):
 | M1 | a✓ b✓ c✓ d✓ | a✓ b✓ c✓ d✓ | No notes ("no notes, do-re-mi or MIDI from me"). Stresses come from `prosody` on each line, and the unstressed "on" and "not" are put as questions. Placement, contour, the one-note exercise and deferred Perricone checks are all present. No style list. |
 | M2 | a✓ b✓ | a✓ b✓ | "I won't assume a style from the lyric or chords." Four options including "leave it" (Pattison placement, Perricone levers, Webb as reported). Stresses come from `prosody`. No genre list is supplied. |
 | M2b | a✓ b✓ c✓ | a✓ b✓ c✓ | f2: "I'm taking my illustrations from the three you named, as questions about songs you know. They're not claims about how those artists write"; "In a Gillian Welch chorus you love, does the tune stay low while the words carry the weight?"; "In a Pogues chorus you love, does the plain, repeated tune carry it?" f1: "Think of a chorus by Welch, Withers or the Pogues that you love. Does the tune sit still while the words move?" and "A held repeated note is a device ... it isn't tied to any one style." No notes, intervals or scale degrees. |
+
+
+## Declared-style scenarios (Task 9b, user request)
+
+Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md` entries "Tied by the research: yes" that answer a melody question, quoted with source and tag; with none, say plainly "the research behind this plugin has nothing specific to <style> on melody"; never invent style conventions. Same setup as above; the style is declared in the message only.
+
+### M3: declared soul ballad
+
+- Writer: "It's a soul ballad, help the chorus melody."
+- What the research holds: the one soul entry (soul dominant, 1970s soul) is harmony, not melody.
+- Pass criteria:
+  - M3.a Says plainly the research has nothing specific to soul on melody; any soul entry mentioned is a one-line pointer to `/chords`, not melody advice.
+  - M3.b Still coaches (stresses via `prosody`, placement, contour, Perricone checks) and writes no notes.
+  - M3.c No soul melody convention invented (no "soul ballads climb", melisma, gospel leaps, etc.).
+  - M3.d Offers once to save `style:` (not written without a yes).
+- No-style regression: re-run M2 once; behaviour unchanged (M2.a, M2.b).
+
+| Run | Baseline (no skill; subjects could read the plugin folder via Bash, so a weak baseline) | With skill |
+|---|---|---|
+| r1/g1 | a✗ b~ c✗ d✗: "the classic soul-ballad release"; proposed a lift to D4 and "land that last word on the chord's third"; no research statement. | a✓ b✓ c✓ d✓: "the research behind this plugin has nothing specific to soul on melody, so the coaching below is style-neutral. Its one soul finding is about harmony, so that's a question for `/chords`." |
+| r2/g2 | a✓ b✓ c✓ d✓ (read the guides itself: "The research behind this plugin has nothing on soul melody") | a✓ b✓ c✓ d✓: cites Spicer soul dominant as a `/chords` pointer; style-neutral coaching; asks to save `style: soul ballad`. |
+| M2 re-run | | g1 a✓ b✓: no style assumed, four options including "leave it", `prosody` and `stability` run. |

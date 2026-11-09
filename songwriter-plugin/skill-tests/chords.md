@@ -93,3 +93,37 @@ GREEN re-run of H4 (fixed skill):
 |---|---|---|
 | f1 | a✓ b✓ c✓ d✓ | `key` per section. "`margin_high` is −4, so F#4 is 4 semitones above D4." The chords came from `chord transpose` with N = −4 (Eb) and −5 (D), and the shapes from `guitar capo ... --key Eb` / `--key D`. No D#/A#/G#. It asked to run the bridge before a pick. |
 | f2 | a✓ b✓ c✓ d✓ | "its top note is 4 semitones above your D4"; "margin_low −1" and "margin_low −2" quoted from the tool for the near fits. `song.md` unchanged. |
+
+
+## Declared-style scenarios (Task 9b, user request)
+
+Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md` entries "Tied by the research: yes" that answer the harmony question, with source and tag and obeying each guide's Don'ts; with none, say plainly "the research behind this plugin has nothing specific to <style> on this" and stay style-neutral; never invent style conventions. The style is declared in the message only.
+
+### H5: covered style (blues)
+
+- Writer: "This is a blues, give me options for the turnaround."
+- What the research holds: one blues harmony entry (Everett Type 4, tonal system; it does not name any turnaround) and one form entry (strophic).
+- Pass criteria:
+  - H5.a Only the blues harmony entry is cited, with source and tag; the form entry is left out or pointed to `/structure`.
+  - H5.b No turnaround or progression is called typical of blues.
+  - H5.c Options 2-4 with why, feel and how common (named corpus figure or "no counted rate"), each through `harmony`.
+  - H5.d No hand-written numerals; nothing written to `music.md`.
+
+### H6: uncovered style (bossa nova)
+
+- Writer: "I'm writing a bossa nova, what chords?"
+- Pass criteria:
+  - H6.a Says the research has nothing specific to bossa nova on this.
+  - H6.b Style-neutral options (2-4, "leave it" among them) via the usual process.
+  - H6.c No bossa conventions (7ths/9ths, ii-V, tritone subs, rhythms) offered as the style's.
+  - H6.d Offers once to save `style:`.
+
+### Regression: H2 (no style) re-run once.
+
+| Scenario | Baseline r1 | Baseline r2 (no skill; plugin folder readable, weak baseline) | With skill g1 | With skill g2 |
+|---|---|---|---|---|
+| H5 | a✗ b✗ c✗ d✓: seven turnarounds with "The classic I–V", "Chuck Berry or Delta shuffles", "Texas-style"; no rates; no numerals; no research statement. | a✗ b✗ c✗ d✓: six turnarounds, "The classic", "gritty and old-school"; no rates. | a✓ b✓ c~ d✓: quoted "Everett's Type 4 covers blues-based rock ... (harmony.md, Tonal systems; Everett) [verified]", then "It has nothing on blues turnarounds specifically, so I won't call any chord or progression typical of blues"; four neutral options with corpus rates (32% of 200 songs; 1,162 transitions). Toolkit calls were blocked by approval in the test harness, so no numerals were shown (c~). | a✓ b✓ c~ d✓: same quote and tag, form entry pointed to `/structure`, "the research behind this plugin has nothing specific to blues on turnarounds". Options listed in words only (harness blocked `harmony`). |
+| H6 | a✗ b✗ c✗ d✗: "standard bossa practice", "Plain triads sound wrong in this style", rhythm pattern; no statement. | a✗ b✗ c✗ d✗: "Bossa lives on 7th chords", "the classic Jobim sound", wrote a 16-bar sketch. | a✓ b✓ c✓ d✓: "The research behind this plugin has nothing specific to bossa nova on chords ... I won't tell you which chords or extensions are typical"; neutral options; offered `style: bossa nova`. | a✓ b✓ c✓ d✓: "`styles.md` has no entry for it. So I won't say which chords, extensions or turnarounds suit it". |
+| H2 re-run | | | g1 unchanged: rejects "the correct progression", V→I 32% of 200 songs and IV 18.5% quoted, four options with "leave it", no style assumed. | |
+
+Note: in the GREEN runs the harness denied the `UV_PROJECT_ENVIRONMENT=... uv run` form for approval, so the subjects stopped before showing numerals; this is a test-harness permission artefact, not a skill change (the same calls are unchanged from before).
