@@ -1,6 +1,6 @@
 ---
 name: arrange
-description: Use when a songwriter asks how to arrange a song for a band, what each player or section should do, where a song should build or drop, whether a section has too many parts, for a road map or band chart, or asks for a drum part or other band part to hand to a player. Not when the question is about chords, a progression, a capo or the writer's own guitar part (chords).
+description: Use when a songwriter asks how to arrange a song for a band, what each player or section should do, where a song should build or drop, whether a section has too many parts, for a road map or number chart of the arrangement, or asks for a drum part or other band part to hand to a player. Not when the question is about chords, a progression, a capo or the writer's own guitar part (chords), or the writer wants the song's chords and lyrics printed as a chart, lead sheet, PDF or guide track (chart).
 ---
 
 # Arrange

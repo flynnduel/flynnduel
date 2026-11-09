@@ -11,7 +11,7 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[3]
 INVOKE = 'UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools'
 SKILLS = ["newsong", "idea", "structure", "lyrics", "melody", "chords", "arrange", "chart", "critique", "finalcheck", "bank"]
 # Skills not written yet; each skill task removes its own name from this set.
-SKILLS_PENDING = {"newsong", "chart", "bank"}
+SKILLS_PENDING: set[str] = set()
 
 
 def real_subcommands() -> list[str]:

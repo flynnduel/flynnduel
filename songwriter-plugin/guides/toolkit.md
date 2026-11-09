@@ -295,13 +295,17 @@ A section without inline chords is not compared. Symbols are matched exactly, so
 
 ### midi
 
-`midi SONG_DIR [--tempo BPM]`
+`midi SONG_DIR [--tempo BPM] [--concert]`
 
-Writes `out/guide.mid`, a reference track of the writer's own chords (block chords, nothing added). The tempo defaults to the one in `song.md`. [design]
+Writes `out/guide.mid`, a reference track of the writer's own chords from `music.md` (block chords, nothing added). The tempo defaults to the one in `song.md`. Without `--concert` the chords play as written, so with a capo they sound lower than the band hears them. `--concert` writes `out/guide-concert.mid` instead, every chord moved up by `song.md`'s capo, with the sounding key; `capo_applied` says by how much (0 when there is no capo, and the track is then the same as `guide.mid`). [design]
 
 ```
 $ songtools midi song --tempo 96
-{"path": "song/out/guide.mid", "tempo": 96, "chords": 24, "beats": 96.0,
+{"path": "song/out/guide.mid", "tempo": 96, "chords": 24, "beats": 96.0, "key": "G", "capo_applied": 0,
+ "basis": "reference track of the writer's own chords (mido)"}
+
+$ songtools midi song --concert
+{"path": "song/out/guide-concert.mid", "tempo": 96, "chords": 24, "beats": 96.0, "key": "A", "capo_applied": 2,
  "basis": "reference track of the writer's own chords (mido)"}
 ```
 

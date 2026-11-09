@@ -48,3 +48,39 @@ def test_midi_cli_errors(tmp_path, capsys):
     assert main(["midi", str(tmp_path), "--tempo", "90"]) == 2
     err = capsys.readouterr().err
     assert "Hx" in err and "Verse" in err
+
+
+def _notes(path):
+    return [m.note for t in mido.MidiFile(path).tracks for m in t if m.type == "note_on" and m.velocity > 0]
+
+
+def test_midi_concert_applies_capo(tmp_path, capsys):
+    (tmp_path / "song.md").write_text("# T\n\n## Core\nkey: G\ncapo: 2\ntempo: 90\n")
+    (tmp_path / "music.md").write_text("## Verse\nprogression: G:4 N.C.:2 C/E:4\n")
+    assert main(["midi", str(tmp_path)]) == 0
+    shape = json.loads(capsys.readouterr().out)
+    assert shape["path"].endswith("guide.mid") and shape["capo_applied"] == 0
+    assert main(["midi", str(tmp_path), "--concert"]) == 0
+    r = json.loads(capsys.readouterr().out)
+    assert r["path"].endswith("guide-concert.mid") and r["capo_applied"] == 2 and r["key"] == "A"
+    assert r["chords"] == 3 and r["beats"] == 10
+    assert [n % 12 for n in _notes(r["path"])] == [(n + 2) % 12 for n in _notes(shape["path"])]
+    keys = [m.key for t in mido.MidiFile(r["path"]).tracks for m in t if m.type == "key_signature"]
+    assert keys == ["A"]
+
+
+def test_midi_concert_without_capo_is_unchanged(tmp_path, capsys):
+    _song(tmp_path)
+    assert main(["midi", str(tmp_path), "--concert"]) == 0
+    r = json.loads(capsys.readouterr().out)
+    assert r["capo_applied"] == 0 and r["key"] == "G"
+    assert main(["midi", str(tmp_path)]) == 0
+    capsys.readouterr()
+    assert _notes(tmp_path / "out" / "guide-concert.mid") == _notes(tmp_path / "out" / "guide.mid")
+
+
+def test_midi_concert_bad_capo(tmp_path, capsys):
+    (tmp_path / "song.md").write_text("# T\n\n## Core\nkey: G\ncapo: two\ntempo: 90\n")
+    (tmp_path / "music.md").write_text("## Verse\nprogression: G:4\n")
+    assert main(["midi", str(tmp_path), "--concert"]) == 2
+    assert "capo" in capsys.readouterr().err

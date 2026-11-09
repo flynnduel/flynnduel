@@ -4,7 +4,9 @@ Each chord sounds its bass (36 + root pitch class, or the slash bass) with its c
 stacked from 60 + pc (anything above 71 drops an octave), velocity 80, for its beat count.
 N.C. is a rest. 480 ticks per beat.
 
-CLI: songtools midi SONG_DIR [--tempo N] -> {"path", "tempo", "chords", "beats", "basis"}.
+CLI: songtools midi SONG_DIR [--tempo N] [--concert] -> {"path", "tempo", "chords", "beats", "key",
+"capo_applied", "basis"}. --concert writes out/guide-concert.mid instead, every chord moved up by
+song.md's capo (the sounding pitch the band hears), with the sounding key.
 """
 
 import argparse
@@ -12,7 +14,7 @@ from pathlib import Path
 
 import mido
 
-from songtools.chords import NOTE_PC, is_no_chord, parse_chord
+from songtools.chords import NOTE_PC, is_no_chord, parse_chord, transpose
 from songtools.cli import SongtoolsError
 from songtools.songfile import file_error, parse_music_md, parse_song_md, read_text
 
@@ -86,6 +88,17 @@ def _h_midi(args: argparse.Namespace):
                                  "no tempo: pass --tempo or set tempo in song.md core") from None
     if tempo <= 0:
         raise SongtoolsError(None, None, f"tempo must be positive, got {tempo}")
+    key = record.core.get("key") or None
+    capo = 0
+    if args.concert:
+        from songtools.chordpro import _sounding_key
+        capo_text = record.core.get("capo", "")
+        try:
+            capo = int(capo_text) if capo_text else 0
+        except ValueError:
+            raise SongtoolsError(str(song_path), None, f"bad capo value {capo_text!r}") from None
+        if key and capo:
+            key = _sounding_key(key, capo)
     progression = []
     for name, chords in sections.items():
         for symbol, beats in chords:
@@ -95,20 +108,25 @@ def _h_midi(args: argparse.Namespace):
                 except ValueError:
                     raise SongtoolsError(str(music_path), None,
                                          f"cannot parse chord {symbol!r} in section {name!r}") from None
+            if capo and not is_no_chord(symbol):
+                symbol = transpose(symbol, capo, key)
             progression.append((symbol, beats))
+    out = d / "out" / ("guide-concert.mid" if args.concert else "guide.mid")
     try:
-        path = write_midi(progression, tempo, d / "out" / "guide.mid",
-                          key=record.core.get("key") or None, time=record.core.get("time") or "4/4")
+        path = write_midi(progression, tempo, out, key=key, time=record.core.get("time") or "4/4")
     except ValueError as e:
         raise SongtoolsError(str(song_path), None, f"cannot build MIDI: {e}") from None
     except OSError as e:
-        raise file_error(d / "out" / "guide.mid", "cannot write MIDI", e) from None
+        raise file_error(out, "cannot write MIDI", e) from None
     return {"path": str(path), "tempo": tempo, "chords": len(progression),
-            "beats": sum(b for _, b in progression), "basis": BASIS}, to_text
+            "beats": sum(b for _, b in progression), "key": key, "capo_applied": capo,
+            "basis": BASIS}, to_text
 
 
 def register(subparsers) -> None:
     p = subparsers.add_parser("midi", help="write out/guide.mid from music.md (your chords only)")
     p.add_argument("song_dir", type=Path, metavar="SONG_DIR")
     p.add_argument("--tempo", type=int, default=None, help="beats per minute (default: song.md tempo)")
+    p.add_argument("--concert", action="store_true",
+                   help="write out/guide-concert.mid with the capo applied (sounding pitch)")
     p.set_defaults(handler=_h_midi)
