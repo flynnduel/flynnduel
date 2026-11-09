@@ -57,3 +57,52 @@ Pattison's Perth master-class write-up (recorded in `research_notes/.../07_criti
   - C5.d Never imposes one rewrite (and changes no file).
 
 Blindness: the SKILL.md states general principles only (what a rhyme scheme does to motion is measured by `stability` and named from the guide; structure notes are demonstrated with the writer's own lines rearranged). It names neither this case nor aabb. The critique guide, which the skill loads, does contain the Perth write-up in one bullet, so C5 tests that the skill makes the subject apply its guide; it is not blind with respect to the guide.
+
+## RED: baseline (no skill)
+
+Four baseline runs per scenario. In r1 and r2 the subject could read the plugin folder (it was added as a working directory), and most of them found `guides/critique.md` beside the toolkit and read it. Those runs are marked "guides read" and are weak baselines. For r3 and r4 the plugin folder was no longer added. The toolkit still ran through `uv run --project`, but the guides could not be read. These r3/r4 runs are the real RED. Key: ✓ pass, ✗ fail, ~ partial.
+
+| Scenario | r1 (guides read) | r2 (guides read) | r3 | r4 |
+|---|---|---|---|---|
+| C1 full critique | a✓ b✓ c✓ d✓ | a✓ b✓ c✓ d✓ | a✗ b✗ c✗ d✓ | a✗ b✗ c✗ d✓ |
+| C2 unsolicited taste | a✓ b✓ | a✓ b✓ | a✗ b✓ | a✗ b✓ |
+| C3 Davis claim | a✓ b✓ | a✓ b✓ | a✗ b✗ | a✗ b~ |
+| C4 kept lines | a✓ b✗ | a✓ b✗ | a✗ b✗ | a✗ b✗ |
+| C5 Bellbird Hill (BM) | a~ b✗ c~ d✓ | a~ b✗ c✗ d✓ | a✗ b✗ c✗ d✓ | a~ b✗ c✗ d~ |
+
+How the clean baselines failed (in substance):
+- **C1.** r3 and r4 open with "Short answer: yes, the bridge is too vague". There is no statement of meaning before it and no neutral questions. Notes are loose lists ("How to fix it:", "What to look at", five items) with no location, basis or options. Rules are stated as universal ("A bridge should show us something new"). Both judge stock language by ear: "The cliché scan flagged nothing, but those two lines … sound weaker."
+- **C2.** r3 says "the title is never sung … pull 'porch light' into one chorus line, or retitle the song" and "a publisher's demo or chart will expose the inconsistency". r4 says "Under the Webb lens it comes out as a false rhyme. A publisher who hears it as a miss will notice" (the webb lens is off) and "For a pitch, make the chorus work if someone hears only that section". It imposes one fix: "I will not be sleeping at home". Neither asks permission. Craft notes are given plainly in both.
+- **C3.** r3 runs the checklist as rules ("Time frame: broken"), with no "as reported" label. r4 says "As I remember it, she treats consistency of time, place and viewpoint as part of lyric unity". That is from memory, unlabelled, and it applies "the three criteria as you stated them".
+- **C4.** r3 puts the kept line among the strengths ("you were right to keep it") and re-argues home/alone ("the rhyme is softer than the cliché's reputation suggests"). r4 calls the kept lines "the song's best" and adds an "About home/alone" section. Neither has a separate group or asks a question. The guides-read runs listed both kept lines in their own group but never asked about them.
+- **C5.** No clean run says that aabb stops the motion at each couplet; the nearest is r4: "four perfect rhymes in a row sound settled". No run brings the boots image forward or lays out alternative schemes side by side. Each offers one fix ("making the second pair a near-rhyme"). r4 says "the line lengths are even" by eye, while `stability` reports 5/4/5/4. The guides-read r1 lists "Try abab or abba" as an option but does not show either.
+
+## GREEN: with the skill
+
+| Scenario | g1 | g2 | g3 | g4 | g5 | g6/g7 |
+|---|---|---|---|---|---|---|
+| C1 | ✓ | ✓ | ✓ | ✓ | (usage limit, no reply) | g7 ✓ |
+| C2 | ✓ | a✗ b✓ | ✓ | ✓ | ✓ | g6 ✓ |
+| C3 | ✓ | ✓ | ✓ | ✓ | ✓ | |
+| C4 | ✓ | ✓ | ✓ | ✓ | (usage limit) | g7 ✓ |
+| C5 | a✓ b✗ c✓ d✓ | a✓ b~ c✓ d✓ | ✓ | ✓ | ✓ | |
+
+Round 1 (g1, g2) used the first SKILL.md. g3 and g4 used the first refactor (taste-offer, image-placement and option-count counters). g5 to g7 used the final text, which adds the plain-call counter and a neutral taste example. Runs marked "usage limit" ended without a reply because the account hit its usage limit, and were rerun as g7.
+
+Evidence, in summary:
+- **C1.** Every with-skill reply follows this order: "What it seems to be about" with 1–3 strengths tied to measurements; then "Your question: is the bridge too vague?" answered "Partly, yes" as a six-part note; then neutral questions ("What should the listener feel at the bridge: doubt, or a decision?"); then two or three ranked notes, point of view (song level) first and the home/alone pair (line level) last. Each note has Location, Observation, Mechanism, Listener effect, Basis and Options with "leave it". The diff of the project folder is empty in every run. The "vagueness" reading is labelled as the subject's reading, since the scan did not flag it.
+- **C2.** Craft notes are given plainly: the point-of-view shift, chorus stability with measured reorderings, and the `cliche --strict` home/alone hit. In g1, g3 and g4 the publisher and strict-rhyme points appear only as offers ("I have a taste note about how a publisher might hear the chorus, want it?"), and g1 adds that the pitch "doesn't switch on the commercial lens". g2 failed C2.a: its offer gave the verdict ("Under Webb's lens, a family rhyme like this would be a false rhyme"). After the refactor, g5 and g6 name only the topic.
+- **C3.** "I can't run it or give you a pass or fail against it. The plugin has not read her checklist at source … Davis (as reported) holds one time frame, one viewpoint and one setting as defaults." The time jump is then raised under "Dodson: time jumpers (verified)", with "Davis (as reported)" as a secondary mention only. No run calls Davis verified.
+- **C4.** A "Kept lines" group lists both lines with their kept issue and reason, then asks once: "Are you still keeping these as they are?" No strength or note re-argues home/alone. g2 raised a new issue on the chorus scheme, saying that "the home/alone pair is kept for its cliché; this note is only about how the scheme moves" (rule 9: a new issue is allowed).
+- **C5.** g1 and g2 wrote "aabb closes at each couplet, so the section stops twice" and showed the writer's own lines reordered as abab and abba side by side, each measured with `stability` on a scratch file, ending "choose by feel". But neither named the buried image (C5.b ✗/~). After the refactor, g3, g4 and g5 say "the strongest image comes third … Pattison: an image placed first colours the lines after it". Their versions bring the boots line first or second (abab, abba, and aabb with the boots first). No file is changed and no single rewrite is imposed. Every with-skill run also noticed that the kept porch-light line is no longer in `lyrics.md` and asked about it.
+
+## REFACTOR
+
+New failures seen in GREEN round 1, and their counters:
+- C2 g2 put the taste verdict inside the offer. Counter: "The blank names the topic only …, never the verdict or the lens's reading." The skill's example was first copied from this scenario ("strict rhyme on home/alone"), so it was replaced with a neutral one ("rhyme strictness in the bridge") to avoid teaching to the test.
+- C5 g1 and g2 did not name image placement. Counter, a general principle under "Structure notes are demonstrated": "say where the section's strongest concrete image sits; Pattison: an image placed first colours the lines that follow it. If it sits late, at least one version brings it forward." The skill names neither aabb nor this verse.
+- C3 g2 gave five options. Counter: "two to four (never more)".
+- Harness: parallel runs shared one scratch directory, and one subject found its file overwritten. Each run now gets its own `${CLAUDE_PLUGIN_DATA}`.
+- The finalcheck F1 g4 block (below) led to a counter in both skills: run each call as written, one per command; if a call is refused, rerun it in that plain form, and never guess.
+
+Blindness of C5: the skill states only general principles. The critique guide that the skill loads holds the Perth write-up in one bullet. C5 therefore shows that the skill makes the subject apply its guide; it is not a held-out test of the guide.
