@@ -12,13 +12,17 @@ directives are kept as unknown and their body as plain lines.
 Capo: {key} stays the shape key; the band hears it `capo` semitones higher. concert_pitch
 transposes every chord up by capo, drops {capo} and sets {key} to the sounding key.
 
+Accidentals: the .cho and PDF outputs always use # and b; a ♯ or ♭ in the song files is converted
+(the PDF font has neither glyph), never dropped.
+
 CLI: songtools chart SONG_DIR [--concert] [--pdf] -> {"written": [paths], "basis": str}.
 --pdf also renders out/chart.pdf (and out/chart-concert.pdf with --concert) via songtools.pdf.
 Every output is built in memory first; nothing is written if any build fails.
 
 songtools chart SONG_DIR --check writes nothing. It compares, per section, the inline chords of
 lyrics.md (consecutive repeats collapsed) with the music.md progression (collapsed): a section
-matches when its lyric chords are the progression played one or more whole times. Every
+matches when its lyric chords are the progression played one or more whole times (B♭ and Bb
+are the same symbol; chords are reported with # and b). Every
 occurrence of a repeated heading is compared, keyed "Chorus", "Chorus (2)", ... as pov does. Sections
 without inline chords are not compared. It also reports whether out/chart.cho exists and is
 older than lyrics.md or song.md (the files a chart is built from).
@@ -29,7 +33,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from songtools.chords import FLAT_KEYS, is_no_chord, transpose
+from songtools.chords import FLAT_KEYS, ascii_accidentals, is_no_chord, transpose
 from songtools.cli import SongtoolsError
 from songtools.songfile import Section, SongRecord, file_error, parse_lyrics, parse_song_md, read_text
 
@@ -124,6 +128,7 @@ def _directive(name: str, value: str) -> str:
 
 
 def write(song: ChordProSong) -> str:
+    """Canonical ChordPro text. ♯ and ♭ are written as # and b everywhere (chords, key, lyrics)."""
     head = [_directive(k, str(song.meta[k])) for k in _META_ORDER if k in song.meta]
     head += list(song.meta.get("_unknown", []))
     head += [_directive("define", d) for d in song.defines]
@@ -135,7 +140,7 @@ def write(song: ChordProSong) -> str:
             body = ([_directive("comment", s.label)] if s.label else []) + list(s.lines)
         blocks.append("\n".join(body))
     parts = (["\n".join(head)] if head else []) + blocks
-    return "\n\n".join(parts) + "\n" if parts else ""
+    return ascii_accidentals("\n\n".join(parts) + "\n") if parts else ""
 
 
 def _inline(lyric: str, chords: list[tuple[int, str]]) -> str:
@@ -239,7 +244,7 @@ def _plays_through(lyric: list[str], prog: list[str]) -> bool:
 def _chart_check(d: Path, sections: list[Section]):
     from songtools.songfile import parse_music_md
     music_path = d / "music.md"
-    music = {name: _collapse([c for c, _ in prog])
+    music = {name: _collapse([ascii_accidentals(c) for c, _ in prog])
              for name, prog in parse_music_md(_read(music_path), file=str(music_path)).items()}
     result: dict[str, dict] = {}
     base: dict[str, str] = {}  # result key -> section name as written
@@ -247,7 +252,7 @@ def _chart_check(d: Path, sections: list[Section]):
     for s in sections:
         seen[s.name] = seen.get(s.name, 0) + 1
         key = s.name if seen[s.name] == 1 else f"{s.name} ({seen[s.name]})"
-        lyric = _collapse([c for line in s.lines for _, c in line.chords])
+        lyric = _collapse([ascii_accidentals(c) for line in s.lines for _, c in line.chords])
         if not lyric:
             continue
         prog = music.get(s.name)

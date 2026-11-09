@@ -75,8 +75,12 @@ class Chord:
     tones: list[str]
 
 
-def _norm(note: str) -> str:
-    return note.replace("♯", "#").replace("♭", "b")
+def ascii_accidentals(text: str) -> str:
+    """♯ -> # and ♭ -> b. Charts are written with these: the PDF font has no ♯ or ♭ glyph."""
+    return text.replace("♯", "#").replace("♭", "b")
+
+
+_norm = ascii_accidentals
 
 
 def _flat_key(key: str | None) -> bool:

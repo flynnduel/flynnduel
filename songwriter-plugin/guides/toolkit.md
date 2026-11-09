@@ -280,6 +280,8 @@ $ songtools chart song --concert --pdf
 
 Charts hold the writer's own chords and lyrics only. [design]
 
+A `♯` or `♭` in a chord, the key, the title or a lyric is written as `#` or `b` in the `.cho` and PDF files. [design]
+
 `chart SONG_DIR --check` writes nothing. Per section it compares the inline chords in `lyrics.md` (consecutive repeats collapsed) with the `music.md` progression: a section `matches` when its lyric chords are the progression played one or more whole times. Every occurrence of a repeated heading is compared, keyed `Chorus`, `Chorus (2)`, ... as in `pov`. It also says whether `out/chart.cho` exists and is older than `lyrics.md` or `song.md`. It needs `music.md`, and cannot be combined with `--concert` or `--pdf`. [design]
 
 ```
@@ -291,13 +293,13 @@ $ songtools chart song --check
  "basis": "inline chords in lyrics.md against music.md progressions (exact symbol match; design rule)"}
 ```
 
-A section without inline chords is not compared. Symbols are matched exactly, so `G` and `G/B` differ; a mismatch is a question for the writer (which file is right?), not an error. [design]
+A section without inline chords is not compared. Symbols are matched exactly, so `G` and `G/B` differ (only `♭`/`b` and `♯`/`#` count as the same); a mismatch is a question for the writer (which file is right?), not an error. [design]
 
 ### midi
 
 `midi SONG_DIR [--tempo BPM] [--concert]`
 
-Writes `out/guide.mid`, a reference track of the writer's own chords from `music.md` (block chords, nothing added). The tempo defaults to the one in `song.md`. Without `--concert` the chords play as written, so with a capo they sound lower than the band hears them. `--concert` writes `out/guide-concert.mid` instead, every chord moved up by `song.md`'s capo, with the sounding key; `capo_applied` says by how much (0 when there is no capo, and the track is then the same as `guide.mid`). [design]
+Writes `out/guide.mid`, a reference track of the writer's own chords from `music.md` (block chords, nothing added). The tempo defaults to the one in `song.md`. Without `--concert` the chords play as written, so with a capo they sound lower than the band hears them. `--concert` writes `out/guide-concert.mid` instead, every chord moved up by `song.md`'s capo, with the sounding key (`key` is `null` when `song.md` has none); `capo_applied` says by how much (0 when there is no capo, and the track is then the same as `guide.mid`). [design]
 
 ```
 $ songtools midi song --tempo 96
@@ -308,6 +310,8 @@ $ songtools midi song --concert
 {"path": "song/out/guide-concert.mid", "tempo": 96, "chords": 24, "beats": 96.0, "key": "A", "capo_applied": 2,
  "basis": "reference track of the writer's own chords (mido)"}
 ```
+
+A `music.md` with no `progression:` lines still writes a file, with `"chords": 0`: it is silent, not a guide track. [design]
 
 ### version
 
@@ -325,7 +329,7 @@ When the writer sees one of these results, explain it rather than letting it con
 - Webb's lens calls homophones and identical words "false rhyme" (the same pair is `perfect` or `identical` under Pattison). Name the lens. [design]
 - Prosody proposals often start in pickup slots (negative slot numbers): the line's first unstressed syllables sit before the first downbeat. That is a normal setting, not an error. [design]
 - Multisyllable rhymes are undercounted: unstressed vowels are compared strictly, so a pair like beautiful / dutiful reads as assonance, not perfect. Treat a low result on a long rhyme as a prompt to listen, not a verdict. [design]
-- The PDF font has no sharp or flat glyphs, so charts use `#` and `b` in the PDF. [design]
+- A `♯` or `♭` typed in the song files comes out as `#` or `b` in every chart file (`.cho` and PDF): the toolkit converts them, because the PDF font has neither glyph. `B♭` prints as `Bb`; no accidental is dropped, and the song files are not changed. [design]
 - An explicit key reports confidence 1.0 because the key was supplied. Say "key given", not "the tool is certain". [design]
 - Cliche pairs come from `cliche`, not `rhyme`; `rhyme` classifies and suggests but does not flag cliche pairs. [design]
 - `key` is called once per section: it fits one melody range at a time, so run it for each section whose range differs. [design]

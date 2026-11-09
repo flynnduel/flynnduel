@@ -84,3 +84,46 @@ def test_midi_concert_bad_capo(tmp_path, capsys):
     (tmp_path / "music.md").write_text("## Verse\nprogression: G:4\n")
     assert main(["midi", str(tmp_path), "--concert"]) == 2
     assert "capo" in capsys.readouterr().err
+
+
+def _concert(tmp_path, capsys, core, music):
+    (tmp_path / "song.md").write_text("# T\n\n## Core\n" + core, encoding="utf-8")
+    (tmp_path / "music.md").write_text(music, encoding="utf-8")
+    assert main(["midi", str(tmp_path)]) == 0
+    shape = json.loads(capsys.readouterr().out)
+    assert main(["midi", str(tmp_path), "--concert"]) == 0
+    return shape, json.loads(capsys.readouterr().out)
+
+
+def _key_sigs(path):
+    return [m.key for t in mido.MidiFile(path).tracks for m in t if m.type == "key_signature"]
+
+
+def test_midi_concert_flat_key(tmp_path, capsys):
+    # D shapes, capo 1: the band hears Eb (a flat key, spelled with flats)
+    shape, r = _concert(tmp_path, capsys, "key: D\ncapo: 1\ntempo: 90\n", "## Verse\nprogression: D:4 G:4 A/C#:4\n")
+    assert r["key"] == "Eb" and r["capo_applied"] == 1 and shape["key"] == "D"
+    assert _key_sigs(r["path"]) == ["Eb"]
+    assert [n % 12 for n in _notes(r["path"])] == [(n + 1) % 12 for n in _notes(shape["path"])]
+    assert _notes(r["path"])[:4] == [36 + 3, 60 + 3, 60 + 7, 60 + 10]  # Eb major over an Eb bass
+
+
+def test_midi_concert_minor_key(tmp_path, capsys):
+    # Em shapes, capo 3: the band hears Gm
+    shape, r = _concert(tmp_path, capsys, "key: Em\ncapo: 3\ntempo: 90\n", "## Verse\nprogression: Em:4 C:2 B7:2\n")
+    assert r["key"] == "Gm" and r["capo_applied"] == 3
+    assert _key_sigs(r["path"]) == ["Gm"] and _key_sigs(shape["path"]) == ["Em"]
+    assert [n % 12 for n in _notes(r["path"])] == [(n + 3) % 12 for n in _notes(shape["path"])]
+
+
+def test_midi_concert_capo_without_key(tmp_path, capsys):
+    shape, r = _concert(tmp_path, capsys, "capo: 2\ntempo: 90\n", "## Verse\nprogression: G:4 Em:4\n")
+    assert r["key"] is None and r["capo_applied"] == 2 and shape["key"] is None
+    assert _key_sigs(r["path"]) == []
+    assert [n % 12 for n in _notes(r["path"])] == [(n + 2) % 12 for n in _notes(shape["path"])]
+
+
+def test_midi_unicode_key_and_chords(tmp_path, capsys):
+    shape, r = _concert(tmp_path, capsys, "key: B♭\ncapo: 1\ntempo: 90\n", "## Verse\nprogression: B♭:4 E♭:4\n")
+    assert shape["key"] == "Bb" and r["key"] == "B"
+    assert _key_sigs(shape["path"]) == ["Bb"] and _key_sigs(r["path"]) == ["B"]

@@ -212,3 +212,34 @@ def test_chart_check_compares_every_repeated_section(tmp_path, capsys, first, se
     good = "Chorus (2)" if bad == "Chorus" else "Chorus"
     assert out["sections"][bad]["matches"] is False and out["sections"][good]["matches"] is True
     assert out["matches"] is False and out["only_in_lyrics"] == [] and out["only_in_music"] == []
+
+
+def test_chart_writes_ascii_accidentals(tmp_path, capsys):
+    from songtools.cli import main
+    (tmp_path / "song.md").write_text("# B♭ song\n\n## Core\nkey: B♭\ncapo: 1\n", encoding="utf-8")
+    (tmp_path / "lyrics.md").write_text("## Verse 1\n[B♭]hello [F♯m7]world [E♭/G]now ♭\n", encoding="utf-8")
+    assert main(["chart", str(tmp_path), "--concert"]) == 0
+    capsys.readouterr()
+    shape = (tmp_path / "out" / "chart.cho").read_text(encoding="utf-8")
+    concert = (tmp_path / "out" / "chart-concert.cho").read_text(encoding="utf-8")
+    assert "♭" not in shape + concert and "♯" not in shape + concert
+    assert "[Bb]hello [F#m7]world [Eb/G]now b" in shape
+    assert "{key: Bb}" in shape and "{title: Bb song}" in shape
+    assert "[B]hello [Gm7]world [E/G#]now b" in concert and "{key: B}" in concert
+
+
+def test_write_converts_unicode_accidentals():
+    from songtools.chordpro import parse, write
+    out = write(parse("{key: E♭}\n{start_of_verse: A♭ part}\n[E♭]la [C♯]la\n{end_of_verse}\n"))
+    assert out == "{key: Eb}\n\n{start_of_verse: Ab part}\n[Eb]la [C#]la\n{end_of_verse}\n"
+
+
+def test_chart_check_treats_unicode_and_ascii_accidentals_alike(tmp_path, capsys):
+    import json
+    from songtools.cli import main
+    (tmp_path / "song.md").write_text("# T\n\n## Core\nkey: F\n", encoding="utf-8")
+    (tmp_path / "lyrics.md").write_text("## Verse 1\n[F]hello [B♭]world\n", encoding="utf-8")
+    (tmp_path / "music.md").write_text("## Verse 1\nprogression: F:4 Bb:4\n", encoding="utf-8")
+    assert main(["chart", str(tmp_path), "--check"]) == 0
+    r = json.loads(capsys.readouterr().out)
+    assert r["matches"] is True and r["sections"]["Verse 1"]["lyrics"] == ["F", "Bb"]

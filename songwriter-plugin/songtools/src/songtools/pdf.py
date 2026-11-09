@@ -10,7 +10,8 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-from songtools.chordpro import ChordProSong
+from songtools.chordpro import ChordProSong, CPSection
+from songtools.chords import ascii_accidentals
 from songtools.paths import data_dir
 
 BASIS = "lead sheet rendering (reportlab, Lato OFL)"
@@ -88,8 +89,14 @@ def _segments(text: str, maxw: float, font: str, size: float) -> list[tuple[int,
 
 
 def layout_song(song: ChordProSong) -> list[list[Op]]:
-    """Pages of positioned text (origin bottom-left); render_pdf_bytes just draws these."""
+    """Pages of positioned text (origin bottom-left); render_pdf_bytes just draws these.
+
+    Lato has no ♯ or ♭ glyph, so every text is laid out with # and b in their place.
+    """
     _register_fonts()
+    song = ChordProSong({k: ascii_accidentals(v) if isinstance(v, str) else v for k, v in song.meta.items()},
+                        [CPSection(s.kind, ascii_accidentals(s.label), [ascii_accidentals(l) for l in s.lines])
+                         for s in song.sections], song.defines)
     height = letter[1]
     pages: list[list[Op]] = [[]]
     y = height - MARGIN

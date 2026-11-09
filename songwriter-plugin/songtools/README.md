@@ -83,7 +83,9 @@ syllable count:
 ```
 
 Generated output goes to `out/` (`chart.cho`, `chart-concert.cho`, `chart.pdf`, `chart-concert.pdf`,
-`guide.mid`), draft snapshots to `drafts/`, cuts to `cuts/cuts.md`.
+`guide.mid`, `guide-concert.mid`), draft snapshots to `drafts/`, cuts to `cuts/cuts.md`.
+Charts are written with `#` and `b`: a `♯` or `♭` in the song files is converted (the PDF font has
+neither glyph), never dropped.
 
 ## Prosody limit
 

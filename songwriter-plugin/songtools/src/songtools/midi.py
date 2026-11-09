@@ -14,7 +14,7 @@ from pathlib import Path
 
 import mido
 
-from songtools.chords import NOTE_PC, is_no_chord, parse_chord, transpose
+from songtools.chords import NOTE_PC, ascii_accidentals, is_no_chord, parse_chord, transpose
 from songtools.cli import SongtoolsError
 from songtools.songfile import file_error, parse_music_md, parse_song_md, read_text
 
@@ -88,7 +88,7 @@ def _h_midi(args: argparse.Namespace):
                                  "no tempo: pass --tempo or set tempo in song.md core") from None
     if tempo <= 0:
         raise SongtoolsError(None, None, f"tempo must be positive, got {tempo}")
-    key = record.core.get("key") or None
+    key = ascii_accidentals(record.core.get("key", "")) or None  # reported and notated with # and b
     capo = 0
     if args.concert:
         from songtools.chordpro import _sounding_key

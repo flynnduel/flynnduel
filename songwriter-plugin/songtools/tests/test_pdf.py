@@ -76,3 +76,19 @@ def test_pdf_embeds_lato_and_counts_pages(tmp_path):
     data = render_pdf_bytes(s, compress=False)
     assert b"Lato" in data and b"/FontFile2" in data
     assert len(re.findall(rb"/Type /Page(?!s)", data)) >= 2
+
+
+def test_pdf_never_drops_an_accidental():
+    # Lato has no sharp or flat glyph: a dropped one prints B for B♭ on the band's chart
+    ops = _ops("{title: B♭ blues}\n{key: B♭}\n{start_of_verse: In E♭}\n{comment: to F♯}\n"
+               "[B♭]one [F♯m7]two [A♭/E♭]three ♭ and ♯\n{end_of_verse}\n")
+    texts = [op.text for op in ops]
+    assert not any("♭" in t or "♯" in t for t in texts)
+    assert {"Bb", "F#m7", "Ab/Eb", "Bb blues", "Key: Bb", "In Eb", "to F#"} <= set(texts)
+    assert "one two three b and #" in texts
+
+
+def test_pdf_accidental_chords_keep_their_place():
+    plain = _ops("{start_of_verse}\n[Bb]one [F#m]two\n{end_of_verse}\n")
+    uni = _ops("{start_of_verse}\n[B♭]one [F♯m]two\n{end_of_verse}\n")
+    assert [(o.x, o.y, o.text) for o in uni] == [(o.x, o.y, o.text) for o in plain]
