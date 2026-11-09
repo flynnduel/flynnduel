@@ -18,7 +18,8 @@ Every output is built in memory first; nothing is written if any build fails.
 
 songtools chart SONG_DIR --check writes nothing. It compares, per section, the inline chords of
 lyrics.md (consecutive repeats collapsed) with the music.md progression (collapsed): a section
-matches when its lyric chords are the progression played one or more whole times. Sections
+matches when its lyric chords are the progression played one or more whole times. Every
+occurrence of a repeated heading is compared, keyed "Chorus", "Chorus (2)", ... as pov does. Sections
 without inline chords are not compared. It also reports whether out/chart.cho exists and is
 older than lyrics.md or song.md (the files a chart is built from).
 """
@@ -241,18 +242,23 @@ def _chart_check(d: Path, sections: list[Section]):
     music = {name: _collapse([c for c, _ in prog])
              for name, prog in parse_music_md(_read(music_path), file=str(music_path)).items()}
     result: dict[str, dict] = {}
+    base: dict[str, str] = {}  # result key -> section name as written
+    seen: dict[str, int] = {}
     for s in sections:
+        seen[s.name] = seen.get(s.name, 0) + 1
+        key = s.name if seen[s.name] == 1 else f"{s.name} ({seen[s.name]})"
         lyric = _collapse([c for line in s.lines for _, c in line.chords])
         if not lyric:
             continue
         prog = music.get(s.name)
-        result[s.name] = {
+        base[key] = s.name
+        result[key] = {
             "lyrics": lyric, "music": prog,
             "matches": prog is not None and _plays_through(lyric, prog),
             "only_lyrics": sorted(set(lyric) - set(prog or []), key=lyric.index),
             "only_music": sorted(set(prog or []) - set(lyric), key=(prog or []).index),
         }
-    only_lyrics = [n for n in result if n not in music]
+    only_lyrics = [n for n in result if base[n] not in music]
     only_music = [n for n in music if n not in {s.name for s in sections}]
     chart = d / "out" / "chart.cho"
     if chart.exists():

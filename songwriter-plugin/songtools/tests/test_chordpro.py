@@ -200,3 +200,15 @@ def test_chart_check_excludes_writing_flags(tmp_path, capsys):
     _check_song(tmp_path, "## Verse\n[G]a\n", "## Verse\nprogression: G:4\n")
     assert main(["chart", str(tmp_path), "--check", "--pdf"]) == 2
     assert not (tmp_path / "out").exists()
+
+
+@pytest.mark.parametrize("first,second", [("[C]a [D]b", "[G]a [C]b"), ("[G]a [C]b", "[C]a [D]b")])
+def test_chart_check_compares_every_repeated_section(tmp_path, capsys, first, second):
+    _check_song(tmp_path, f"## Chorus\n{first}\n\n## Verse\n[G]v\n\n## Chorus\n{second}\n",
+                "## Chorus\nprogression: G:4 C:4\n\n## Verse\nprogression: G:4\n")
+    out = _run_check(tmp_path, capsys)
+    assert set(out["sections"]) == {"Chorus", "Verse", "Chorus (2)"}
+    bad = "Chorus" if first.startswith("[C]") else "Chorus (2)"
+    good = "Chorus (2)" if bad == "Chorus" else "Chorus"
+    assert out["sections"][bad]["matches"] is False and out["sections"][good]["matches"] is True
+    assert out["matches"] is False and out["only_in_lyrics"] == [] and out["only_in_music"] == []

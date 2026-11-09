@@ -198,11 +198,13 @@ Reads a chord list or every section of a `music.md`. Gives the key, the Everett 
 
 ```
 $ songtools harmony --music song/music.md
-{"sections": {"Verse 1": {"key": {"tonic": "G", "mode": "major", "score": 8.0}, "confidence": 0.5,
+{"sections": {"Chorus": {"key": {"tonic": "G", "mode": "major", "score": 14.0}, "confidence": 0.538,
     "system": "1a", "system_label": "1a — functional major (simplified from Everett 2004, Table 1)",
-    "numerals": ["I", "IV", "I", "V"], "nashville": ["1", "4", "1", "5"], "symbols": ["G", "C", "G", "D"],
-    "notes": ["Ambiguous key: also reads as D mixolydian; both are valid, so choose by where the melody rests."],
-    "dual_reading": {"tonic": "D", "mode": "mixolydian", "score": 8, "numerals": ["IV", "bVII", "IV", "I"]},
+    "numerals": ["IV", "I", "V", "vi", "IV", "I", "V", "I"], "nashville": ["4", "1", "5", "6m", "4", "1", "5", "1"],
+    "symbols": ["C", "G", "D", "Em", "C", "G", "D", "G"],
+    "notes": ["V–I is still the most common chorus-ending cadence (32%); IV–I 18.5%",
+              "Ambiguous key: also reads as E minor; both are valid, so choose by where the melody rests."],
+    "dual_reading": {"tonic": "E", "mode": "minor", "score": 9, "numerals": ["bVI", "bIII", "bVII", "i", ...]},
     "errors": []}, ...},
  "modulations": [], "skipped": {},
  "corpus": {"root_share": {"I": 32.8, "IV": 22.6, "V": 16.3, ...}, "chorus_cadence_pre_tonic": {"V": 32.0, "IV": 18.5}},
@@ -247,7 +249,7 @@ $ songtools drafts diff song/drafts/lyrics-v2.md song/drafts/lyrics-v3.md --song
  "kept_changed_count": 1, "basis": "..."}
 ```
 
-`kept_changed` true means a kept line was altered: ask before leaving it that way. `index` is the line's position in the section. These commands write to the song folder; snapshot before changing `lyrics.md`. [design]
+`kept_changed` true means a kept line was altered: ask before leaving it that way. With `--song` the result also has `kept_missing`, the kept lines that appear nowhere in the new draft (case, punctuation and inline chords ignored); diffing `lyrics.md` against itself gives just that presence check. `index` is the line's position in the section. These commands write to the song folder; snapshot before changing `lyrics.md`. [design]
 
 ### chart
 
@@ -263,13 +265,13 @@ $ songtools chart song --concert --pdf
 
 Charts hold the writer's own chords and lyrics only. [design]
 
-`chart SONG_DIR --check` writes nothing. Per section it compares the inline chords in `lyrics.md` (consecutive repeats collapsed) with the `music.md` progression: a section `matches` when its lyric chords are the progression played one or more whole times. It also says whether `out/chart.cho` exists and is older than `lyrics.md` or `song.md`. It needs `music.md`, and cannot be combined with `--concert` or `--pdf`. [design]
+`chart SONG_DIR --check` writes nothing. Per section it compares the inline chords in `lyrics.md` (consecutive repeats collapsed) with the `music.md` progression: a section `matches` when its lyric chords are the progression played one or more whole times. Every occurrence of a repeated heading is compared, keyed `Chorus`, `Chorus (2)`, ... as in `pov`. It also says whether `out/chart.cho` exists and is older than `lyrics.md` or `song.md`. It needs `music.md`, and cannot be combined with `--concert` or `--pdf`. [design]
 
 ```
 $ songtools chart song --check
-{"sections": {"Chorus": {"lyrics": ["C", "G", "D", "Em", "C", "G", "D", "G"], "music": ["C", "G", "D", "Em"],
-   "matches": false, "only_lyrics": [], "only_music": []}, ...},
- "only_in_lyrics": [], "only_in_music": [], "matches": false,
+{"sections": {"Verse 1": {"lyrics": ["G", "C", "D", "G", "C", "D", "G"], "music": ["G", "C", "D", "G"],
+   "matches": true, "only_lyrics": [], "only_music": []}, ...},
+ "only_in_lyrics": [], "only_in_music": [], "matches": true,
  "chart": {"exists": false, "older_than_lyrics": null},
  "basis": "inline chords in lyrics.md against music.md progressions (exact symbol match; design rule)"}
 ```
@@ -284,7 +286,7 @@ Writes `out/guide.mid`, a reference track of the writer's own chords (block chor
 
 ```
 $ songtools midi song --tempo 96
-{"path": "song/out/guide.mid", "tempo": 96, "chords": 16, "beats": 64.0,
+{"path": "song/out/guide.mid", "tempo": 96, "chords": 24, "beats": 96.0,
  "basis": "reference track of the writer's own chords (mido)"}
 ```
 

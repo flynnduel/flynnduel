@@ -55,3 +55,16 @@ The baselines compared the inline chords in `lyrics.md` with `music.md` by eye. 
 - **F1.** Each run gives a ten-row table `# | check | result | basis` in the guide's order, with Pattison, Dodson, Pattison, Hayes, Perricone, Stolpe, toolkit, design rule, Simon via Zollo, and Zollo and Webb. It opens with "I won't call the song done or not done. This reports what each step found, and you choose." It ends with the kept line listed once ("Are you still keeping these as they are?"), "Play it back once more. Does any line, word or note still bother you?", "Writing done is separate from demo done" and "Your call: **done**, **done for now**, or **keep working**." `status:` is `working` after turn 1 in every run. After turn 2 it is `done for now`, and that is the only diff. From g3 onward, step 7 runs `chart --check` and flags "0 of 4 sections match" as a question for the writer. g4: the harness refused the subject's compound shell commands, and it then wrote a script that also needed approval. It ran nothing and honestly said "the final check hasn't started. I'm not going to guess at any results", but F1.a failed. Counter: run each call as written, one per command, and rerun a refused call in plain form ("The tool calls are blocked, so the check hasn't started" is now a red flag).
 - g5 and g6 hit the account usage limit before turn 2 (turn 1 passed a–e). g7 and g8 reran F1 with the final text and passed every criterion.
 - **F2.** Steps 5 and 7 read "**not run: no music.md**". g3 adds "I did not build a chord check from the inline chords"; g5 adds "I did not check the inline chords in `lyrics.md`". No `harmony`, `guitar` or `chart --check` call is made, and the project diff is empty.
+
+## Fix round 1
+
+Changes:
+- The fixture's `music.md` now agrees with `lyrics.md`'s inline chords, so step 7's pass path is exercised.
+- `chart --check` compares every repeated heading.
+- Call blocks use placeholders (SECTION, N, MELODY_LOW, KEY, CAPO, SHAPE, NAME); every value comes from the song files or the writer.
+- Step 8 reads `kept_missing` and `kept_changed` from `drafts diff`.
+
+| Scenario | g9 | g10 |
+|---|---|---|
+| F1 | ✓. Step 7: "`chart --check`: all four sections' inline chords match `music.md`. No chart yet"; the harmony dual reading is flagged as ambiguity. Step 8: "No `drafts/` snapshot exists, so I diffed `lyrics.md` against itself … `kept_missing: []`". Status is `working` after turn 1 and `done for now` after turn 2, the only change. | ✓. Step 7 passes, with the ambiguity noted. Step 8 reads `kept_missing` empty and `kept_changed` 0, and says there is no snapshot. Status is as in g9. |
+| F2 | ✓. Steps 5 and 7: "Not run: no music.md"; no harmony, guitar, transpose or chart calls; empty diff. | |

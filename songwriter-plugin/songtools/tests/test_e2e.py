@@ -77,6 +77,16 @@ def test_key_and_harmony_values(sample_dir, capsys):
     h = _json(["harmony", "--music", str(sample_dir / "music.md")], capsys)
     assert h["sections"]["Verse 1"]["key"]["tonic"] == "G"
     assert h["sections"]["Verse 1"]["key"]["mode"] == "major"
+    assert h["sections"]["Verse 1"]["numerals"] == ["I", "IV", "V", "I"]
+    assert h["sections"]["Chorus"]["dual_reading"]["tonic"] == "E"
+
+
+def test_chart_check_on_fixture_matches_every_section(sample_dir, capsys):
+    r = _json(["chart", str(sample_dir), "--check"], capsys)
+    assert set(r["sections"]) == {"Verse 1", "Chorus", "Verse 2", "Bridge"}
+    assert all(s["matches"] for s in r["sections"].values()) and r["matches"] is True
+    assert r["only_in_lyrics"] == [] and r["only_in_music"] == []
+    assert not (sample_dir / "out").exists()
 
 
 def test_chart_and_midi_contents(sample_dir):

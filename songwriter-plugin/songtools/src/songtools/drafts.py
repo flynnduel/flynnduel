@@ -4,12 +4,13 @@ JSON shapes (CLI):
   drafts snapshot -> {"path": str, "version": int, "basis": str}
   drafts cut      -> {"path": str, "date": str, "basis": str}
   drafts diff     -> {"changes": [{"section", "index", "old", "new", "kept_changed"}],
-                      "kept_changed_count": int, "basis": str}
+                      "kept_changed_count": int, "basis": str, "kept_missing": [str] (with --song)}
 Sections are matched by name (repeated names by occurrence), lines by 1-based index within the
 section; an added line has old = null, a removed line new = null. Lines compare by lyric text
 (inline chords ignored). Kept-line matching ignores case and punctuation; a changed line that held a
 kept line is flagged only when the kept text no longer appears in the same section of the new draft
-(anywhere in the new draft if that section is gone).
+(anywhere in the new draft if that section is gone). With --song, kept_missing lists the kept lines
+that appear nowhere in the new draft; diffing lyrics.md against itself gives just that check.
 """
 
 import argparse
@@ -104,6 +105,12 @@ def diff(old_text: str, new_text: str, kept: list[KeptLine], old_file: str = "ol
     return changes
 
 
+def kept_missing(new_text: str, kept: list[KeptLine], new_file: str = "new") -> list[str]:
+    """Kept lines whose text (case, punctuation and inline chords ignored) is in no line of new_text."""
+    present = {_norm(line) for lines in _by_section(new_text, new_file).values() for line in lines}
+    return [k.text for k in kept if _norm(k.text) not in present]
+
+
 def _read(path: Path) -> str:
     return read_text(path, Path(path).name)
 
@@ -133,8 +140,11 @@ def _h_diff(args: argparse.Namespace):
     kept = parse_song_md(_read(args.song), str(args.song)).kept if args.song else []
     old_text, new_text = _read(args.old), _read(args.new)
     changes = diff(old_text, new_text, kept, str(args.old), str(args.new))
-    return {"changes": [asdict(c) for c in changes],
-            "kept_changed_count": sum(c.kept_changed for c in changes), "basis": BASIS}, to_text
+    result = {"changes": [asdict(c) for c in changes],
+              "kept_changed_count": sum(c.kept_changed for c in changes), "basis": BASIS}
+    if args.song:
+        result["kept_missing"] = kept_missing(new_text, kept, str(args.new))
+    return result, to_text
 
 
 def register(subparsers) -> None:

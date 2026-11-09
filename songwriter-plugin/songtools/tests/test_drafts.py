@@ -114,3 +114,16 @@ def test_cli_diff_parse_error_names_the_file(tmp_path, capsys):
     (tmp_path / "new.md").write_text("## Verse\n[G broken\n")
     assert main(["drafts", "diff", str(tmp_path / "old.md"), str(tmp_path / "new.md")]) == 2
     assert "new.md:2:" in json.loads(capsys.readouterr().err)["error"]
+
+
+def test_cli_diff_reports_kept_lines_missing_from_new_draft(tmp_path, capsys):
+    lyr = tmp_path / "lyrics.md"
+    lyr.write_text("## Verse\n[G]Down to the [C]river, slow\nI go\n")
+    song = tmp_path / "song.md"
+    song.write_text("# T\n\n## Kept lines\n- \"down to the river slow\" | x | r | 2026-11-08\n"
+                    "- \"Gone line\" | y | s | 2026-11-08\n")
+    assert main(["drafts", "diff", str(lyr), str(lyr), "--song", str(song)]) == 0
+    res = json.loads(capsys.readouterr().out)
+    assert res["changes"] == [] and res["kept_missing"] == ["Gone line"]
+    assert main(["drafts", "diff", str(lyr), str(lyr)]) == 0
+    assert "kept_missing" not in json.loads(capsys.readouterr().out)

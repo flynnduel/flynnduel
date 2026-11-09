@@ -13,19 +13,20 @@ Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGI
 
 ## Toolkit calls
 
-Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call as written, one per command: no shell variables, loops or scripts. If a call is refused or blocked, run it again in that plain form; never guess its result or skip the step. Add `--pron songs/pronunciations.txt` before the subcommand when that file exists.
+Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words (SECTION, N, KEY, CAPO, ...) are placeholders: every value comes from the song files or the writer, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result or skip the step. Add `--pron songs/pronunciations.txt` before the subcommand when that file exists.
 
 ```
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools pov <song>/lyrics.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools stability <song>/lyrics.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools cliche <song>/lyrics.md --strict
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section "Verse 1" --line 1
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section "Verse 2" --line 1 --compare
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools key --melody-low A2 --melody-high E4 --voice-low G2 --voice-high D4 --key G
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section SECTION --line N
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section SECTION --line N --compare
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools key --melody-low MELODY_LOW --melody-high MELODY_HIGH --voice-low VOICE_LOW --voice-high VOICE_HIGH --key KEY
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools harmony --music <song>/music.md
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chord transpose G 2
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools guitar verify x32010 C
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chord transpose KEY CAPO
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools guitar verify SHAPE NAME
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chart <song> --check
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools drafts diff <song>/drafts/lyrics-vN.md <song>/lyrics.md --song <song>/song.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools drafts diff <song>/lyrics.md <song>/lyrics.md --song <song>/song.md
 ```
 
@@ -54,7 +55,7 @@ Final check:
 5. **Melody (Perricone).** Only if `music.md` exists; otherwise the step reads **not run: no music.md**. When it exists, ask Perricone's three questions (leaps, breath between phrases, range and range changes within a section), and if the writer gives a section's lowest and highest melody notes, run `key` with the voice range from `song.md`.
 6. **Listener test (Stolpe).** Answer as a first-time listener would, and say you are simulating one and cannot hear audio: could the words be heard and followed, is the chorus start clear, could you sing a part after one listen, does the music's mood match the words.
 7. **Music check.** Only if `music.md` exists; otherwise **not run: no music.md**. Do not build a chord check from the inline chords in `lyrics.md`, and do not create `music.md`. When it exists: `harmony --music` for the key, compared with `key` in `song.md`, which is the shape key under `capo` (report `dual_reading` and low confidence as ambiguity); `chord transpose KEY CAPO` gives the sounding key to state; `guitar verify SHAPE NAME` for each shape the writer has recorded or gives you, with the shape name and frets counted from the capo (none recorded: "voicings: none recorded"); `chart <song> --check` (writes nothing) for whether each section's inline chords in `lyrics.md` match its `music.md` progression (a mismatch is a flag: which file is right?) and for the chart itself: `exists` false is "no chart yet (`/chart` makes one)", `older_than_lyrics` true is "chart older than the song files". Never compare chords by eye.
-8. **Kept lines.** Run the `drafts diff` parse. List each kept line once in its own short group: text, the issue it was kept over, the writer's reason, and whether it still appears in `lyrics.md`. Do not re-argue the kept issue; a new issue on it is a normal flag. Ask one question: "Are you still keeping these as they are?"
+8. **Kept lines.** Diff the newest snapshot in `drafts/` (highest N) against `lyrics.md` with `--song`; with no snapshot, diff `lyrics.md` against itself and say there is no snapshot to compare against. List each kept line once in its own short group: text, the issue it was kept over, the writer's reason, and what the diff reports: `kept_missing` (gone from `lyrics.md`) and `kept_changed` (altered since the snapshot). Never judge either by reading. Do not re-argue the kept issue; a new issue on it is a normal flag. Ask one question: "Are you still keeping these as they are?"
 9. **Irritant scan.** Ask: "Play it back once more. Does any line, word or note still bother you?" Zollo's point: what still irks you on replay is the song showing what is wrong. The writer decides what to do about it.
 10. **Status.** Offer the three choices, and say that writing done is separate from demo done. Then stop and wait.
 

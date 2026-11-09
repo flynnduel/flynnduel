@@ -106,3 +106,14 @@ New failures seen in GREEN round 1, and their counters:
 - The finalcheck F1 g4 block (below) led to a counter in both skills: run each call as written, one per command; if a call is refused, rerun it in that plain form, and never guess.
 
 Blindness of C5: the skill states only general principles. The critique guide that the skill loads holds the Perth write-up in one bullet. C5 therefore shows that the skill makes the subject apply its guide; it is not a held-out test of the guide.
+
+## Fix round 1
+
+Changes: `drafts diff --song` now reports `kept_missing`, added test-first. Kept lines are diffed as the newest snapshot against `lyrics.md`; with no snapshot, `lyrics.md` is diffed against itself, the subject says so, and presence comes from `kept_missing`. Call blocks use placeholders. The writing says "no song file is written". A direct taste question counts as permission for that one answer (Lerman step 2). The description now separates critique from finalcheck.
+
+| Scenario | g9 |
+|---|---|
+| C1 | ✓. Order, six-part notes, empty diff; the kept line is listed with "There is no draft snapshot". |
+| C2 | ✓. Both offers name only the topic ("what a publisher may look for in a chorus", "rhyme strictness in the last line"); craft notes are plain. |
+| C4 | ✓. "Both are still in `lyrics.md` (`kept_missing` is empty). There is no `drafts/` snapshot, so I couldn't check whether either was altered." One question for the group. |
+| C5 | ✓. aabb "comes to rest at each couplet"; "an image placed first colours the lines after it"; four measured versions (aabb with the boots first, two abab orders, and the original). The kept line is reported from `kept_missing`, not by reading. |

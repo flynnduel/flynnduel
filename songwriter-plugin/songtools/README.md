@@ -69,7 +69,7 @@ line, chords inline in square brackets before the syllable they fall on:
 
 ```
 ## Verse 1
-progression: G:4 C:4 G:4 D:4
+progression: G:4 C:4 D:4 G:4
 ```
 
 **melody.md** - confirmed melody lines: `<line number>: syllable/slot ...`, one slot (an eighth-note

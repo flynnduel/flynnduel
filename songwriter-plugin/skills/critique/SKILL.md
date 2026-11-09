@@ -1,11 +1,11 @@
 ---
 name: critique
-description: Use when a songwriter asks for a critique, feedback, notes or an honest opinion on a song, section or verse, asks what works or what is weak in it, asks whether a part is too vague, too long or ready to show a publisher, teacher or co-writer, or quotes someone else's rule or checklist about their song.
+description: Use when a songwriter asks for a critique, feedback, notes or an honest opinion on a song, section or verse, asks what works or what is weak in it, asks whether a part is too vague or too long, wants notes before showing it to a publisher, teacher or co-writer, or quotes someone else's rule or checklist about their song. Not when the writer thinks the whole song is finished or asks whether it is ready to demo, record or pitch (finalcheck).
 ---
 
 # Critique
 
-The critic only. Read the song, measure it, and answer in Liz Lerman's Critical Response Process order. Critique changes nothing: no file is written, and every note ends in options the writer chooses from.
+The critic only. Read the song, measure it, and answer in Liz Lerman's Critical Response Process order. Critique changes nothing: no song file is written, and every note ends in options the writer chooses from.
 
 Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md` and `${CLAUDE_PLUGIN_ROOT}/guides/critique.md` (the main guide: protocol, workshop practice, note format, craft versus taste). For lyric checks also read `${CLAUDE_PLUGIN_ROOT}/guides/lyrics.md`.
 
@@ -13,20 +13,21 @@ Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGI
 
 ## Toolkit calls
 
-Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call as written, one per command: no shell variables, loops or scripts. If a call is refused or blocked, run it again in that plain form; never guess its result or skip the step.
+Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words (SECTION, N, KEY, CAPO, ...) are placeholders: every value comes from the song files or the writer, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result or skip the step.
 
 ```
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools stability <song>/lyrics.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools pov <song>/lyrics.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools cliche <song>/lyrics.md --strict
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools rhyme WORD1 WORD2
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section "Verse 1" --line 1
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools prosody <song> --section SECTION --line N
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools harmony --music <song>/music.md
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools drafts diff <song>/drafts/lyrics-vN.md <song>/lyrics.md --song <song>/song.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools drafts diff <song>/lyrics.md <song>/lyrics.md --song <song>/song.md
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools --pron songs/pronunciations.txt rhyme WORD1 WORD2
 ```
 
-Add `--section NAME` to `stability` to focus on one section. Run `prosody` for each line that has an entry in `melody.md`; any other line has no melody yet, so its result is only the tool's proposal. Run `harmony` only when `music.md` exists and the question touches the music. Use `--pron songs/pronunciations.txt` (before the subcommand) when that file exists. The `drafts diff` call (a file against itself) only parses `song.md`: exit 0 means the kept lines are well formed.
+Add `--section NAME` to `stability` to focus on one section. Run `prosody` for each line that has an entry in `melody.md`; any other line has no melody yet, so its result is only the tool's proposal. Run `harmony` only when `music.md` exists and the question touches the music. Use `--pron songs/pronunciations.txt` (before the subcommand) when that file exists. For kept lines, diff the newest snapshot in `drafts/` (highest N) against `lyrics.md` with `--song`: `kept_changed` marks a kept line altered since then, and `kept_missing` lists kept lines that appear nowhere in `lyrics.md`. With no snapshot, run the second form (the file against itself): it gives `kept_missing` only, and you say there is no snapshot to compare against. Exit 2 names a malformed kept-line entry.
 
 ## Before writing a word
 
@@ -34,7 +35,7 @@ Add `--section NAME` to `stability` to focus on one section. Run `prosody` for e
 Critique:
 - [ ] Song found: song.md (lenses, idea fields, ## Kept lines), lyrics.md, melody.md, music.md
 - [ ] Tools run for the scope asked: stability, pov, cliche --strict; prosody per melody.md line
-- [ ] Kept lines read; drafts diff parse run
+- [ ] Kept lines read; drafts diff run (latest snapshot, or lyrics.md against itself)
 - [ ] Each candidate note sorted: craft (state it) or taste (ask first)
 - [ ] Notes ranked song > section > line; top three kept
 ```
@@ -61,7 +62,7 @@ Critique:
 
    If there are more, end the notes with "I have N more notes; want them?"
 5. **Kept lines**, in their own short group: each kept line, what it was kept over and the writer's reason, then one question for the whole group: "Are you still keeping these as they are?" (see Kept lines).
-6. **Taste offers**, if any: "I have a taste note about ___, want it?" The blank names the topic only (for example "rhyme strictness in the bridge"), never the verdict or the lens's reading. Nothing more until the writer says yes.
+6. **Taste offers**, if any: "I have a taste note about ___, want it?" The blank names the topic only (for example "rhyme strictness in the bridge"), never the verdict or the lens's reading. Nothing more until the writer says yes. A direct taste question from the writer ("will a publisher like it?") is permission for that one answer (Lerman step 2): answer it in part 2, labelled as taste with its basis.
 7. **End with the writer's choices** (which note to work on, or none), not a verdict. Say that no file was changed.
 
 ## Craft or taste
@@ -90,7 +91,7 @@ Davis's checklist, Blume's checklists, NSAI's criteria and Webb's rewriting rule
 
 - A kept line is not re-flagged or re-argued in the notes for the issue it was kept over, and is not praised for having been kept.
 - A different, new issue on a kept line is a normal note that says the line is kept for the earlier issue.
-- In the kept-lines group, list each kept line once: the text, the kept issue, the reason. If a kept line no longer appears in `lyrics.md`, say so there. Ask one question for the group and move on.
+- In the kept-lines group, list each kept line once: the text, the kept issue, the reason. Say a kept line is gone from `lyrics.md` only when `kept_missing` lists it, and changed only when `kept_changed` marks it; never judge either by reading. Ask one question for the group and move on.
 
 ## Red flags: stop
 
