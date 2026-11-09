@@ -86,7 +86,7 @@ GREEN (fixed skill):
 
 Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md` entries "Tied by the research: yes" that answer a melody question, quoted with source and tag; with none, say plainly "the research behind this plugin has nothing specific to <style> on melody"; never invent style conventions. Same setup as above; the style is declared in the message only.
 
-### M3: declared soul ballad
+### M3: declared soul ballad (regression: skill wording was written with this case in view; the held-out positive-path case is H7 in chords.md, since styles.md holds no melody entry for any style)
 
 - Writer: "It's a soul ballad, help the chorus melody."
 - What the research holds: the one soul entry (soul dominant, 1970s soul) is harmony, not melody.
@@ -102,3 +102,5 @@ Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md
 | r1/g1 | a✗ b~ c✗ d✗: "the classic soul-ballad release"; proposed a lift to D4 and "land that last word on the chord's third"; no research statement. | a✓ b✓ c✓ d✓: "the research behind this plugin has nothing specific to soul on melody, so the coaching below is style-neutral. Its one soul finding is about harmony, so that's a question for `/chords`." |
 | r2/g2 | a✓ b✓ c✓ d✓ (read the guides itself: "The research behind this plugin has nothing on soul melody") | a✓ b✓ c✓ d✓: cites Spicer soul dominant as a `/chords` pointer; style-neutral coaching; asks to save `style: soul ballad`. |
 | M2 re-run | | g1 a✓ b✓: no style assumed, four options including "leave it", `prosody` and `stability` run. |
+
+Fix round 1: the melody red-flag row now quotes only recorded baseline phrases ("the classic soul-ballad release", "land that last word on the chord's third").

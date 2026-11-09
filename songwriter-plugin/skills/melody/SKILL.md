@@ -72,6 +72,6 @@ Each of these was said or done by an agent without this skill, or in an early te
 | "Want me to draft two or three chorus options in melody.md?" | Never offer to write a tune. |
 | "The chorus should sit higher than the verse", "if someone can hum it back after one pass, you're done" | Options with a basis, not one convention as the rule. |
 | "Let the stressed words move: LEAVE and ON" (no `prosody` run) | Stresses come from `prosody`; an unstressed word is a question. |
-| "Soul ballads usually ...", "in gospel-leaning choruses the melody climbs" (no `styles.md` entry) | Style claims come only from `styles.md` entries tied to the style and to melody; otherwise say the research has nothing and stay neutral. |
+| "the classic soul-ballad release", "land that last word on the chord's third" (no `styles.md` entry) | Style claims come only from `styles.md` entries tied to the style and to melody; otherwise say the research has nothing and stay neutral. |
 | Five options for one question | Two to four, "leave it" among them. |
 | A range given by guess ("it's within your G2–D4") | `key`, with the range the writer gave, per section. |

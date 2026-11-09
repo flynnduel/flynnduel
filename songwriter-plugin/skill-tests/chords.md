@@ -99,7 +99,7 @@ GREEN re-run of H4 (fixed skill):
 
 Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md` entries "Tied by the research: yes" that answer the harmony question, with source and tag and obeying each guide's Don'ts; with none, say plainly "the research behind this plugin has nothing specific to <style> on this" and stay style-neutral; never invent style conventions. The style is declared in the message only.
 
-### H5: covered style (blues)
+### H5: covered style (blues) (regression: skill wording was written with this case in view)
 
 - Writer: "This is a blues, give me options for the turnaround."
 - What the research holds: one blues harmony entry (Everett Type 4, tonal system; it does not name any turnaround) and one form entry (strophic).
@@ -109,7 +109,7 @@ Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md
   - H5.c Options 2-4 with why, feel and how common (named corpus figure or "no counted rate"), each through `harmony`.
   - H5.d No hand-written numerals; nothing written to `music.md`.
 
-### H6: uncovered style (bossa nova)
+### H6: uncovered style (bossa nova) (regression)
 
 - Writer: "I'm writing a bossa nova, what chords?"
 - Pass criteria:
@@ -126,4 +126,31 @@ Rule (binding, from the user): with a declared style, use ONLY `guides/styles.md
 | H6 | a✗ b✗ c✗ d✗: "standard bossa practice", "Plain triads sound wrong in this style", rhythm pattern; no statement. | a✗ b✗ c✗ d✗: "Bossa lives on 7th chords", "the classic Jobim sound", wrote a 16-bar sketch. | a✓ b✓ c✓ d✓: "The research behind this plugin has nothing specific to bossa nova on chords ... I won't tell you which chords or extensions are typical"; neutral options; offered `style: bossa nova`. | a✓ b✓ c✓ d✓: "`styles.md` has no entry for it. So I won't say which chords, extensions or turnarounds suit it". |
 | H2 re-run | | | g1 unchanged: rejects "the correct progression", V→I 32% of 200 songs and IV 18.5% quoted, four options with "leave it", no style assumed. | |
 
-Note: in the GREEN runs the harness denied the `UV_PROJECT_ENVIRONMENT=... uv run` form for approval, so the subjects stopped before showing numerals; this is a test-harness permission artefact, not a skill change (the same calls are unchanged from before).
+Note (superseded by fix round 1 below): in the first GREEN runs the harness denied the `UV_PROJECT_ENVIRONMENT=... uv run` form for approval, so the subjects stopped before showing numerals; this is a test-harness permission artefact, not a skill change (the same calls are unchanged from before).
+
+
+## Declared-style fix round 1 (review findings)
+
+Changes: `skills/chords/SKILL.md` Declared style now says any base rate quoted under a declared style is named "general, not <style>" and is never called "classic" or "common" for that style; strum/groove/feel questions go to `/arrange`; if the toolkit stays blocked after one plain retry, stop and say the measurement could not run (no hand-written options, numerals or rates). Red-flag rows and rule 5 now quote only phrases recorded in the baselines ("Bossa lives on 7th chords", "Plain triads sound wrong in this style", "the classic Jobim sound", "Texas-style", "The classic I–V"). Test harness now permits the toolkit calls (`Bash(UV_PROJECT_ENVIRONMENT=*)`), so the earlier "requires approval" artefact is gone.
+
+### H7 (held-out): pop, an entry that DOES answer harmony
+
+Not derived from any example in the skill. Writer: "This is a pop song. What could the chorus chords do, give me options." styles.md Pop holds two harmony entries (Everett Type 1 share of chart pop; recent pop minor flat-VI, flat-VII, i replacing iv, V, i). Pass criteria: H7.a the entries used are quoted with source and tag, as framing or one option, not widened into "pop does X"; H7.b no pop convention beyond them; H7.c general rates labelled "general, not pop"; H7.d 2-4 options through `harmony` with measured numerals; H7.e Summach/era figures not presented as pop.
+
+| Run | Result |
+|---|---|
+| RED r1 (no skill) | a✗ b✗ c✗ d✗: "It's a solid pop loop", "Pop sheen: Cadd9 G D/F♯ Em7 ...", seven options, no sources, no rates, numerals hand-written. |
+| RED r2 (no skill) | a✗ b✗ c✗ d✗: "The standard pop-axis chorus ... sounds big and familiar", six options, no rates or sources. |
+| GREEN g1 | a✓ b✓ c✓ d✓ e✓ (one wording slip: "Feel: a firm, classic close" beside the 32% rate, labelled "general, not pop"; scored ~ on c): quoted "The greatest share of chart pop falls in Everett's Type 1 ... (harmony.md, Tonal systems; Everett) [verified]" then "That finding describes the whole system and doesn't pick a chord for you"; the pop-minor entry not used (chorus reads major). Measured numerals: chorus IV I V vi IV I V I / 4 1 5 6m 4 1 5 1; 32% of 200 songs and 18.5% and 1,162 vs 788 transitions, 8.1% bVII, each "(general, not pop)". |
+| GREEN g2 | a✓ b✓ c✓ d✓ e✓: quoted both entries with source and tag; of the pop-minor one: "It only matters if you hear the chorus as E minor" (not widened); "It has nothing pop-specific on cadences. The rates below are the general de Clercq and Temperley rock corpus (99 songs), not pop figures"; every rate "(general, not pop)"; measured tool rows for four options. |
+
+### Re-runs with the toolkit permitted
+
+| Scenario | Run | Result |
+|---|---|---|
+| H5 | g3 | a✓ b✓ c✓ d✓: Everett Type 4 quoted with source and tag, "doesn't choose a turnaround"; "The research behind this plugin has nothing more specific to blues on turnarounds"; four options with tool rows (e.g. I IV V I / 1 4 5 1; bVII option "system 3a"), rates "32% of 200 songs; general, not blues", "8.1% of all chord roots ... general, not blues". Slip: "one of the two common closes" in a Why line (general, but near the style label) scored ~ on b. |
+| H5 | g4 | a✓ b✓ c~ d✓: same quote and tag; form entry sent to /structure; "The rates below are general rock-corpus figures ... not blues figures"; tool rows for options A-C; option D said "I haven't run this one through the tool" (disclosed, but should have been run; c~). |
+| H6 | g3 | a✓ b✓ c✓ d✓: "nothing specific to bossa nova on chords ... The rates below are general corpus rates ... not bossa nova rates"; options with tool rows and "(general, not bossa nova)". Offered `style: bossa nova`. |
+| H6 | g4 | a✓ b✓ c✓ d✓: "Its style index has no bossa entry"; tool rows; "(de Clercq and Temperley, general, not bossa nova)". |
+| H6 | g1 re-scored under the new rule | b✗: "The two classic endings are V→I ... (32% of 200 songs)" had no "general, not bossa" label and used "classic"; fixed by the rule above, g3/g4 comply. |
+| H2 (no style) | g2 | unchanged: "V–I is one common close, not the only proper cadence", 32% of 200 songs and 18.5%, tool rows (IV I V vi IV I V I / 4 1 5 6m 4 1 5 1), four options incl. "leave it as it is", no style assumed. |

@@ -101,10 +101,12 @@ A style in `style:` (song.md `## Core`) or in the message changes only the examp
 
 1. Look the style up in `styles.md` by label and spellings, ignoring case, hyphens and spaces. Do not search the other guides for the style word: only entries `styles.md` lists with "Tied by the research: yes" are style material.
 2. Use only entries that answer the harmony question at hand (from `harmony.md`, or `guitar.md`'s Voicings). A form, feel or arrangement entry is not harmony advice: leave it out, or point to `/structure` or `/arrange` in one line. Obey `styles.md`'s rules and each guide's own Don'ts (harmony.md's ban on citing a genre rate that was not read; an entry marked "No usable finding" is never cited). An entry that does not answer the question (a tonal-system description when the question is a specific cadence) is said to be that: it frames the options, it does not choose a progression.
-3. Quote each finding you use in one line with its source and its tag (`<finding> (<source>) [tag]`), never as a rule for the style. The general base rates stay general: never present them as the style's.
+3. Quote each finding you use in one line with its source and its tag (`<finding> (<source>) [tag]`), never as a rule for the style. Any base rate quoted under a declared style is named as the general corpus rate ("general, not <style>"), and is never called "classic" or "common" for that style; "classic" and "common" are used only inside a quoted `styles.md` finding.
 4. With no entry, or none that fits, say so plainly: "The research behind this plugin has nothing specific to <style> on this", and give the usual options, style-neutral, each still through `harmony`.
-5. Never call a chord, extension, progression, turnaround, voicing or groove typical of, common in or idiomatic to the style without such an entry. No "bossa wants maj7s", no "the classic blues turnaround". The writer's own choices are theirs to describe.
+5. Never call a chord, extension, progression, turnaround, voicing or groove typical of, common in or idiomatic to the style without such an entry. No "Bossa lives on 7th chords", no "The classic I–V". The writer's own choices are theirs to describe.
 6. If the style came from the message, offer once to save it as `style: <style>` in `## Core`; write it only on a yes, replacing any existing `style:` line rather than adding a second, then run `song <song>/song.md`.
+7. Strum, groove and feel questions under a declared style go to `/arrange` (its own Declared style section applies); say so in one line and do not answer them here.
+8. If the toolkit is still blocked after one retry in the plain form, stop and say the measurement could not run. Never hand-write options, numerals or rates in its place.
 
 ## Red flags: stop
 
@@ -121,5 +123,5 @@ Each of these was said or done by an agent without this skill, or in an early te
 | "No, that's a Cmaj7" without running the tool; "they'd play x32010" | Run `guitar verify`; options, not a fingering. |
 | One `key` call over the whole song's range | One call per section; report every section's fit. |
 | "The overshoot is F#4, 2 semitones over D4" (the tool said −4) | Overshoot is the current key's negative margin; a move is the fit's `shift`. Never count by hand. |
-| "Bossa lives on 7ths and ii-V moves", "the classic 12-bar turnaround is I-VI-II-V" (no `styles.md` entry) | Style claims come only from `styles.md` entries tied to the style and to harmony; otherwise say the research has nothing and stay neutral. |
+| "Bossa lives on 7th chords", "Plain triads sound wrong in this style", "the classic Jobim sound", "Texas-style", "The classic I–V" (no `styles.md` entry) | Style claims come only from `styles.md` entries tied to the style and to harmony; otherwise say the research has nothing and stay neutral. |
 | "I can sketch a higher chorus melody for you" | Melody is coached, never written (melody skill). |
