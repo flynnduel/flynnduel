@@ -13,16 +13,16 @@ Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGI
 
 ## Toolkit calls
 
-Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words (CHORD, KEY, N, SHAPE, NAME, CAPO, NOTE, SECTION, MELODY_LOW, ...) are placeholders: every value comes from the song files or the writer, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result.
+Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words are placeholders: CHORD (one chord; `CHORD ...` means the whole list), KEY (a key, as `harmony` accepts it: `G`, `Em`, `G dorian`), N (a semitone shift, always a fit's `shift` from `key`), SHAPE, NAME, CAPO, NOTE, MELODY_LOW, MELODY_HIGH, VOICE_LOW, VOICE_HIGH. Every value comes from the song files, the writer or an earlier tool result, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result.
 
 ```
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools harmony --music <song>/music.md
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools harmony CHORD CHORD CHORD CHORD --key KEY
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools harmony CHORD ... --key KEY
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chord transpose CHORD N --key KEY
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chord names NOTE NOTE NOTE
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chord names NOTE ...
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools guitar verify SHAPE NAME
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools guitar identify SHAPE
-UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools guitar capo CHORD CHORD CHORD --key KEY
+UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools guitar capo CHORD ... --key KEY
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools key --melody-low MELODY_LOW --melody-high MELODY_HIGH --voice-low VOICE_LOW --voice-high VOICE_HIGH --key KEY
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools chart <song> --check
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools drafts snapshot <song>
@@ -90,13 +90,14 @@ Only after the writer picks an option or gives chords. "Put it in" with no clear
 
 1. You need each section's lowest and highest sung note from the writer, and `voice low` and `voice high` from `song.md` (or the writer). Never estimate a melody range; ask for it.
 2. Run `key` once per section whose range differs, with the song's current key. A key that suits the song has `fits` true in every section; report each margin (0 means the edge of the range) and warn where saving one section pushes another to the edge or out.
+   **Never count semitones or intervals yourself.** How far a key moves is that fit's `shift`. How far a note overshoots the voice in the current key is the current key's row (`shift` 0): a negative `margin_high` or `margin_low` is the overshoot in semitones (−4 means 4 over). Quote those numbers; do not work them out.
 3. Capo pairings come from each fit's `capo` list: `[3, "C"]` is "capo 3, C shapes". A capo only raises pitch, so a lower key from G shapes means other shapes up the neck, not a lower capo.
-4. Spell everything for the new key: key names as the tool gives them, chords via `chord transpose CHORD N --key NEWKEY`. For shapes at each fret, `guitar capo CHORD ... --key KEY` gives `shape_key` and shapes spelled for it.
+4. Spell everything for the new key: key names as the tool gives them, chords via `chord transpose CHORD N --key KEY`, where N is that fit's `shift` and KEY is its `key`. For shapes at each fret, `guitar capo CHORD ... --key KEY` gives `shape_key` and shapes spelled for it.
 5. Options, two to four: each fitting key with its capo pairs, a near-fit with its cost, "change the melody's range" (the writer's call), or leave it. `song.md` `key` and `capo` change only when the writer chooses.
 
 ## Red flags: stop
 
-Each of these was said or done by an agent without this skill:
+Each of these was said or done by an agent without this skill, or in an early test of it:
 
 | Thought | Reality |
 |---|---|
@@ -108,4 +109,5 @@ Each of these was said or done by an agent without this skill:
 | Writing a progression nobody picked ("I took 'the second one' to mean...") into music.md, unverified | Write only the writer's pick, verify with `harmony --music`, run `chart --check`. |
 | "No, that's a Cmaj7" without running the tool; "they'd play x32010" | Run `guitar verify`; options, not a fingering. |
 | One `key` call over the whole song's range | One call per section; report every section's fit. |
+| "The overshoot is F#4, 2 semitones over D4" (the tool said −4) | Overshoot is the current key's negative margin; a move is the fit's `shift`. Never count by hand. |
 | "I can sketch a higher chorus melody for you" | Melody is coached, never written (melody skill). |

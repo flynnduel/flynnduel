@@ -24,6 +24,17 @@ Setup, test subject and judging are as in `chords.md`: a scratch copy of `sample
   - M2.a No genre is assumed: no "in pop", "radio", "hit choruses" or any one style's habits given as the norm, and no commercial heuristic (the commercial lens is off).
   - M2.b Examples, where given, come from more than one style.
 
+### M2b (held-out, added in fix round 1): the writer names their influences
+
+Not derived from any example in the skill: the skill gives no artist names and no genre list, only the rule that illustrations come from the writer's own references, put as questions.
+
+- Setup: as above, no edits.
+- Writer: "My chorus melody is boring. It sits on the same three notes and only goes up at the very end. I grew up on Gillian Welch, Bill Withers and the Pogues, if that helps. How do I make the chorus stand out?"
+- Pass criteria:
+  - M2b.a Illustrations come from the writer's named references (Welch, Withers, the Pogues), not from a genre list the plugin supplies.
+  - M2b.b Claims about those artists' songs are put as questions to the writer or labelled as unverified, never stated as fact.
+  - M2b.c No genre beyond the writer's references is assumed as the norm, and no notes are written.
+
 ## RED: baseline (no skill)
 
 Two baseline runs per scenario, without the plugin folder as a working directory. M1 r2 nonetheless listed and read files under the plugin folder through Bash and quoted the rulebook ("guides read"). Key: ✓ pass, ✗ fail, ~ partial.
@@ -47,3 +58,25 @@ Rationalizations seen (in substance): no skill says otherwise, so write it; the 
 - **Too many options (M2 g1).** g1 gave five options. The skill said "two or three ranked options" and then "One option is always leave it", which read as extra. Now: "two to four ranked options in all, "leave it" counted among them (never five)", plus a red-flag row.
 - **Unmeasured stress (M2 g1, g2).** Both ran only `stability` and told the writer to "let only the stressed syllables move ... LEAVE and ON", though the dictionary leaves "on" unstressed. Now: any syllable called stressed comes from a `prosody` run, and an unstressed word is put as a question; red-flag row added.
 - Re-run with the refactored skill: M2 g3 and g4 each ran `prosody` on all four lines and `stability`, gave four options including "leave it", and asked "do you hear "on" as stressed?". M1 g3 confirmed no regression.
+
+## Fix round 1 (review findings)
+
+Changes:
+- The hand-made stress example ("never let it go", NEV and GO) contradicted `prosody` (NE, LET, GO) and was removed. Stressed syllables are now named only from the tool's `stress` field.
+- The fixed style list (hymn, rap, folk, punk) is gone; the GREEN runs had reused it verbatim, and it had no basis in `melody.md`. Now, if the writer names influences, illustrations come from those, put as questions about songs the writer knows. Otherwise the device is named and said not to be tied to one style. M2b was added as a held-out case.
+- M2.b reading after this change: with no references from the writer, examples are not drawn from styles the plugin supplies; a device is named as not tied to one style. The brief's "more than one style" is met through the writer's own references (M2b), not through a stock list.
+
+RED for M2b (no skill):
+
+| Run | Result | How it failed |
+|---|---|---|
+| r1 | a~ b✗ c✗ | Used the references, but as facts: "Bill Withers is the model", "a very Welch move", "Much of what the Pogues do is rhythmic push". It wrote a scale-degree sketch ("Line 1: 5 5 3, 5 5 2") and offered to write the notes into `melody.md`. |
+| r2 | a~ b✗ c~ | "The Pogues do this a lot", "That's cheap and very Welch"; prescribed intervals ("A fifth or sixth up on Leave"); miscounted the range by hand ("Your range is a ninth (G2–D4)"). |
+
+GREEN (fixed skill):
+
+| Scenario | f1 | f2 | Evidence |
+|---|---|---|---|
+| M1 | a✓ b✓ c✓ d✓ | a✓ b✓ c✓ d✓ | No notes ("no notes, do-re-mi or MIDI from me"). Stresses come from `prosody` on each line, and the unstressed "on" and "not" are put as questions. Placement, contour, the one-note exercise and deferred Perricone checks are all present. No style list. |
+| M2 | a✓ b✓ | a✓ b✓ | "I won't assume a style from the lyric or chords." Four options including "leave it" (Pattison placement, Perricone levers, Webb as reported). Stresses come from `prosody`. No genre list is supplied. |
+| M2b | a✓ b✓ c✓ | a✓ b✓ c✓ | f2: "I'm taking my illustrations from the three you named, as questions about songs you know. They're not claims about how those artists write"; "In a Gillian Welch chorus you love, does the tune stay low while the words carry the weight?"; "In a Pogues chorus you love, does the plain, repeated tune carry it?" f1: "Think of a chorus by Welch, Withers or the Pogues that you love. Does the tune sit still while the words move?" and "A held repeated note is a device ... it isn't tied to any one style." No notes, intervals or scale degrees. |

@@ -79,3 +79,17 @@ Rationalizations seen (in substance): parts are quick to write by hand; assume t
 | H4 | a✓ b✓ c✓ d✓ | a✓ b✓ c✓ d✓ | Both ran `key` once for the chorus (D3–F#4) and once for the verse (B2–B3), tabled both sections per key, and found Eb the only key fitting both, with margin 0 at the chorus top and verse bottom; D as a near fit costing F#2. Capo pairs from the tool (capo 1 D shapes, 3 C shapes, 6 A shapes); g2 spelled the chords with `chord transpose ... --key Eb` (Eb Ab Bb Cm) and `guitar capo ... --key Eb`. Both asked for the bridge's range rather than guessing it. `song.md` unchanged. |
 
 No new rationalization appeared in the GREEN runs, so no REFACTOR round was needed for /chords.
+
+## Fix round 1 (review findings)
+
+Changes:
+- Key and capo: N is the fit's `shift` from `key`, and an overshoot is the current key's negative `margin_high` or `margin_low`; semitones and intervals are never counted by hand. A red-flag row quotes the H4 g2 slip ("F#4, 2 semitones over D4"; the tool said −4).
+- Placeholders are defined (CHORD with `CHORD ...` for a list, KEY in any `harmony --key` form, N as a fit's `shift`); NEWKEY is gone, and the call forms are variadic.
+- Toolkit, test-first: `guitar capo --key` accepts the same key forms as `harmony --key` ("G dorian", "A mixolydian", "A minor"). It spells by the major or minor family on the tonic and keeps the mode in `shape_key` (capo 2 under G dorian gives "F dorian" with Fm Eb Bb). RED: 2 tests failed ("not a key name: 'G dorian'"). GREEN: `test_fretboard.py` 45 passed.
+
+GREEN re-run of H4 (fixed skill):
+
+| Run | Result | Evidence |
+|---|---|---|
+| f1 | a✓ b✓ c✓ d✓ | `key` per section. "`margin_high` is −4, so F#4 is 4 semitones above D4." The chords came from `chord transpose` with N = −4 (Eb) and −5 (D), and the shapes from `guitar capo ... --key Eb` / `--key D`. No D#/A#/G#. It asked to run the bridge before a pick. |
+| f2 | a✓ b✓ c✓ d✓ | "its top note is 4 semitones above your D4"; "margin_low −1" and "margin_low −2" quoted from the tool for the near fits. `song.md` unchanged. |

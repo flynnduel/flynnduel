@@ -141,6 +141,16 @@ def test_capo_key_option_names_the_reference_key():
     assert opts[3].shape_key == "C#m" and opts[3].shapes == ["A", "E", "B", "C#m"]
 
 
+def test_capo_accepts_modal_key_by_its_tonic():
+    # Same key forms as harmony --key: 'G dorian' names a G-tonic, minor-third family; spelled like Gm.
+    opts = {o.fret: o for o in capo_options(["Gm", "F", "C"], STD, key="G dorian")}
+    assert opts[0].shape_key == "G dorian"
+    assert opts[2].shape_key == "F dorian" and opts[2].shapes == ["Fm", "Eb", "Bb"]
+    mix = {o.fret: o for o in capo_options(["A", "G", "D"], STD, key="A mixolydian")}
+    assert mix[2].shape_key == "G mixolydian" and mix[2].shapes == ["G", "F", "C"]
+    assert {o.fret: o for o in capo_options(["Am"], STD, key="A minor")}[0].shape_key == "Am"
+
+
 def test_cli_capo_key_flag(capsys):
     assert main(["guitar", "capo", "G", "C", "D", "--key", "G"]) == 0
     out = json.loads(capsys.readouterr().out)
@@ -149,6 +159,9 @@ def test_cli_capo_key_flag(capsys):
     assert main(["--text", "guitar", "capo", "G", "C", "D"]) == 0
     assert "capo 2 (F shapes): F Bb C" in capsys.readouterr().out
     assert main(["guitar", "capo", "G", "--key", "Hm"]) == 2
+    assert main(["guitar", "capo", "Gm", "F", "C", "--key", "G dorian"]) == 0
+    by = {o["fret"]: o for o in json.loads(capsys.readouterr().out)["options"]}
+    assert by[0]["shape_key"] == "G dorian" and by[2]["shapes"] == ["Fm", "Eb", "Bb"]
 
 
 def test_voicings_from_chords_db():

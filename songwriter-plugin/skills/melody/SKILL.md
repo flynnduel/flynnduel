@@ -34,7 +34,7 @@ No notes are written: no pitch names, no do-re-mi, no scale degrees or intervals
 
 1. Say so in one sentence: "I won't write the tune, so there are no notes from me; the melody stays yours, and I'll help you find it."
 2. Then coach, in this order, each as a question or a short option list:
-   - **Stresses.** Run `prosody` on each line of the section. Name the syllables the dictionary stresses (in "never let it go", NEV and GO) and ask the writer to speak the line in rhythm and feel where those land. Those syllables want the strong beats.
+   - **Stresses.** Run `prosody` on each line of the section. Name the syllables the tool marks stressed (`stress` 1 or 2 in its `syllables` list), never your own reading of the word, and ask the writer to speak the line in rhythm and feel where those land. Those syllables want the strong beats.
    - **Phrase placement** (Pattison). Should each line start on the downbeat (front-heavy: settled, for lines you really mean) or after it (back-heavy: in motion, for longing)? Offer both; the writer picks by feel.
    - **Contour.** Where is the title, and which way should it move: up, down, or held? Does that direction agree with what the line says? Where is the section's highest note, and does the chorus sit above the verse or not?
    - **A way in.** Sing the line on one note, then let the stressed syllables move; record it on a phone. Perricone: it is essential to sing your own melody.
@@ -45,7 +45,7 @@ No notes are written: no pitch names, no do-re-mi, no scale degrees or intervals
 1. Ask what the section should do, and how the writer sings it now; do not assume a style from the lyrics, the subject or the chords.
 2. Give two to four ranked options in all, "leave it" counted among them (never five), each with its basis, from `melody.md`: Perricone's contrast levers (starting chord, rhythm, contour, phrase lengths, tessitura against the verse); Pattison's phrase placement and phrase length; motif development (state, repeat over a changed chord, extend); Webb (as reported): if the melody is stuck, change what is under it.
 3. **Stresses are measured.** Any syllable you call stressed, or say wants a strong beat, comes from a `prosody` run on that line; a word the dictionary leaves unstressed (often a short word at the end of a line) is put to the writer as a question, not called stressed.
-4. **Any style.** When you illustrate a device, describe it in at least two different styles (for example a hymn refrain, a rap hook, a folk chorus, a punk chant), not as one genre's habit. Do not name songs as examples unless the guide gives them. No "in pop", "radio", "hit choruses" or "people will hum it back" as the norm: commercial heuristics apply only when `commercial` is in `lenses`.
+4. **Any style.** If the writer names their own influences, styles or songs, take your illustrations from those, and say which you are using. Put each as a question about a song the writer knows ("in a chorus of theirs you love, does the tune sit still while the words move?"), not as a claim about how that artist writes. Otherwise name the device itself (a held repeated note, a late peak, a back-heavy start) and say it is not tied to one style; do not supply a list of genres of your own. Do not name songs as examples unless the writer or the guide gives them. No "in pop", "radio", "hit choruses" or "people will hum it back" as the norm: commercial heuristics apply only when `commercial` is in `lenses`.
 
 ## Red flags: stop
 

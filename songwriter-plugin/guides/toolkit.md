@@ -159,7 +159,7 @@ $ songtools chord parse Am7/G
 
 `guitar identify SHAPE`, `guitar verify SHAPE NAME`, `guitar vsystem NOTE [NOTE ...]`, `guitar joni [--tuning NOTES]`, `guitar capo CHORD [CHORD ...]`, `guitar voicings NAME`
 
-Fretboard checks. `identify` and `verify` take `--key`, `--tuning NAME_OR_NOTES`, `--capo N` and `--partial-capo MASK` (six characters of 0 or 1, low string to high, 1 = clamped; needs `--capo`); `verify` also takes `--band-bass` (a bass player covers the root). A shape is six frets such as `x32010` (x = muted) or a quoted `'x 10 12 12 12 10'`. Frets are relative to the capo. `capo` takes `--max-fret`, `--tuning` and `--key` (the song key; without it the first chord is taken as the key); `voicings` takes `--limit` and `--tuning`. [design]
+Fretboard checks. `identify` and `verify` take `--key`, `--tuning NAME_OR_NOTES`, `--capo N` and `--partial-capo MASK` (six characters of 0 or 1, low string to high, 1 = clamped; needs `--capo`); `verify` also takes `--band-bass` (a bass player covers the root). A shape is six frets such as `x32010` (x = muted) or a quoted `'x 10 12 12 12 10'`. Frets are relative to the capo. `capo` takes `--max-fret`, `--tuning` and `--key` (the song key, in any form `harmony --key` accepts, such as `G`, `Em` or `G dorian`; a modal key is spelled like the major or minor key on the same tonic, and its `shape_key` keeps the mode name; without `--key` the first chord is taken as the key); `voicings` takes `--limit` and `--tuning`. [design]
 
 ```
 $ songtools guitar identify x32010

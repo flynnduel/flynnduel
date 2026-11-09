@@ -340,19 +340,17 @@ def _is_open(name: str, tuning: Tuning) -> bool:
     return any(0 in s for s in _generated(tuple(tuning.strings), name))
 
 
-def _reference_key(chords: list[str], key: str | None) -> tuple[int, bool] | None:
-    """(tonic pc, minor) from --key, else from the first real chord (minor when its quality is m...)."""
+def _reference_key(chords: list[str], key: str | None) -> tuple[int, bool, str | None] | None:
+    """(tonic pc, minor-third family, mode word for dorian/mixolydian) from --key, else from the first
+    real chord. --key takes the same forms as harmony --key (G, Gm, 'A minor', 'G dorian', 'D mixolydian')."""
     if key is not None:
-        k = key.strip().replace("♯", "#").replace("♭", "b")
-        minor = k.endswith("m") and len(k) > 1
-        root = k[:-1] if minor else k
-        if root not in NOTE_PC:
-            raise SongtoolsError(None, None, f"not a key name: {key!r}")
-        return NOTE_PC[root], minor
+        from songtools.harmony import _parse_key
+        note, mode = _parse_key(key)
+        return NOTE_PC[note], mode in ("minor", "dorian"), mode if mode in ("dorian", "mixolydian") else None
     for ch in chords:
         if not is_no_chord(ch):
             c = parse_chord(ch)
-            return NOTE_PC[c.root], c.quality.startswith("m") and not c.quality.startswith("maj")
+            return NOTE_PC[c.root], c.quality.startswith("m") and not c.quality.startswith("maj"), None
     return None
 
 
@@ -375,8 +373,11 @@ def capo_options(chords: list[str], tuning: Tuning, max_fret: int = 7, key: str 
     ref = _reference_key(chords, key)
     out = []
     for fret in range(max_fret + 1):
-        shape_key = None if ref is None else _shape_key_name(ref[0] - fret, ref[1])
-        shapes = [transpose(ch, -fret, shape_key) for ch in chords]
+        spelling = None if ref is None else _shape_key_name(ref[0] - fret, ref[1])
+        shape_key = spelling
+        if ref is not None and ref[2]:          # modal: name the tonic plus mode, spell like its family
+            shape_key = spelling.removesuffix("m") + " " + ref[2]
+        shapes = [transpose(ch, -fret, spelling) for ch in chords]
         out.append(CapoOption(fret, shape_key, shapes, sum(_is_open(s, tuning) for s in shapes),
                               _SOFT_NOTE if fret >= 7 else ""))
     out.sort(key=lambda o: (-o.open_shapes, o.fret))
