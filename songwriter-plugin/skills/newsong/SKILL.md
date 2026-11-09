@@ -92,6 +92,8 @@ Never write material the writer did not give: no riff, tab, chords, progression,
 
 Every order can end with `/critique` and `/finalcheck` when the writer wants them. Stages are not a corridor: the writer can go anywhere next.
 
+End the reply with at most one question; offering the first stage is that question. Do not add a second one ("One question to open it: ..."): the next skill asks its own.
+
 ## Resume
 
 Copy this checklist:
@@ -130,7 +132,7 @@ A style the writer names in chat ("it's a folk song") is offered once for saving
 
 ## Red flags: stop
 
-Each of these was said or done by an agent without this skill:
+Each of these was said or done by an agent without this skill, unless marked:
 
 | Thought | Reality |
 |---|---|
@@ -140,5 +142,6 @@ Each of these was said or done by an agent without this skill:
 | "A rolling 110 bpm riff usually wants long, open lines, so look for a first line of about 6–8 syllables" | No invented targets. Name the next stage and its skill. |
 | A twenty-minute plan of steps with no skill named | Show the entry's order, each stage with its skill. |
 | "Do you have a melody or guitar idea for the chorus yet?" (no `music.md`, no `melody.md`) | The files answer it: say chords and melody are missing. |
-| Four or five numbered questions "answer whichever you can" | At most one question, about what the files cannot tell. |
+| Four or five numbered questions, "You can answer only the ones you remember" | At most one question, about what the files cannot tell. |
+| "Want to start with `/idea`? One question to open it: ..." (said with this skill) | One question per reply. The offer is the question. |
 | Notes on the bridge and the chorus wording on a resume nobody asked to critique | No critique on a resume. Name the next stage. |

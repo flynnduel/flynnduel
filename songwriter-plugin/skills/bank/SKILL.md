@@ -41,7 +41,7 @@ When the writer asks what is banked, or for ideas with a tag or a word: read `id
 When the writer wants to start a song from a banked idea ("let's start that one"):
 
 1. Find its line in `ideas.md`. Leave the line where it is.
-2. Start the song with `/newsong` (invoke the songwriter `newsong` skill; if it cannot be invoked, read `${CLAUDE_PLUGIN_ROOT}/skills/newsong/SKILL.md` and follow it), with `entry: banked idea` and the banked item as what the writer brought.
+2. Start the song with `/newsong` (invoke the songwriter `newsong` skill; if it cannot be invoked, read `${CLAUDE_PLUGIN_ROOT}/skills/newsong/SKILL.md` and follow it, writing `${CLAUDE_PLUGIN_ROOT}` for the plugin root and `${CLAUDE_PLUGIN_DATA}` for the data directory wherever its text names them), with `entry: banked idea` and the banked item as what the writer brought.
 
 ## Red flags: stop
 
@@ -51,4 +51,4 @@ Each of these was done by an agent without this skill:
 |---|---|
 | "Banked" by creating `songs/salt-in-the-coffee/song.md` with `status: seed` | The bank is one line in `songs/_bank/ideas.md`. No folder. |
 | A new `songs/ideas.md` with `- **Salt in the Coffee** (title): ...`, no date | Exactly `- YYYY-MM-DD [tag] text` in `songs/_bank/ideas.md`. |
-| Promoted with five numbered questions and `tone: wry breakup (not confirmed)` in Core | Promotion goes through `/newsong`: `entry: banked idea`, only the writer's facts saved. |
+| Promoted with five numbered questions, or with `tone: wry breakup (from the banked idea; not confirmed)` in Core | Promotion goes through `/newsong`: `entry: banked idea`, only the writer's facts saved. |

@@ -52,7 +52,7 @@ Chart:
 When `song.md` has a `capo`, say this every time, with the values from the files:
 
 - `out/chart.cho` and `out/chart.pdf`: the shape chords, as the guitarist plays them with capo CAPO (`key` in `song.md` is the shape key).
-- `out/chart-concert.cho` and `out/chart-concert.pdf`: the same chart in sounding pitch, for the band (bass, keys, horns, anyone not using the capo). Its key is the `{key: ...}` line of `chart-concert.cho`: read it there.
+- `out/chart-concert.cho` and `out/chart-concert.pdf`: the same chart in sounding pitch, for the band (bass, keys, horns, anyone not using the capo). Name its key: read the `{key: ...}` line of `out/chart-concert.cho` once it is written and give the value ("concert key: X"). Before the chart exists, say the key will be read from that file.
 - `out/guide.mid` plays the shape chords, so it sounds CAPO semitones lower than the band; `out/guide-concert.mid` sounds with the band. Each track's key is the `key` in its `midi` output.
 
 Never transpose a chord or a key yourself, even one: every concert chord or key you name is read from the toolkit's files or output. With no capo, say the two charts are the same and either can go to the band.
@@ -68,7 +68,7 @@ An error prints `{"error": "..."}` and exits 2.
 
 ## Red flags: stop
 
-Each of these was said or done by an agent without this skill:
+Each of these was said or done by an agent without this skill, unless marked:
 
 | Thought | Reality |
 |---|---|
@@ -79,3 +79,4 @@ Each of these was said or done by an agent without this skill:
 | `--concert` failed, so `chart --pdf` alone was run and handed out | No workaround around an error. Relay it, ask, re-run once fixed. |
 | "The toolkit failed on Hm7" | Quote the error message exactly as printed. |
 | The whole song form and chord list typed into the reply | The files are the chart. Report the paths. |
+| "Its key is on the `{key: ...}` line of `chart-concert.cho`" (said with this skill, value never given) | Read that line and give the key itself. |

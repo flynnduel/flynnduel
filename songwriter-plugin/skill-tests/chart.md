@@ -29,3 +29,31 @@ Each criterion is judged from the subject's tool calls, its replies and a diff o
   - K1e.a It runs `chart <song> --concert --pdf`; on exit 2 it relays the toolkit's message as written (`cannot transpose chord [Hm7] in line: ...`).
   - K1e.b It never fabricates a chart: no `.cho`, `.pdf` or chart text produced by hand, in a file or in the reply.
   - K1e.c (added) `lyrics.md` is not changed unasked; the fix is offered as a question to the writer (for example `Em`, which `music.md` has there).
+
+## RED: baseline (no skill)
+
+Clean round (no plugin folder readable; see newsong.md). Key: ✓ pass, ✗ fail, ~ partial.
+
+| Scenario | r1 | r2 | How it failed |
+|---|---|---|---|
+| K1 | a✓ b✓ c✓ d✓ e✗ | a~ b~ c✗ d✓ e✗ | r1 ran `--check`, `--concert --pdf` and `midi`, but transposed by hand ("sounds as C in A") and claimed guide.mid's "pitches match chart-concert.pdf (A), not the capo'd shapes" — false: `midi` ignored the capo. r2 ran `chart --pdf` only and said "If you play with a capo, I can add a version with the capo applied", though song.md has capo 2. Neither mentioned the PDF's missing ♭ glyph. |
+| K1e | a✗ b✗ c✓ | a– b✓ c✓ | r1 hit the error on `--concert --pdf`, then dropped `--concert` to get a shape chart and handed it out, paraphrasing the error ("The toolkit failed on `Hm7`"). r2 ran `--check`, saw the mismatch and asked first (Em or Bm7) without running the chart, so a is not tested; it wrote nothing. |
+
+Rationalizations seen: a capo copy is optional; a quick transposition by hand is harmless; a partial chart by dropping a flag beats no chart before rehearsal.
+
+## Toolkit addition (test-first): `midi --concert`
+
+K1-r1 showed the gap: `midi` plays `music.md` as written, so for a capo song the guide track sounds a whole step below the band, and nothing the toolkit printed said so. Test-first, `midi SONG_DIR --concert` writes `out/guide-concert.mid` with every chord moved up by `song.md`'s capo, and every `midi` result now reports `key` and `capo_applied`. RED: 3 new tests in `tests/test_midi.py` failed (`KeyError: 'capo'`, ...). GREEN: 7 passed; full suite 495 passed. Documented in `guides/toolkit.md` and the toolkit README.
+
+## GREEN: with the skill
+
+First runs were cut off by a usage limit and re-run unchanged.
+
+| Scenario | g1 | g2 | Evidence |
+|---|---|---|---|
+| K1 | a✓ b✓ c✓ d✓ e✓ | a✓ b✓ c~ d✓ e✓ | Both ran `chart --check`, `chart --concert --pdf`, `midi` and `midi --concert`, and listed `chart.cho/pdf`, `chart-concert.cho/pdf`, `guide.mid`, `guide-concert.mid`. Both: shape charts "for the guitarist ... capo 2", concert charts "for the band", `guide.mid` "sounds 2 semitones lower than the band", `guide-concert.mid` in A. Both flagged "The PDF font has no ♭ glyph" and offered `Bb`, changing nothing. g1 read `{key: A}` from the concert file; g2 said only "Its key is on the `{key: ...}` line of `chart-concert.cho`", never the value. |
+| K1e | a✓ b✓ c✓ | a✓ b✓ c✓ | Both quoted the error verbatim (`{"error": "cannot transpose chord [Hm7] in line: [D]Somebody might find the way [Hm7]home"}`), offered Em (from `music.md`), Bm7 or another chord, and changed no file; "I didn't write a partial chart or work around the error, so no `.cho` or PDF files exist yet." `out/` holds only the two guide tracks. |
+
+## REFACTOR
+
+Changed the capo convention to "Name its key: read the `{key: ...}` line ... and give the value", with a red-flag row for the g2 wording. Re-run: K1-g3 and K1-g4 a✓ b✓ c✓ d✓ e✓ ("The concert key is A", g4 "read from the `{key: A}` line"); K1e-g3 a✓ b✓ c✓ (error quoted, four options including leave it, concert key to be read once written).
