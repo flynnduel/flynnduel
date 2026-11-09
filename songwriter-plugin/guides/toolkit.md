@@ -257,7 +257,7 @@ $ songtools drafts diff song/drafts/lyrics-v2.md song/drafts/lyrics-v3.md --song
 
 `song SONG_MD`
 
-Reads `song.md` on its own (no lyrics file needed) and prints what the parser sees: the title, every `## Core` key and value, the kept lines, the split sheet and the names of any other sections. Run it after writing a `## Core` field: exit 0 means the file still parses; exit 2 names the bad line (a `## Core` line without `key: value`, a malformed kept line or split entry). [design]
+Reads `song.md` on its own (no lyrics file needed) and prints what the parser sees: the title, every `## Core` key and value, the kept lines, the split sheet and the names of any other sections. Run it after writing a `## Core` field: exit 0 means the file still parses; exit 2 names the bad line (a `## Core` line without `key: value`, a `## Core` key that appears twice, a malformed kept line or split entry). Every command that reads `song.md` rejects a duplicate key the same way, so a field is changed by replacing its line. [design]
 
 ```
 $ songtools song song/song.md

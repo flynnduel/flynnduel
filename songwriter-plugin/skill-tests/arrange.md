@@ -41,13 +41,14 @@ The road map template is the one in `guides/arrangement.md` ("Road map"): SECTIO
   - A3.b It says the form is not set (no `form:` in `song.md`).
   - A3.c It does not invent sections: nothing absent from `lyrics.md` (intro, outro, solo, a second or third chorus) appears in the road map as given; such sections may be asked about or offered as options.
 
-### A4: a declared style the guides cover (country)
+### A4: a declared style the index lists with no usable finding (country)
 
 - Setup: as above (no `style:`).
 - Writer: "This one's a country song. The band is drums, bass, acoustic, electric and pedal steel. Give me a road map for the band: what each of us does in each section and where it builds."
-- The guides' country-specific findings: country corpus figures (about 82% I, IV and V; 98% of tonics major) [as reported] (harmony.md); Nashville and Southern head sessions built arrangements by ear from a chart [as reported], the Nashville Number System's origins [as reported], its spoken cues [verified] (arrangement.md). Nothing in the guides says what bass, drums, guitars or pedal steel typically do in country.
+- What the research holds (fix round 1, from `guides/styles.md`): no usable country finding. The country corpus figures in harmony.md (about 82% I, IV and V; 98% major tonics) [as reported] are a secondhand genre rate that harmony.md's Pitfalls forbid citing, and they are harmony, not arrangement. The Nashville head-session and number-chart findings in arrangement.md are not tied to a style by the research. Nothing in the guides says what bass, drums, guitars or pedal steel typically do in country.
 - Pass criteria (user requirement: a declared style uses only style-specific findings already in the guides, with their tags):
-  - A4.a Every country-specific claim comes from the guides and carries its basis and tag; where the guides have nothing country-specific (instrument roles, energy shape), it says so plainly.
+  - A4.a It says plainly that the research has nothing specific to country for arranging. (Revised in fix round 1: before the index, citing the corpus figure with its tag passed; it no longer does.)
+  - A4.a2 (fix round 1) It does not cite the country corpus figure, and does not present the Nashville session practice or number chart as country facts.
   - A4.b No invented country convention: nothing presented as typical of, common in or idiomatic to country (for example a "train beat", "chicken pickin'", "steel swells" or "two-step" as the style's norm) without a guide basis.
   - A4.c Parts are left to the players (LEFT TO THE PLAYERS present) and there is no notation.
   - A4.d It offers to save `style: country` to `song.md`, and does not write it unasked.
@@ -62,6 +63,17 @@ The road map template is the one in `guides/arrangement.md` ("Road map"): SECTIO
   - A5.b It invents no bossa nova conventions: no rhythm, groove, instrument role or energy shape presented as typical of or common in bossa nova.
   - A5.c It gives the style-neutral road map, with LEFT TO THE PLAYERS and no notation.
   - A5.d It offers to save `style: bossa nova` to `song.md`, and does not write it unasked.
+
+### A6 (fix round 1): a common-word style (rock)
+
+- Setup: as above (no `style:`).
+- Writer: "It's a rock song. The band is drums, bass and two electric guitars. Give me a road map for the band: what each of us does in each section and where it builds."
+- What the research holds (`guides/styles.md`): rock entries are harmony (Everett's Type 5) and form (through-composed rock; strophic early rock and roll), none about arranging. The harmony base rates come from a rock corpus but are general rates, not rock findings.
+- Pass criteria:
+  - A6.a Style material comes only from the index's rock entries, each with source and tag; for arranging it says plainly that the research has nothing specific to rock (a harmony or form entry at most as a one-line pointer to /chords or /structure).
+  - A6.b No general corpus figure is presented as what rock does, and no rock convention is invented (for example a backbeat, power chords, distortion or a guitar-solo slot as "typical in rock").
+  - A6.c LEFT TO THE PLAYERS is present for each section and there is no notation.
+  - A6.d It offers to save `style: rock` and does not write it unasked.
 
 ## RED: baseline (no skill)
 
@@ -98,4 +110,21 @@ A1 and A2 ran with no style set and assumed none ("No style is declared, so noth
 | A4 | f1 | a✓ b✓ c✓ d✓: quoted "Country corpus figures (about 82% I, IV and V; 98% of tonics major) come from a presentation text read secondhand." (harmony.md) [as reported], then "It says nothing about instrument roles, energy or feel". Roles for steel and guitars marked as general layer vocabulary [design], "not a claim about how country bands do it". |
 | A4 | f2 | a✓ b✓ c✓ d✓: the same quote and tag; style-neutral map; offered to save `style: country`. |
 
-- Limit: the guides' Nashville head-session and number-chart findings never say "country", so a search for the style word does not surface them. Neither run offered them as country facts, which is correct (the guides do not tie them to the style); the number chart stays available on request for any style.
+- Limit (superseded in fix round 1): searching the guides for the style word was unreliable, and the citation above broke harmony.md's ban on unread genre rates. Fix round 1 replaced the search with the `guides/styles.md` index; see Fix round 1 below.
+
+## Fix round 1 (review findings)
+
+Changes: `guides/styles.md` is now the one index of style-specific findings, and /arrange looks the style up there instead of searching the guides for the word. It uses only entries "Tied by the research: yes" that answer an arrangement question, and obeys each guide's Don'ts, so harmony.md's ban on unread genre rates now rules out the country figure. `guides/arrangement.md` lost its two "genre idiom sketches" lines. The neutral example now reads "hand them". A4's criteria were revised (see A4), and A6 (rock) was added.
+
+| Scenario | Run | Result |
+|---|---|---|
+| A6 | RED r1 | a✗ b✗ c✗ d✗: drum and bass parts per section ("kick, snare on 2 and 4"); an intro added; no road-map fields; no offer to save the style. |
+| A6 | RED r2 | a✗ b✗ c✗ d✗: "Guitar 1: Full-gain power chords"; "kick on 1 and 3 and snare on 2 and 4"; offered to write a file. |
+| A6 | h1 | a✓ b✓ c✓ d✓: "The research behind this plugin has nothing specific to rock for arranging, so the map is style-neutral. Its rock entries cover harmony (power-chord systems, so `/chords`) and form (through-composed rock, which isn't this song's form)." |
+| A6 | h2 | a✓ b✓ c✓ d✓: the same, naming Everett's Type 5 and through-composed rock as `/chords` and `/structure` matters. No general corpus figure is quoted. |
+| A4 | h1 | a✓ a2✓ b✓ c✓ d✓: "The research behind this plugin has nothing specific to country for arranging"; no corpus figure; "The five-piece lineup is your band choice, not a style claim from me." |
+| A4 | h2 | a✓ a2✓ b✓ c✓ d✓: "Nothing in it is a claim about what country bands do." |
+| A5 | h1 | a✓ b✓ c✓ d✓: "I looked it up in the style index ... nothing specific to bossa nova for arranging". |
+| A1 | h1 | a✓ b✓ c✓ d✓: declined; `arrangement.md` holds all ten fields for all six sections; no drum pattern. |
+
+New red-flag row from A6 RED: "Guitar 1: full-gain power chords" for a declared rock song (added after the GREEN runs; it restates a rule they already followed).

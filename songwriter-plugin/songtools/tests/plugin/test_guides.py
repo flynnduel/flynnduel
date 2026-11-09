@@ -100,7 +100,7 @@ def test_lint_ignores_fenced_code(tmp_path):
     assert lint_guide(p) == []
 
 
-@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody", "harmony", "guitar", "arrangement", "critique", "process"])   # extended by Tasks 3-5
+@pytest.mark.parametrize("guide", ["sources", "lyrics", "drafting", "structure", "melody", "harmony", "guitar", "arrangement", "critique", "process", "styles"])   # extended by Tasks 3-5, 9
 def test_guide_is_clean(guide):
     assert lint_guide(PLUGIN_ROOT / f"guides/{guide}.md") == []
 
@@ -156,3 +156,19 @@ def test_critique_and_process():
     assert c.count("\n| ") >= 11          # 10-step final-check table + header
     for x in ["## Entry points", "## Receive, then edit", "## Getting unstuck", "## Versions and cuts"]: assert x in p
     for e in ["riff", "guitar song", "lyric", "progression", "title", "brief", "bank", "co-write"]: assert e in p.lower()
+
+
+def test_styles_index_entries():
+    """styles.md is the one style index: each style has spellings, and every finding names its guide
+    section and whether the research ties it to the style (Task 9 review)."""
+    t = (PLUGIN_ROOT / "guides/styles.md").read_text()
+    index = t.split("## Index", 1)[1].split("## Not style findings", 1)[0]
+    entries = re.split(r"^### ", index, flags=re.M)[1:]
+    assert len(entries) >= 8
+    for e in entries:
+        assert "\nSpellings: " in e, e.splitlines()[0]
+        for line in e.splitlines():
+            if line.startswith("- ") and "No usable finding" not in line and "Not a" not in line:
+                assert "Tied by the research:" in line and ".md, " in line, line
+    hip = next(e for e in entries if e.startswith("Hip-hop"))
+    assert "hip hop" in hip.splitlines()[1]

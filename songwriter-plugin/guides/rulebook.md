@@ -40,7 +40,7 @@ Tags: each rule, check and prompt bullet ends with [verified], [as reported], [u
 
 - Commercial heuristics (title in the chorus, title timing, length) apply only when the writer has declared a commercial goal. Otherwise judge the song by what it is trying to do. No cadence or form is "the correct one". [design]
 - Do: "You've said this is a radio target, so: Pattison and the commercial lens agree the title arrives late." [design]
-- Declared style (`style` in `## Core`, or the writer saying "this is a soul ballad"): no style is ever assumed, and a declared one changes only the examples for that song. Use only the style-specific findings already in the guides, each with its basis and tag; never invent a convention or say "common in <style>" without that basis. Where the guides have nothing on that style for the question, say so plainly ("the research behind this plugin has nothing specific to that style on this", naming the style) and give the style-neutral guidance. A style declared in chat is offered for saving to `style:`, never written unasked. [design]
+- Declared style (`style` in `## Core`, or the writer saying "this is a soul ballad"): no style is ever assumed, and a declared one changes only the examples for that song. Style material comes only from `styles.md`, the one index of style-specific findings: look the style up there, use only its entries that fit the question, each with its source and tag, and obey each guide's own Don'ts. A style with no entry, or none that fits the question, gets a plain statement ("the research behind this plugin has nothing specific to that style on this", naming the style) and the style-neutral guidance. Never invent a convention or say "common in <style>". A style declared in chat is offered for saving to `style:`, never written unasked. [design]
 - Break: "Real songs put the title in the first line of the chorus." [design]
 
 ### 7. Stock language is craft, never say a line sounds like AI
@@ -123,7 +123,7 @@ status: working
 - Ann Writer | lyrics, melody | 100
 ```
 
-`## Core` keys the toolkit reads: `key`, `capo`, `tempo`, `time`, `voice low`, `voice high`. Keys the skills add: `entry`, `mode` (`drafting` or `editing`), `lenses` (default `pattison`; also `webb`, `commercial`), `status` (`working`, `done for now`, `done`) and `style` (the writer's declared style, absent unless declared; rule 6). `/idea` adds the idea fields `point`, `singer`, `listener`, `moment`, `central image`, `unresolved`, `pov` and `title`; `/structure` adds `form`. Every `## Core` entry is one `key: value` line; check the file with `songtools song <song>/song.md` after writing one. [design]
+`## Core` keys the toolkit reads: `key`, `capo`, `tempo`, `time`, `voice low`, `voice high`. Keys the skills add: `entry`, `mode` (`drafting` or `editing`), `lenses` (default `pattison`; also `webb`, `commercial`), `status` (`working`, `done for now`, `done`) and `style` (the writer's declared style, absent unless declared; rule 6). `/idea` adds the idea fields `point`, `singer`, `listener`, `moment`, `central image`, `unresolved`, `pov` and `title`; `/structure` adds `form`. Every `## Core` entry is one `key: value` line and each key appears once: to change a field, replace its line rather than adding a second (the toolkit rejects a duplicate key). Check the file with `songtools song <song>/song.md` after writing one. [design]
 
 `lyrics.md`: `## Section` headings (Verse, Chorus, Pre-chorus, Bridge), one lyric line per line, chords inline in square brackets before the syllable they fall on:
 

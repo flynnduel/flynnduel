@@ -151,8 +151,25 @@ def test_song_cli_rejects_core_line_without_colon(tmp_path, capsys):
 
 
 def test_song_cli_missing_file(tmp_path, capsys):
+    import json
     from songtools.cli import main
     assert main(["song", str(tmp_path / "nope.md")]) == 2
+    err = json.loads(capsys.readouterr().err)["error"]
+    assert "nope.md" in err and "cannot read song file" in err
+
+
+def test_duplicate_core_key_is_an_error(tmp_path, capsys):
+    """A second `form:` line would silently replace the first; report it instead (Task 9 review)."""
+    import json
+    from songtools.cli import main
+    text = "# U\n\n## Core\nform: strophic\nkey: G\nForm: AABA\n"
+    with pytest.raises(SongtoolsError) as e:
+        parse_song_md(text)
+    assert e.value.line == 6 and "duplicate" in e.value.message and "line 4" in e.value.message
+    p = tmp_path / "song.md"
+    p.write_text(text)
+    assert main(["song", str(p)]) == 2
+    assert "duplicate" in json.loads(capsys.readouterr().err)["error"]
 
 
 def test_song_cli_text_output(tmp_path, capsys):

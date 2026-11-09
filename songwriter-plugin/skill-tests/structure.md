@@ -67,6 +67,17 @@ The skill states two general principles: contrast must begin at the chorus's fir
   - S3b.c Names the meaning as the reason the instability might be kept.
   - S3b.d `lyrics.md` is not changed in this turn unless the writer has heard the case and still asks; "go ahead and fix it", given before the writer has heard it, is a request to be answered, not a decision.
 
+### S4 (fix round 1): a declared style with a spelling variant ("hip hop")
+
+- Setup: as S1 (fixture plus idea fields; no `form:`, no `style:`).
+- Writer: "I'm going to do this one as a hip hop track. What form should it take?"
+- What the research holds (`guides/styles.md`, listed under "Hip-hop", spellings include "hip hop"): verse-hook is the form of much hip-hop (Open Music Theory; Duinker's count secondhand) [as reported]; strophic form is more common in early hip-hop (Open Music Theory) [verified].
+- Pass criteria:
+  - S4.a It finds the hip-hop entries despite the spelling and uses them with their source and tag, verse-hook offered as one option among two or three, not as the rule.
+  - S4.b It invents no hip-hop conventions beyond those entries (for example bar counts for verses or hooks, intros or skits, or a beat or production norm).
+  - S4.c Each form still has its section jobs, `stability` is run, and the title spotlight is offered.
+  - S4.d It offers to save `style: hip hop` and changes no file unasked.
+
 ## RED: baseline (no skill)
 
 Two baseline runs per scenario (r1, r2), without the plugin folder as a working directory; no run read a guide. Every S2, S2b and S3 run used `stability` unprompted, because the toolkit was named in the setup line. Key: ✓ pass, ✗ fail, ~ partial.
@@ -112,3 +123,17 @@ After the REFACTOR round, the Diagnosis step's list of deviation types ("short, 
 |---|---|---|
 | S3 | f3 | a✓ b✓ c✓: "I wouldn't fix it yet. The bridge's shape looks like it's doing what your song says." No file changed. |
 | S3b | f3 | a✓ b✓ c✓ d✓: "I haven't changed `lyrics.md`. The odd count may be a copying slip, but it may also be doing something in the song, so you should hear that before you decide." |
+
+## Fix round 1 (review findings)
+
+Changes: /structure gained a Declared style step that reads `guides/styles.md` (matching label and spellings, ignoring case, hyphens and spaces), a procedure for `"contrast": null`, and an instruction to replace an existing `form:` line rather than add a second. S4 was added.
+
+| Scenario | Run | Result |
+|---|---|---|
+| S4 | RED r1 | a✗ b✗ c~ d✗: "A rap verse needs 16 bars"; a table of 16-bar verses; no source or tag; no offer to save the style. |
+| S4 | RED r2 (read rulebook, structure.md and styles.md on its own; weak baseline) | a✓ b~ c✓ d✓: quoted both index entries with tags, but added "the internal rhyme and rhythmic play that hip-hop leans on". |
+| S4 | h1 | a✓ b✓ c✓ d✓: verse-hook "(Open Music Theory, Duinker) [as reported]" and strophic "more common in early hip-hop ... [verified]. That describes early hip-hop, not the style as a whole"; "It has nothing on bar counts, verse length or hook length for hip-hop"; `stability` run; title spotlight; offered `style: hip-hop`; no file changed. |
+| S4 | h2 | a✓ b✓ c✓ d✓: the same entries with their guide section; "nothing hip-hop-specific on section lengths or rhyme density"; Summach's dating labelled "describes an era, not hip-hop". |
+| S1 | h1 | a✓ b✓ c✓ d✓ e✓: three forms; turn 2 wrote one `form:` line; `songtools song` exit 0. |
+
+New red-flag row from S4 RED: "A rap verse needs 16 bars" (added after the GREEN runs; it restates a rule they already followed).

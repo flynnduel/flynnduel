@@ -46,3 +46,11 @@ No new rationalization appeared, so no REFACTOR round was needed for /idea.
 ## Toolkit addition (test-first): `songtools song`
 
 `/idea` writes to `song.md` before any `lyrics.md` exists, and no subcommand parsed `song.md` on its own (`drafts diff ... --song` needs a lyrics file: "song.md:1: lyric line before any '## Section' heading"). Test-first, `songtools song SONG_MD` prints the title, `## Core`, kept lines, split sheet and other section names, and exits 2 naming a bad line. RED: 3 of 4 new tests in `tests/test_songfile.py` failed ("invalid choice: 'song'"). GREEN: 28 passed in `test_songfile.py`. `guides/toolkit.md` documents it; `/idea`, `/structure` and `/arrange` use it.
+
+## Fix round 1 (review findings)
+
+Changes: saving replaces an existing key's line instead of adding a second (the toolkit now rejects a duplicate `## Core` key). A chosen title also updates the `# ` heading. I1 re-run on the changed skill:
+
+| Scenario | Run | Result |
+|---|---|---|
+| I1 | h1 | a✓ b✓ c✓ d✓ e✓: one question per reply; nothing saved before turn 6; six concrete fields saved as single lines, `songtools song` exit 0; the four points of view shown in turn 6 with `pov` held open; title left open, so the heading stayed `# Untitled`. |

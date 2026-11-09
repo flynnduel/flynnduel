@@ -7,7 +7,7 @@ description: Use when a songwriter asks how to arrange a song for a band, what e
 
 Arrangement is guidance, never parts. The plugin gives a road map: what each section does, who plays in it by role, its energy and feel in words, and what is left to the players. The players make their own parts; the writer decides.
 
-Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/arrangement.md` (the main guide: layers, energy, the road map template, number charts, checks) and the feel template in `${CLAUDE_PLUGIN_ROOT}/guides/guitar.md`. Section jobs and functions are in `${CLAUDE_PLUGIN_ROOT}/guides/structure.md`.
+Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/arrangement.md` (the main guide: layers, energy, the road map template, number charts, checks) and the feel template in `${CLAUDE_PLUGIN_ROOT}/guides/guitar.md`. Section jobs and functions are in `${CLAUDE_PLUGIN_ROOT}/guides/structure.md`. When a style is declared, also read `${CLAUDE_PLUGIN_ROOT}/guides/styles.md`, the one index of style-specific findings.
 
 **Violating the letter of these rules is violating the spirit.** A drummer starting Friday, "just this once" or "the toolkit has no drum tool" does not change them.
 
@@ -32,7 +32,7 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 
 No drum part, bass line, riff, voicing chart or tab: no beat-by-beat or bar-by-bar pattern, no "kick on 1 and 3, snare on 2 and 4", no grid, no notation, not even as a starting point.
 
-1. Say so in one sentence: "I don't write parts, so there's no drum part from me; your drummer builds it. Here's a road map you can hand him instead."
+1. Say so in one sentence: "I don't write parts, so there's no drum part from me; your drummer builds it. Here's a road map you can hand them instead."
 2. Give the road map (below). Feel in counts and words: the grid (straight or swung, the subdivision), where the weight sits, how hard, how busy, what changes at the transition. Never which drum or string plays on which beat.
 3. Offer to check what the player comes up with against the road map.
 
@@ -69,10 +69,12 @@ Over four: flag it with that basis, say what it may cost (masking, nowhere left 
 
 A style declared in `style:` or in the message changes only the examples, for this song.
 
-1. Search `${CLAUDE_PLUGIN_ROOT}/guides/` for that style word (Grep). Use only what the guides say about it. Quote each finding you mention in one line with its source and its tag exactly as the guide gives it (`<finding> (<source>) [tag]`), and say which part of the question it does and does not answer.
-2. Where the guides have nothing on that style for what was asked (instrument roles, energy, feel), say so plainly: "The research behind this plugin has nothing specific to <style> on this, so the map below is style-neutral." Then give the style-neutral road map.
-3. Never present a groove, rhythm, instrument role, voicing or shape as typical of, common in or idiomatic to the style without a guide finding. The writer's own band choices are theirs to describe, not a style claim of yours.
-4. If the style came from the message, offer once to save it as `style: <style>` in `## Core`; write it only on a yes, then run `song <song>/song.md`.
+1. Look the style up in `styles.md` by its label and spellings, ignoring case, hyphens and spaces. Do not search the other guides for the style word: a finding counts as style material only if `styles.md` lists it with "Tied by the research: yes".
+2. Use only entries that answer an arrangement question (roles, energy, feel; from `arrangement.md` or `guitar.md`'s Feel). A harmony or form entry is not arrangement advice: leave it out, or mention it in one line as a pointer to `/chords` or `/structure`. Obey `styles.md`'s rules and each guide's own Don'ts; an entry marked "No usable finding" is never cited.
+3. Quote each finding you use in one line with its source and its tag (`<finding> (<source>) [tag]`), and never as a rule for the style.
+4. With no entry, or none that fits, say so plainly: "The research behind this plugin has nothing specific to <style> for arranging, so the map below is style-neutral." Then give the style-neutral road map.
+5. Never present a groove, rhythm, instrument role, voicing or shape as typical of, common in or idiomatic to the style without such an entry. A general corpus is not a style finding. The writer's own band choices are theirs to describe, not a style claim of yours.
+6. If the style came from the message, offer once to save it as `style: <style>` in `## Core`; write it only on a yes, replacing any existing `style:` line rather than adding a second, then run `song <song>/song.md`.
 
 ## Writing arrangement.md
 
@@ -90,5 +92,6 @@ Each of these was said or done by an agent without this skill:
 | "Intro (4 bars, added)", "Outro", "Chorus 3", "replay the last 4 bars as a tag" | Only sections in `form:` or `lyrics.md`; others are questions. |
 | "Pick one of piano or organ." (no count, no basis) | Count the elements, name the basis, give 2-4 options with "leave it". |
 | "Plays the bossa pattern", "<style> usually wants extensions", "the <style> clave" | No style claim without a guide finding; say the research has none. |
+| "Guitar 1: full-gain power chords" for a declared rock song | A harmony entry is not arrangement advice; the map stays style-neutral. |
 | "The road map is written and saved in the song folder." (not asked) | Write arrangement.md only when asked or agreed. |
-| "Its only <style> figure is a chord-frequency number" (no source, no tag; early test of this skill) | Quote the finding with its source and tag. |
+| "Its only <style> figure is a chord-frequency number" (early test of this skill) | A harmony rate is not arrangement advice, and the guide forbids citing an unread genre rate. Use `styles.md` only. |

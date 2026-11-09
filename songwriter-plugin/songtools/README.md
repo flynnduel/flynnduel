@@ -29,6 +29,7 @@ When something cannot be determined, the output says `undetermined` or carries `
 | `harmony` | Key, Everett system, Roman and Nashville numerals | `songtools harmony --music music.md` |
 | `key` | Fit a melody to a voice range; capo pairings | `songtools key --melody-low A2 --melody-high E4 --voice-low G2 --voice-high D4 --key G` |
 | `drafts` | `snapshot` lyrics, `cut` to the pool, `diff` drafts against kept lines | `songtools drafts snapshot song/` |
+| `song` | Parse `song.md` alone and print its core, kept lines and split sheet; exit 2 names a bad or duplicate line | `songtools song song/song.md` |
 | `chart` | Write ChordPro charts (`--concert` applies the capo, `--pdf` renders lead sheets); `--check` writes nothing and compares lyrics.md's inline chords with music.md | `songtools chart song/ --concert --pdf` |
 | `midi` | Write `out/guide.mid` from `music.md` (your chords only) | `songtools midi song/ --tempo 96` |
 | `version` | Print the version | `songtools version` |

@@ -72,13 +72,13 @@ The writer picks; even when they have already said "I'm singing it to him", show
 
 ## Title
 
-If the writer gives a title, record it. Otherwise offer two to four candidates taken from their own words and say where each came from, or leave it open. Never save a title the writer has not chosen; `# Untitled` stays until they do.
+If the writer gives a title, record it. Otherwise offer two to four candidates taken from their own words and say where each came from, or leave it open. Never save a title the writer has not chosen; `# Untitled` stays until they do. When the writer chooses one, save it as `title:` and change the `# ` heading on line 1 of `song.md` to the same title, because the toolkit reads the song's title from that heading. The song folder's name stays as it is unless the writer asks.
 
 ## Saving to song.md
 
 Only when the writer says to save, or agrees when you offer:
 
-1. Write each concrete field as one line in `## Core`, exactly `key: value`, value on the same line, in the writer's words, without notes, labels or "(proposed)". Keep every existing line. Do not add a new section, and do not write open fields or your own proposals.
+1. Write each concrete field as one line in `## Core`, exactly `key: value`, value on the same line, in the writer's words, without notes, labels or "(proposed)". Keep every other line. If the key is already there, replace that line; never add a second line for the same key (the toolkit rejects a duplicate key). Do not add a new section, and do not write open fields or your own proposals.
 2. Run `song <song>/song.md`. Exit 2 names the bad line: fix it and run it again.
 3. Show the saved lines and list any field still open.
 

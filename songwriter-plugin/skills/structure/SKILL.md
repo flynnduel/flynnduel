@@ -7,7 +7,7 @@ description: Use when a songwriter asks what form or structure a song should hav
 
 Form follows what the song says. The plugin offers a menu of forms, measures each section with `songtools`, and names the options; the writer picks. No form is the standard one, and a deviation that serves the song is kept, not fixed.
 
-Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/structure.md` (the main guide: form menu, section jobs, contrast, hooks and titles, asymmetry), the "Stability" section of `${CLAUDE_PLUGIN_ROOT}/guides/lyrics.md`, and the `stability` and `song` entries of `${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md`.
+Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGIN_ROOT}/guides/structure.md` (the main guide: form menu, section jobs, contrast, hooks and titles, asymmetry), the "Stability" section of `${CLAUDE_PLUGIN_ROOT}/guides/lyrics.md`, and the `stability` and `song` entries of `${CLAUDE_PLUGIN_ROOT}/guides/toolkit.md`. When a style is declared, also read `${CLAUDE_PLUGIN_ROOT}/guides/styles.md`, the one index of style-specific findings.
 
 **Violating the letter of these rules is violating the spirit.** "Just give me the standard form", "no lecture" or "fix whatever needs fixing" does not change them.
 
@@ -28,7 +28,8 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 
 1. Find `songs/<title>/`. Read `song.md` (the idea fields `point`, `moment`, `unresolved`, `title`; `form`; `lenses`; `style`) and `lyrics.md`.
 2. Run `stability` on the whole `lyrics.md` before saying anything about shape, contrast or stability.
-3. Sort the request: choosing a form (Form choice) or a section that feels wrong (Diagnosis). A song can need both.
+3. **No contrast reading.** If `stability` returns `"contrast": null`, quote its `note` (no verse, no chorus, or a section with no lines). The first-line contrast check cannot run: say so, never estimate it by eye, and say what would let it run (a section headed Verse and one headed Chorus). A form with no chorus, such as strophic, has no chorus contrast to check; compare sections only through the per-section `stability` results.
+4. Sort the request: choosing a form (Form choice) or a section that feels wrong (Diagnosis). A song can need both. With a declared style, also follow Declared style below.
 
 ## Form choice
 
@@ -51,7 +52,16 @@ Form:
 - **One asymmetry**, from the guide's Asymmetry section, chosen because it enacts something the song says (name the field it serves), with its tag. Never decoration.
 - At most three forms and three further notes per reply; no lyric lines written.
 
-**Saving the form.** Only after the writer picks. "The second one" means the second form you listed; if that is ambiguous, ask. Write one line in `## Core`: `form: <form name> (<section order>)`. Then run `song <song>/song.md`; exit 2 names the bad line. Change nothing else: `/structure` does not add sections to `lyrics.md` or `music.md`.
+**Saving the form.** Only after the writer picks. "The second one" means the second form you listed; if that is ambiguous, ask. Write one line in `## Core`: `form: <form name> (<section order>)`. If a `form:` line already exists, replace it; never add a second (the toolkit rejects a duplicate key). Then run `song <song>/song.md`; exit 2 names the bad line. Change nothing else: `/structure` does not add sections to `lyrics.md` or `music.md`.
+
+## Declared style
+
+A style in `style:` or in the message changes only the examples, for this song.
+
+1. Look it up in `styles.md` by label and spellings, ignoring case, hyphens and spaces. Do not search the other guides for the style word; only entries `styles.md` lists with "Tied by the research: yes" are style material.
+2. Use only entries that answer a form or section question (from `structure.md`). Offer a matching form among the two or three, quoted in one line with its source and tag (`<finding> (<source>) [tag]`), as one option, never as the style's rule. A harmony or feel entry is not form advice: leave it out or point to `/chords` or `/arrange` in one line. Obey `styles.md`'s rules and each guide's own Don'ts.
+3. With no entry, or none for form, say so plainly: "The research behind this plugin has nothing specific to <style> on form, so the options below are style-neutral." A general corpus (Summach's chart forms, the era dating) is never presented as the style's form.
+4. If the style came from the message, offer once to save it as `style: <style>`; write it only on a yes, replacing any existing `style:` line, then run `song <song>/song.md`.
 
 ## Diagnosis
 
@@ -81,3 +91,4 @@ Each of these was said or done by an agent without this skill:
 | "You said to fix it, so I evened the section out", with what the irregularity might mean mentioned afterwards | Say what the deviation may do first; keep it among the options; edit only after the writer decides. |
 | "Since the lyric shape is the same, the melody has to carry that difference." | The measured finding is the form; offer form changes, with a melodic lift as one option. |
 | Five options: three form changes, a melodic lift and "leave it" (early test of this skill) | Two to four in all, "leave it" among them. |
+| "A rap verse needs 16 bars" | Not in the style index: no style convention without a `styles.md` entry. |

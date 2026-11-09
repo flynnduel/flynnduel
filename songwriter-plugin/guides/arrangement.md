@@ -2,7 +2,7 @@
 
 Arrangement is guidance, not parts (shared rule 5). The plugin helps a songwriter decide what each section should do and who should be playing, then leaves the notes to the players. It never writes a bass line, drum pattern, tab or notation. The model is the Nashville head session, where a chart gave the framework and players built their own parts by ear. Tags show the evidence level; see sources.md.
 
-Evidence is uneven. The layer vocabulary and energy trajectories are verified in peer-reviewed articles (Lavengood, Cobb); Owsinski's numbers and Rooksby's book were not readable. Genre-by-genre role sketches are this plugin's synthesis, because no authoritative role table exists. [design]
+Evidence is uneven. The layer vocabulary and energy trajectories are verified in peer-reviewed articles (Lavengood, Cobb); Owsinski's numbers and Rooksby's book were not readable. No authoritative genre-by-genre role table exists, and the plugin supplies none: for a declared style it uses only the tagged findings indexed in styles.md, and says plainly when there are none (shared rule 6). [design]
 
 ## Layers
 
@@ -19,7 +19,7 @@ Evidence is uneven. The layer vocabulary and energy trajectories are verified in
 - Backing vocals can be a pad, a lyric harmony or call and response, staged toward the last chorus. [design]
 - Solos and fills answer in the gaps of the vocal and need a defined length and an owner. [design]
 - Rooksby's Arranging Songs is known only as a chapter list (guitar, then keys, bass and drums). It supports the workflow of starting from the guitar part and asking what each added player contributes, but that is a reading of a contents page. [unverified]
-- Genre idiom sketches are suggestions the plugin labels as such. [design]
+- No genre idiom sketches: style material comes only from the findings in styles.md; a style with none there gets the style-neutral road map and a plain statement that the research has nothing specific to it. [design]
 
 ## Energy
 

@@ -269,3 +269,17 @@ def test_helper_reads_block_scalar_descriptions(style):
 def test_helper_reads_plain_multiline_description():
     bad = "---\nname: x\ndescription: Use when testing,\n  then run the checks.\n---\n" + RB
     assert any("workflow" in e for e in check_skill_text(bad, "x"))
+
+
+def test_every_guide_is_loaded_by_a_skill():
+    """A guide no skill reads is dead weight (sources.md is the bibliography, read by people)."""
+    bodies = "\n".join(p.read_text() for p in (PLUGIN_ROOT / "skills").glob("*/SKILL.md"))
+    for g in (PLUGIN_ROOT / "guides").glob("*.md"):
+        if g.name != "sources.md":
+            assert f"${{CLAUDE_PLUGIN_ROOT}}/guides/{g.name}" in bodies, g.name
+
+
+def test_rulebook_style_rule_points_at_styles_index():
+    t = (PLUGIN_ROOT / "guides/rulebook.md").read_text()
+    rule6 = t.split("### 6.", 1)[1].split("### 7.", 1)[0]
+    assert "styles.md" in rule6 and "style" in t.split("## Song folder", 1)[1]

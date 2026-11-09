@@ -189,13 +189,20 @@ def parse_song_md(text: str, file: str = "song.md") -> SongRecord:
             continue
         key = name.lower()
         if key == "core":
+            seen: dict[str, int] = {}
             for number, line in body:
                 if not line.strip():
                     continue
                 k, sep, v = line.partition(":")
                 if not sep or not k.strip():
                     raise SongtoolsError(file, number, "expected 'key: value'")
-                rec.core[k.strip().lower()] = v.strip()
+                k = k.strip().lower()
+                if k in seen:
+                    # a second line would silently replace the first; make the writer choose
+                    raise SongtoolsError(file, number,
+                                         f"duplicate ## Core key {k!r} (first on line {seen[k]})")
+                seen[k] = number
+                rec.core[k] = v.strip()
         elif key == "split sheet":
             for number, line in body:
                 if line.lstrip().startswith("-"):
