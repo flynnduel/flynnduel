@@ -283,3 +283,40 @@ def test_rulebook_style_rule_points_at_styles_index():
     t = (PLUGIN_ROOT / "guides/rulebook.md").read_text()
     rule6 = t.split("### 6.", 1)[1].split("### 7.", 1)[0]
     assert "styles.md" in rule6 and "style" in t.split("## Song folder", 1)[1]
+
+
+# Skills whose triggers overlap no other skill's and so need no "Not when ... (skill)" clause.
+NO_NOT_WHEN_NEEDED: set[str] = set()
+MAX_DESCRIPTION = 500
+
+
+def _description(name: str) -> str:
+    text = (PLUGIN_ROOT / "skills" / name / "SKILL.md").read_text()
+    return parse_frontmatter(re.match(r"---\n(.*?)\n---\n", text, re.S).group(1))["description"]
+
+
+@pytest.mark.parametrize("name", SKILLS)
+def test_description_is_short_and_says_when_not_to_use_it(name):
+    desc = _description(name)
+    assert len(desc) < MAX_DESCRIPTION, len(desc)
+    if name in NO_NOT_WHEN_NEEDED:
+        return
+    m = re.search(r"\bNot when\b(.*)", desc)
+    assert m, "no 'Not when' clause"
+    named = set(re.findall(r"\(([a-z, ]+)\)", m.group(1)))
+    others = {s for group in named for s in re.split(r",\s*", group)}
+    assert others and others <= set(SKILLS) - {name}, f"'Not when' must name other skills in brackets: {others}"
+
+
+# Trigger overlaps found in review: each side names the other skill in its "Not when" clause.
+RECIPROCAL = [("chords", "arrange"), ("structure", "melody"), ("lyrics", "critique"), ("lyrics", "idea"),
+              ("lyrics", "structure"), ("critique", "finalcheck"), ("idea", "newsong"), ("bank", "newsong"),
+              ("chart", "arrange"), ("chart", "chords"), ("melody", "chords")]
+
+
+@pytest.mark.parametrize("a,b", RECIPROCAL)
+def test_overlapping_skills_exclude_each_other(a, b):
+    for this, other in ((a, b), (b, a)):
+        tail = _description(this).split("Not when", 1)[1]
+        groups = re.findall(r"\(([a-z, ]+)\)", tail)
+        assert any(other in re.split(r",\s*", g) for g in groups), f"{this} does not exclude ({other})"

@@ -1,6 +1,6 @@
 ---
 name: melody
-description: Use when a songwriter asks for a melody or tune, asks how to make a melody or chorus stand out, says a melody is boring, flat, hard to sing or too high, asks about phrasing, contour, leaps, breath or range, or asks how the words sit on the tune. Not when the question is about chords, a capo or a part (chords).
+description: Use when a songwriter asks for a melody or tune, asks how to make a melody or a chorus's tune stand out, says a melody is boring, flat, hard to sing or too high, asks about phrasing, contour, leaps, breath or range, or asks how the words sit on the tune. Not when the question is about chords, a capo or a part (chords), or a song or chorus that feels flat or doesn't lift with no mention of the tune (structure).
 ---
 
 # Melody
@@ -27,6 +27,8 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 - `prosody` answers stress-beat questions: which syllables carry stress (`stress`) and whether the writer's setting puts them on strong beats. A line in `melody.md` is scored as the writer set it; any other line gets only the tool's proposal. Report its flags, quote its `notation`, and state its `limit` sentence once.
 - `key` runs only with a range the writer gives: the lowest and highest sung note of a section, plus `voice low` and `voice high` from `song.md`. One call per section. Never estimate a range from the lyrics, the chords or a description.
 - Use `--pron songs/pronunciations.txt` (before the subcommand) when that file exists.
+
+**No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill.
 
 ## Asked to write the melody
 

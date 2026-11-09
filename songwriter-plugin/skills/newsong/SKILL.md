@@ -1,6 +1,6 @@
 ---
 name: newsong
-description: Use when a songwriter wants to start a new song (from a riff, groove, progression, lyric, title, brief, banked idea or co-write), picks a song back up and asks where they were or what to do next, or is unsure which step comes next. Not when the writer only wants an idea saved for later (bank), or asks about one part of a song already under way (idea, structure, lyrics, melody, chords, arrange, chart, critique, finalcheck).
+description: Use when a songwriter wants to start a new song (from a riff, groove, progression, lyric, title, brief, subject, feeling, banked idea or co-write), picks a song back up and asks where they were or what to do next, or is unsure which step comes next. Not when the writer only wants an idea saved for later (bank), or asks about one part of a song already under way (idea, structure, lyrics, melody, chords, arrange, chart, critique, finalcheck).
 ---
 
 # New song
@@ -48,11 +48,12 @@ New song:
 | lyrics or lines, no music | `lyric` |
 | chord changes or a progression, no words | `chord progression` |
 | a title | `title` |
-| a brief, commission, prompt, deadline, or only a subject or feeling | `brief or commission` |
+| a brief, commission, prompt or deadline | `brief or commission` |
+| only a subject, a feeling or a vague idea, nothing made yet | `brief or commission` (the nearest entry: the writer's own brief) |
 | an item from `songs/_bank/ideas.md` | `banked idea` |
 | a co-writer's partial draft to answer | `co-write exchange` |
 
-Use the value exactly as written in the table. If two rows fit, take the thing the writer leads with and say which you chose in one line.
+Use the value exactly as written in the table. If two rows fit, take the thing the writer leads with and say which you chose in one line. When the writer brought only a subject or feeling, say in one line which entry you recorded and why ("I've filed this as `brief or commission`: your subject is the brief").
 
 **2. Folder.** `songs/<slug>/`, the slug lowercase with hyphens. From the title if the writer gave one; with no title, `untitled-` plus one to three of the writer's own words about it (`untitled-dadgad-riff`). If the folder exists, pick another slug; never write into an existing folder.
 
@@ -65,12 +66,12 @@ lenses: pattison
 status: working
 ```
 
-Add only facts the writer stated, in their values: `title`, `key`, `capo`, `tempo`, `time`, `voice low`, `voice high`, `style`. No empty keys, no placeholders, no guesses ("probably D"), no notes in a value. Idea fields (`point`, `singer`, ...) are `/idea`'s; `form` is `/structure`'s. Run `song <song>/song.md`; fix and re-run until it exits 0.
+Add only facts the writer stated, in their values: `title`, `key`, `capo`, `tempo`, `time`, `voice low`, `voice high`. A style the writer named is not written here: see Style below. No empty keys, no placeholders, no guesses ("probably D"), no notes in a value. Idea fields (`point`, `singer`, ...) are `/idea`'s; `form` is `/structure`'s. Run `song <song>/song.md`; fix and re-run until it exits 0.
 
 **4. The writer's material,** in their words, in the file it belongs to:
 
 - lyrics or lines: `lyrics.md`, under `## Section` headings (the writer's section names, or `## Verse 1`);
-- a progression with beats: `music.md`, `progression: CHORD:BEATS ...` under a section heading; without beats, a plain line `progression: <as the writer wrote it>` at the top of `music.md`;
+- chord changes or a progression: a plain line at the top of `music.md`, `changes: <as the writer wrote them>` (one line per section the writer named, `changes: chorus: ...`). Never a `progression:` line: the toolkit reads those as `CHORD:BEATS` under a section heading and rejects anything else; `/chords` writes them once the writer gives beats;
 - a riff, groove or tuning: plain lines at the top of `music.md`, `tuning: <tuning>` and `riff: <the writer's description>`;
 - a brief: a `## Brief` section in `song.md` with the writer's words;
 - a banked idea: the bank line's item, by its tag, as above (a `title` becomes `title:` and the heading). Leave the bank line in `ideas.md`.
@@ -84,11 +85,13 @@ Never write material the writer did not give: no riff, tab, chords, progression,
 | `riff or groove` | feel, key and tempo (`/chords` for key and capo, `/arrange` for feel) → section map (`/structure`) → scat melody over the riff (`/melody`) → what it is about (`/idea`) → words fitted to the rhythm (`/lyrics`) → chart early (`/chart`) |
 | `finished guitar song` | chords, melody and words together (`/chords`, `/melody`, `/lyrics`) → form (`/structure`) → `/critique` → arrangement and band chart last (`/arrange`, `/chart`) |
 | `lyric` | the idea, if open (`/idea`) → the stanzas' form and stresses (`/structure`, `/lyrics`) → a melody fitted to them, checked for stress clashes (`/melody`) → chords (`/chords`) → `/arrange`, `/chart` |
-| `chord progression` | chart the changes (`/chart` once `lyrics.md` has the chords) → section map (`/structure`) → what it is about (`/idea`) → words to the changes (`/lyrics`) → `/melody` |
+| `chord progression` | the changes with beats, section by section (`/chords` writes the `progression:` lines) → chart the changes (`/chart` once `lyrics.md` has the chords) → section map (`/structure`) → what it is about (`/idea`) → words to the changes (`/lyrics`) → `/melody` |
 | `title` | what the title means (`/idea`) → title placement and section outline (`/structure`) → chorus, then verses that recolor the title (`/lyrics`) → `/melody`, `/chords` |
 | `brief or commission` | the constraint and the concept (`/idea`) → a timed draft (`/structure`, `/lyrics`), shippable even if it feels unfinished |
 | `banked idea` | the order of the item's own kind: a title as `title`, a line as `lyric`, a riff or groove as `riff or groove`, a progression as `chord progression`, a concept or core as `brief or commission` |
-| `co-write exchange` | a `## Split sheet` in `song.md` from the first session (names, roles, equal shares until agreed) → answer the partner's draft with the order of what they sent |
+| `co-write exchange` | a `## Split sheet` in `song.md` from the first session, one line per writer in the rulebook's format, `- Name | roles | PERCENT` → answer the partner's draft with the order of what they sent |
+
+Split sheet: the names and roles are the writers' (ask for a name you were not given; that is the reply's one question). PERCENT is a number, never a word such as "equal" (the toolkit rejects it): the shares the writers agreed, or, until they agree, equal shares as numbers (two writers: `50` each), said to be a placeholder they can change. Run `song` after writing it.
 
 Every order can end with `/critique` and `/finalcheck` when the writer wants them. Stages are not a corridor: the writer can go anywhere next.
 
@@ -116,7 +119,7 @@ Resume:
 | form (`/structure`) | `form` in `## Core` |
 | words (`/lyrics`) | `lyrics.md` with lines under section headings |
 | melody (`/melody`) | `melody.md` with lines |
-| chords (`/chords`) | `music.md` progressions, or inline chords in `lyrics.md` |
+| chords (`/chords`) | `progression:` lines in `music.md`, or inline chords in `lyrics.md` (only a `changes:` line: started) |
 | arrangement (`/arrange`) | `arrangement.md` |
 | chart (`/chart`) | files in `out/` |
 
@@ -128,7 +131,7 @@ Resume:
 
 ## Style
 
-A style the writer names in chat ("it's a folk song") is offered once for saving as `style: <their words>` in `## Core`; write it only on a yes, replacing any existing `style:` line, then run `song`. This skill gives no style advice: style material comes only from `styles.md`, which the stage skills read.
+A style the writer names ("it's a folk song"), when starting a song or resuming one, is never written unasked, not even with the other facts at creation. Offer once, as one plain line that is not a question ("You called it a folk song: say 'save the style' and I'll record it"); on a yes, write `style: <their words>` in `## Core`, replacing any existing `style:` line, then run `song`. With no style named, say nothing about style and assume none. This skill gives no style advice: style material comes only from `styles.md`, which the stage skills read.
 
 ## Red flags: stop
 
@@ -145,3 +148,4 @@ Each of these was said or done by an agent without this skill, unless marked:
 | Four or five numbered questions, "You can answer only the ones you remember" | At most one question, about what the files cannot tell. |
 | "Want to start with `/idea`? One question to open it: ..." (said with this skill) | One question per reply. The offer is the question. |
 | Notes on the bridge and the chorus wording on a resume nobody asked to critique | No critique on a resume. Name the next stage. |
+| `progression: Am F C G` at the top of music.md (an early version of this skill; `harmony --music` then fails with "progression before any '## Section' heading") | Beat-less changes go on a `changes:` line. `progression:` lines are `/chords`'s. |

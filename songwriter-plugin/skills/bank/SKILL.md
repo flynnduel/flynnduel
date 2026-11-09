@@ -21,7 +21,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read the "Bank" sect
 
 - **Date:** today's date, from `date +%F`. Never typed from memory.
 - **Tag:** one of `title`, `line`, `core`, `riff`, `memo`, `progression`, `groove`, `concept`, chosen by what the writer says the item is. Lowercase, in square brackets, one tag.
-- **Text:** the item in the writer's words; a title or line verbatim in double quotes. Key, tempo or mood the writer mentioned follow it in their words, after a ` | ` (`- 2026-11-02 [riff] "rolling DADGAD thing" | 110 bpm, drony`). Nothing the writer did not say.
+- **Text:** the item in the writer's words; a title or line verbatim in double quotes. Anything else the writer said about it (key, tempo, mood, what it might be) follows after a ` | `, in their exact words, hedges included: "maybe a wry breakup thing" is saved as `maybe a wry breakup thing`, never tidied to `wry breakup`. Form: `- 2026-11-02 [riff] "rolling DADGAD thing" | 110 bpm, drony`. Nothing the writer did not say.
 - A voice memo or recording cannot be stored here: bank its description and where the writer keeps the file.
 
 ## Banking
@@ -41,7 +41,8 @@ When the writer asks what is banked, or for ideas with a tag or a word: read `id
 When the writer wants to start a song from a banked idea ("let's start that one"):
 
 1. Find its line in `ideas.md`. Leave the line where it is.
-2. Start the song with `/newsong` (invoke the songwriter `newsong` skill; if it cannot be invoked, read `${CLAUDE_PLUGIN_ROOT}/skills/newsong/SKILL.md` and follow it, writing `${CLAUDE_PLUGIN_ROOT}` for the plugin root and `${CLAUDE_PLUGIN_DATA}` for the data directory wherever its text names them), with `entry: banked idea` and the banked item as what the writer brought.
+2. Start the song with `/newsong`: invoke the songwriter `newsong` skill, with `entry: banked idea` and the banked item as what the writer brought.
+3. If the skill cannot be invoked, read `${CLAUDE_PLUGIN_ROOT}/skills/newsong/SKILL.md` and follow it. Before running any command from it, replace the two `${...}` variables in its text with these paths: CLAUDE_PLUGIN_ROOT is `${CLAUDE_PLUGIN_ROOT}` and CLAUDE_PLUGIN_DATA is `${CLAUDE_PLUGIN_DATA}`.
 
 ## Red flags: stop
 

@@ -1,6 +1,6 @@
 ---
 name: finalcheck
-description: Use when a songwriter thinks a song is finished, asks for a final check, final pass or last review, asks whether a song is done or ready to demo, record or pitch, or wants to mark a song done, done for now or still working.
+description: Use when a songwriter thinks a song is finished, asks for a final check, final pass or last review, asks whether a song is done or ready to demo, record or pitch, or wants to mark a song done, done for now or still working. Not when the writer wants notes on a song or section still being written (critique), one line checked (lyrics), or asks what to work on next (newsong).
 ---
 
 # Final check
@@ -47,6 +47,8 @@ Final check:
 - [ ] 9 Irritant scan asked (Simon via Zollo)
 - [ ] 10 Writer chooses: done, done for now, keep working (Zollo; Webb)
 ```
+
+**No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill.
 
 1. **Point, title, recoloring.** Read `song.md`'s idea fields against the lyric. Is the point clear? Is the title in a spotlight position (first or last line of a section)? Does each verse change what the chorus means? This is a reading, so say so; no tool measures it.
 2. **Dodson's four checks.** Pronoun drift from `pov` (`shift`, per-section `pov`; a chordless section can raise a false shift). Time jumps and missing backstory are a reading: quote the lines. Twin verses: compare the verses' `stability` profiles and `prosody --compare`, and whether verse 2 adds new information.

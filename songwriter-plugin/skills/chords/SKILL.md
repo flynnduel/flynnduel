@@ -1,6 +1,6 @@
 ---
 name: chords
-description: Use when a songwriter asks about chords, a progression, harmony, a cadence or "the right" ending, what a guitar shape or chord is called, a key or capo that suits their voice, or asks for a bass line, riff, tab, strum pattern or other part. Not when the question is about the tune's notes or singability (melody), or what the band, a drummer or each section should do (arrange).
+description: Use when a songwriter asks about chords, a progression, harmony, a cadence or "the right" ending, what a guitar shape or chord is called, a key or capo that suits their voice, or asks for a bass line, riff, tab, strum pattern or guitar part. Not when the question is about the tune's notes or singability (melody), what the band, a drummer or each section should do, or a drum part (arrange), or a printed chart or guide track (chart).
 ---
 
 # Chords
@@ -32,7 +32,7 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 
 ## Start
 
-1. Find `songs/<title>/`. Read `song.md` (`key`, `capo`, `voice low`, `voice high`, `lenses`), `music.md` and the inline chords in `lyrics.md`.
+1. Find `songs/<title>/`. Read `song.md` (`key`, `capo`, `voice low`, `voice high`, `lenses`), `music.md` and the inline chords in `lyrics.md`. **No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill. A question that needs none of the song's files (what a shape is called) is still answered.
 2. Sort the request: a part (bass line, riff, tab, strum, fingering), chord options, a shape check, or a key and capo question. Each has a section below.
 
 ## Asked for a part

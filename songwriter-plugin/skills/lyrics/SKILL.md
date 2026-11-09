@@ -1,6 +1,6 @@
 ---
 name: lyrics
-description: Use when a songwriter wants lyric lines, verses or choruses drafted or co-written, wants their lyrics checked or critiqued (rhyme, scansion, syllables, stress on the beat, cliches, point of view), pastes lyrics into chat, revises or keeps a line, or asks whether a line works or sounds like AI.
+description: Use when a songwriter wants lyric lines, verses or choruses drafted, co-written or rewritten, wants particular lines checked (rhyme, scansion, syllables, stress on the beat, cliches, point of view), pastes lyrics into chat to work on, revises or keeps a line, or asks whether a line works or sounds like AI. Not when the writer asks for feedback or notes on a song or section (critique), what the song is about (idea), its form (structure) or whether it is finished (finalcheck).
 ---
 
 # Lyrics
@@ -32,7 +32,7 @@ The last `drafts diff` form (a file against itself) does nothing but parse `song
 ## Start
 
 1. **Find the song.** Look for `songs/<title>/`. Read `song.md` (`mode`, `lenses`, `## Kept lines`, idea fields) and `lyrics.md`.
-2. **No folder, lyrics pasted in chat:** answer the question in this reply, and in the same reply offer to create `songs/<title>/` with `lyrics.md` and `song.md`. Create nothing until the writer says yes. To measure pasted lines meanwhile, write them under a `## Section` heading to `${CLAUDE_PLUGIN_DATA}/scratch/<title>/lyrics.md` and run the tools on that folder.
+2. **No folder, lyrics pasted in chat:** answer the question in this reply, and in the same reply offer to create the song folder with `/newsong` (invoke the `newsong` skill, or ask the writer to run it; the entry is `lyric`). Create nothing until the writer says yes. To measure pasted lines meanwhile, write them under a `## Section` heading to `${CLAUDE_PLUGIN_DATA}/scratch/<title>/lyrics.md` and run the tools on that folder. No folder and nothing pasted: say so in one line and start with `/newsong`.
 3. **Mode** comes from `mode` in `## Core`. When the writer switches ("let's edit", "back to drafting"), change only that line of `song.md`. If `mode` is missing, a request for new lines is drafting and a request for feedback is editing; ask once whether to record it.
 
 ## Drafting mode

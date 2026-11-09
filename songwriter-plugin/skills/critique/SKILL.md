@@ -1,6 +1,6 @@
 ---
 name: critique
-description: Use when a songwriter asks for a critique, feedback, notes or an honest opinion on a song, section or verse, asks what works or what is weak in it, asks whether a part is too vague or too long, wants notes before showing it to a publisher, teacher or co-writer, or quotes someone else's rule or checklist about their song. Not when the writer thinks the whole song is finished or asks whether it is ready to demo, record or pitch (finalcheck).
+description: Use when a songwriter asks for a critique, feedback, notes or an honest opinion on a song, section or verse, asks what works or is weak in it, whether a part is too vague or too long, wants notes before showing it to a publisher, teacher or co-writer, or quotes someone else's rule about their song. Not when the writer wants lines drafted, rewritten or one line's rhyme or stress checked (lyrics), or thinks the song is finished or ready to demo, record or pitch (finalcheck).
 ---
 
 # Critique
@@ -43,6 +43,8 @@ Critique:
 **Lenses.** `pattison` is on by default. A reading from `webb` (strict rhyme) or `commercial` (title timing, title in the chorus, market length) is used only when that lens is in `lenses`. The writer naming a goal ("I'm pitching to a publisher") does not turn a lens on: offer it as a taste note.
 
 **Measure, don't eyeball.** Every count, scheme, rhyme type, stress or line length you state comes from a tool result. Stock language is stated only from `cliche --strict` hits (quote the hit's `source`). A line that strikes you as generic but that the scan did not flag goes in as a neutral question ("what did you actually see at the window?"), never as a finding.
+
+**No song folder yet.** Lyrics pasted in chat: still give the critique (write them under `## Section` headings to `${CLAUDE_PLUGIN_DATA}/scratch/<title>/lyrics.md` and run the tools on that file), and in the same reply offer to create the song folder with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); create nothing until the writer says yes. Nothing pasted: say so in one line and start with `/newsong`.
 
 ## The reply, in this order
 

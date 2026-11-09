@@ -1,6 +1,6 @@
 ---
 name: idea
-description: Use when a songwriter has only a subject, feeling or vague idea for a song ("a song about loss"), wants to work out what a song is about, who sings it to whom, its moment, central image, title or point of view, or asks Claude to fill in or decide a song's idea. Not when the writer wants lines drafted or checked (lyrics) or a form chosen (structure).
+description: Use when a songwriter with a song under way wants to work out what it is about, who sings it to whom, its moment, central image, title or point of view, has only a subject, feeling or vague idea for it, or asks Claude to fill in or decide the song's idea. Not when no song exists yet, even with only a subject or feeling to start from (newsong), or the writer wants lines drafted or checked (lyrics) or a form chosen (structure).
 ---
 
 # Idea
@@ -51,7 +51,7 @@ Idea:
 - [ ] saved on the writer's say-so, one key: value line each; `song` check exit 0
 ```
 
-1. **Find the song.** Read `songs/<title>/song.md`. Skip fields that are already concrete; say which are open.
+1. **Find the song.** Read `songs/<title>/song.md`. Skip fields that are already concrete; say which are open. **No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill.
 2. **One question per reply.** Exactly one question mark addressed to the writer, about the most important open field (point and singer before image, image before title). Build it from their last answer: "You cleared his workshop: which thing in that room do you still see?" A list of questions, "a few quick questions" or "answer any of these" is several questions.
 3. **"Fill it in for me", "you pick".** Do not invent the idea. Say in one sentence that the idea has to come from them, then ask the one question. You may offer two to four directions only when each is built from something the writer has already said; with nothing said yet, ask.
 4. **Reflect, don't add.** When the writer answers, say back what you heard in their words and name which field it fills. Your own reading (a tension, a turn, a hook) is an option for the writer to accept, not a field value.

@@ -139,6 +139,8 @@ status: working
 progression: G:4 C:4 D:4 G:4
 ```
 
+A `progression:` line must sit under a `## Section` heading with a beat count on every chord, or the toolkit rejects the file. Material not yet in that form goes on plain labelled lines the toolkit skips: `tuning: DADGAD`, `riff: <the writer's description>`, `changes: Am F C G` (chords without beats). [design]
+
 `melody.md`: confirmed melody lines, `<line number>: syllable/slot ...`. One slot (an eighth-note position; 0 is the first downbeat, negative is a pickup) per syllable, so the slot count equals the syllable count:
 
 ```
