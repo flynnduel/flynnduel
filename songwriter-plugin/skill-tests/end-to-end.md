@@ -139,3 +139,18 @@ Writer: (13) "/melody Write me the melody for the chorus. Notes and rhythm, I ju
 | Her setting recorded on her yes, unchanged | ✓ | `melody.md`: `## Verse 2` / `3: And/-1 the/0 lone/1 ...`; re-run reads `source: melody`. |
 | E9 new issue on kept line raised as normal note | ✓ | "The line is kept for the \"lonely\" flag. This is a different issue, so I've raised it as a normal note." Four options, "Leave it." first; the kept word is not re-argued. |
 | One question | ✓ | Each reply ends with one question to the writer (turn 14 also asks one about how she says "Marianne", since the dictionary marks the last syllable: two questions, see Breaches). |
+
+### Stage 6: `/chords` (turns 15–17) and the split sheet (turn 18)
+
+Writer: (15) her chords for every section, four beats each; "this is really a soul song"; "What are some other ways I could end the chorus?" (16) "Yes, save the style. And D ... Put it in." (17) "Now write me a bass line for the verse, something I can hand to our bass player." (18) the split sheet, 70/30.
+
+| Check | Result | Evidence |
+|---|---|---|
+| Her chords written as given, measured | ✓ | `music.md`: four `progression:` lines, e.g. `C:4 G:4 D:4 G:4 C:4 G:4 D:4 D:4`; `harmony --music` and `chart --check` run. "about 0.5" for Verse 0.522 / Chorus 0.478; Bridge "E minor first ... G major (vi, IV, I, V) as the dual reading", as in the JSON. |
+| E6 only `styles.md` material, sourced and tagged | ✓ | The one soul entry quoted with "(Spicer) [verified]" and "It is tied to 1970s soul ... I'm not widening it"; "nothing else specific to soul on chorus endings, so Options A to C are style-neutral." |
+| E6 frequencies only in the fixed line | ✓ | Each option has `How common (general corpus, not soul): ...`: "32% of 200 songs' sectional cadences" (V) and "18.5%" (IV) match `chorus_cadence_pre_tonic`; "no counted rate" for the other two. No frequency word in any Why or Feel line. |
+| 2–4 options incl. leave it, writer picks | ✓ | A "Leave it as it is" to D; "None of these is the right one ... I'll only do that once you choose." |
+| Style offered, E7 replaced on the yes | ✓ | Turn 15: "Say \"save the style\" and I'll replace ..." (no file change). Turn 16 diff `-style: sea shanty` / `+style: soul`; one `style:` line; `song` exit 0. Close D written; Chorus re-read "about 0.52" (0.517), "C major as the second reading" (as in the JSON). |
+| E13 bass line declined, roles in words | ✓ | "I don't write parts, so there's no bass line from me, no tab and no note-by-note pattern." Four roles in words; "Which of these the player picks is the player's call." |
+| Measure, don't guess | ~ | "Verse 2's third line is your longest": true (14 syllables from `prosody` against 12), but the other lines were not measured in that turn. A by-eye comparison; see Breaches. |
+| E11 split sheet numeric, parsed | ✓ | `- Rhys Calloway \| words, music \| 70`, `- Dana Okafor \| words \| 30`; `song` reads `percent: 70.0` and `30.0`. "The plugin only records the split and gives no legal or contract advice." |
