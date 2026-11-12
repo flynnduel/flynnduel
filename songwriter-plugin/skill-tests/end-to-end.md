@@ -117,3 +117,25 @@ Interruption: the session history held turns 10 and 11 from the cut-off, and a l
 | Measured, figures match toolkit | ✓ | `cliche --strict`: one hit, `lonely`, `abstract`, "BMI (as reported)" — quoted as such. `stability --section "Verse 2"`: `xaxa`, `[4, 5, 4, 6]`, last line `assonance`, `unstable` — all quoted exactly; `rhyme` bay/rind, bay/write, over/write all `none`, as said. |
 | Flag, explain, 2–4 options incl. leave it; basis named | ✓ | Note 1 four options from "Keep it." to one from her object writing ("the deck humming through your boots" is in `ramp-chain.md`); note 2 three options from "Leave it."; bases "BMI, as reported" and "Pattison's stability elements (verified)"; "a description, not a fault". |
 | Stock language as craft, one question | ✓ | "It's a craft note, not a rule." Ends "Which do you want to take up, if any?" |
+
+### Stage 4d: `/lyrics`, keeping the flagged line (turn 12)
+
+Writer: keeps "And the lonely sound of the Marianne turning over" ("the plain word is the point") and leaves the open scheme.
+
+| Check | Result | Evidence |
+|---|---|---|
+| E8 kept line in register format, parses | ✓ | `## Kept lines` gains `- "And the lonely sound of the Marianne turning over" \| "lonely" names the feeling (abstract filler) \| <her reason> \| 2026-11-12`; controller ran `song`: exit 0, `kept` holds the one entry. |
+| Writer's call accepted, nothing more logged | ✓ | "That's your decision about how the verse pushes into the chorus, not a line to log, so I recorded nothing for it." |
+
+### Stage 5: `/melody` (turns 13–14)
+
+Writer: (13) "/melody Write me the melody for the chorus. Notes and rhythm, I just want something to sing." (14) leans on "chain" and "go"; gives her slots for the kept line (`lone/1 ly/2 sound/3 ...`); "Score it, and yes, record it in melody.md."
+
+| Check | Result | Evidence |
+|---|---|---|
+| E12 declined in one sentence, coaching only | ✓ | "I won't write the tune, so there are no notes or rhythm from me." Then `prosody` per chorus line, Pattison placement and contour questions, Perricone's "sing your own melody"; no pitch or rhythm given. |
+| Uncovered style restated plainly | ✓ | "Sea shanty isn't in this plugin's style index, so the research has nothing specific to it on melody." |
+| Figures match toolkit; limit stated | ✓ | Stressed syllables per line as `prosody` lists them (line 2: chain, comes, up, ramp, lets, go); "simplified version of Hayes (2005) ... about 70%". Turn 14: score 123, one strong `INVERSION` and three soft flags, best slots `-3, -2, 0 ...` — all as in the JSON. |
+| Her setting recorded on her yes, unchanged | ✓ | `melody.md`: `## Verse 2` / `3: And/-1 the/0 lone/1 ...`; re-run reads `source: melody`. |
+| E9 new issue on kept line raised as normal note | ✓ | "The line is kept for the \"lonely\" flag. This is a different issue, so I've raised it as a normal note." Four options, "Leave it." first; the kept word is not re-argued. |
+| One question | ✓ | Each reply ends with one question to the writer (turn 14 also asks one about how she says "Marianne", since the dictionary marks the last syllable: two questions, see Breaches). |
