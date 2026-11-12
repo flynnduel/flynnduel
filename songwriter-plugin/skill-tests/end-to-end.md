@@ -189,3 +189,16 @@ Writer: "Different thing: bank this line for another song, nothing to do with th
 |---|---|---|
 | One line in the bank, exact format | ✓ | New `songs/_bank/ideas.md`: `# Idea bank`, blank line, `- 2026-11-12 [line] "Every porch on Mercer Street has a dog that knows my name."` (date from `date +%F`). No song folder made; the ferry song untouched. The toolkit has no bank parser, so the format is checked against the skill's line form. |
 | No critique unasked | ✓ | Reply is the entry and "`/newsong` can start a song from it later." |
+
+### Stage 10: `/critique` (turn 22; harness file 24)
+
+Writer: "/critique Give me your notes on the whole song."
+
+| Check | Result | Evidence |
+|---|---|---|
+| Measured first; figures match | ✓ | `stability`, `pov`, `cliche --strict`, `drafts diff --song`, `prosody`. "5 stresses and 11 syllables against ... 3 stresses and 6 syllables" (`contrast`); Chorus `second_narrative`, Bridge `first_narrative`, `shift` true; one `cliche` hit; score 123 — all as in the JSON. |
+| Order: about, lands, questions, at most three notes | ✓ | "What it seems to be about", three "What lands", three neutral questions, "Notes (three)", each with location, observation, mechanism, effect, basis and options with "Leave it" first. Note 1 labelled "my reading, not a tool measurement". |
+| E10 kept line back once, own group, not re-argued | ✓ | "**Kept lines** (listed separately, not re-argued)": the register entry, "still in `lyrics.md` and unchanged" (from `kept_missing: []`, `kept_changed_count: 0`), "Are you still keeping it as it is?" The `lonely` scan hit is mentioned only as "that one is your kept line", not flagged. |
+| E9 new issue on the kept line | ✓ | Note 3 is the prosody setting: "this line is kept for the earlier \"lonely\" flag. This is a different issue". |
+| No files changed; writer decides | ✓ | "Which note would you like to work on, or none? I changed no files." Taste note offered, not given. |
+| Nothing invented (E15) | ~ | The summary says she sings to Tam, "who doesn't wave": no file says so (her material has "hands in the pockets" and "no word for goodbye"). An inference stated as fact in a reading; nothing saved. Same kind of slip as stage 2; see Breaches. |
