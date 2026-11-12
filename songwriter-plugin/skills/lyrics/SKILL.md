@@ -43,14 +43,16 @@ The critic is silent. Copy this checklist:
 Draft:
 - [ ] Material gathered: song.md idea fields, lyrics.md, object-writing/
 - [ ] Draft written from that material in the writer's diction
+- [ ] Shows, not tells: the moment object-written through the senses; no idea-field wording in a line; at most one telling line per section
 - [ ] Self-audit run on the draft (cliche --strict, stability, rhyme) and clean
 - [ ] Shown with where each image came from; no notes on the writer's lines
 ```
 
 - **Material.** Every image traces to the song record. With no material, run object writing (lyrics.md, Object writing) or ask one question first. Never invent generic scenery.
+- **Show, don't restate.** The idea fields say what the song is about; they are never its words. Pattison: images that show rather than tell put the listener in the scene, and an image placed first colours the lines below it. Before drafting, object-write the `moment` yourself through the seven senses (sight, hearing, smell, taste, touch, organic, kinesthetic) and draft from that list. Particulars of the writer's own moment are co-writing; a different or stock scene is invention. Then read each line: one that names a feeling or states the `point` or `unresolved` in plain words tells. Rewrite it as something seen, heard, touched or done in that moment, or as a metaphor (lyrics.md, Metaphor). Keep at most one telling line per section, as a payoff after the images that earn it (often the title line). Put the strongest image first.
 - **Shape.** Match the section you are writing for: measure its neighbours with `stability` instead of judging line lengths by eye.
 - **Self-audit, every draft of any size.** Write the candidate lines under their `## Section` heading to `${CLAUDE_PLUGIN_DATA}/draft-check/lyrics.md`, run `cliche --strict`, `stability` and `rhyme` on its end words, and rewrite or drop anything that hits. Re-run until clean. A draft that has not been audited is not shown.
-- **Show** the draft (2–4 versions where a choice matters), one line on which material each image came from, and "self-audit: cliche --strict clean". Ask at most one question.
+- **Show** the draft (2–4 versions where a choice matters), one line on which material and which sense each image came from, the telling line if there is one, and "self-audit: cliche --strict clean". Ask at most one question.
 - **Silence.** No flags, no "one small note", no comment on the writer's stock lines or rhymes, even ones you noticed while reading. The self-audit checks only your own draft; rule 4 bars running checks on the writer's lines. If the writer asks a direct question about a line, answer it.
 - Drafts go into `lyrics.md` only when the writer says so (see Changing lyrics.md).
 
@@ -124,6 +126,7 @@ Each of these was said by an agent without this skill:
 | "The scan didn't run; my read is it would only flag X." | Fix the call and re-run it. Never predict a tool's result. |
 | "The cliche scan didn't catch 'neon', so this is my judgment." | Stock language needs `cliche --strict`. |
 | "The draft reads clean, no need to scan it." | Every draft passes `cliche --strict` before it is shown. |
+| "I still miss you, I can't let go" (the feeling named) or the `unresolved` field set as a line | Tells. Rewrite as what the singer sees, hears or does in the moment; one telling line per section at most. |
 | "That one is soft and common in pop, so leave it", "only a function word, which is minor" | Explain the mechanism, give options; the writer decides, not a genre. |
 | "Snapshotting with `cp lyrics.md drafts/...`" | `drafts snapshot`. |
 | "The snapshot didn't run, so I'll edit and put it back afterwards." | No snapshot path, no edit. |

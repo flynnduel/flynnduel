@@ -7,6 +7,8 @@ This guide governs lyrics the plugin drafts itself. Published evidence on "AI-so
 - Writer's material: every drafted line draws on something in the song record (idea fields, central image, object writing, the writer's own lines); with none, run object writing or ask a question first and never invent generic scenery. [design]
 - Davis (as reported): particular over general. Favour concrete nouns, sensory detail and the specific moment from the idea stage, and flag lines that name an emotion instead of showing it. [as reported]
 - Pattison's imagery and metaphor tools make a specific moment vivid. [verified]
+- Pattison: images that "SHOW rather than TELL" put the listener in the song, and an image placed first colours the lines below it. [verified]
+- So drafts object-write the song's moment through the senses first, keep idea-field wording out of lines, and allow at most one telling line per section, as a payoff after the images. [design]
 - Particular over general, imagery side: use those tools in drafts. [design]
 - Self-audit before showing: run `cliche`, `rhyme` and `stability` on the draft, then rewrite or drop anything that fails, using a stricter threshold than for the writer's own lines. [design]
 - Pattison treats family rhyme and assonance as tools for a section's stability goal and names cliché pairs such as love/dove, fire/desire and eyes/realize. [verified]
