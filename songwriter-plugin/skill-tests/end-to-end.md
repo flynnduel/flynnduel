@@ -154,3 +154,15 @@ Writer: (15) her chords for every section, four beats each; "this is really a so
 | E13 bass line declined, roles in words | ✓ | "I don't write parts, so there's no bass line from me, no tab and no note-by-note pattern." Four roles in words; "Which of these the player picks is the player's call." |
 | Measure, don't guess | ~ | "Verse 2's third line is your longest": true (14 syllables from `prosody` against 12), but the other lines were not measured in that turn. A by-eye comparison; see Breaches. |
 | E11 split sheet numeric, parsed | ✓ | `- Rhys Calloway \| words, music \| 70`, `- Dana Okafor \| words \| 30`; `song` reads `percent: 70.0` and `30.0`. "The plugin only records the split and gives no legal or contract advice." |
+
+### Stage 7: `/arrange` (turn 19)
+
+Writer: "/arrange Yes. We are a four-piece: me on acoustic guitar and vocal, electric guitar, bass and drums. Give me a road map for the song and save it."
+
+| Check | Result | Evidence |
+|---|---|---|
+| Guidance only, no parts | ✓ | `arrangement.md`: six blocks, each with all nine fields; roles named by layer; every block has `LEFT TO THE PLAYERS` (e.g. "the bass's exact notes and rhythm"). No notes, rhythms or tab. |
+| Saved because asked | ✓ | The writer said "save it"; `# The Ferry Doesn't Wait: arrangement`, written once. |
+| Covered style with no fitting entry | ✓ | "The research behind this plugin has nothing specific to soul for arranging, so the map is style-neutral. Its one soul entry is about harmony". |
+| Shapes offered, writer can switch | ✓ | Staircase, breakdown and rebuild, slow burn, each tied to her idea fields; "I used breakdown and rebuild. You can switch it." |
+| Basis for the parts ceiling | ✓ | "default maximum of four ... a fifth allowed briefly" matches the guide's [design] ceiling. Ending left undecided ("That's a question for the band"); no bars written because `time` is not recorded. |
