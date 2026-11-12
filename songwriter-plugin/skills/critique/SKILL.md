@@ -48,7 +48,7 @@ Critique:
 
 ## The reply, in this order
 
-1. **What it seems to be about**, in one or two sentences, then **one to three specific strengths**, each tied to a line or a measurement. Kept lines are not used as strengths; they have their own group.
+1. **What it seems to be about**, in one or two sentences built only from what the song files and the writer say: no gesture, feeling or event of your own ("who never calls back" when no line says so). Then **one to three specific strengths**, each tied to a line or a measurement. Kept lines are not used as strengths; they have their own group.
 2. **The writer's own questions, answered directly** ("Partly, yes: ..."). An answer that is a note uses the note format below. If the writer asked nothing specific, skip this part.
 3. **Neutral questions**, one to three, with no opinion in them: "What should the listener feel at the bridge?", not "Isn't the bridge weak?".
 4. **Notes: at most three**, ranked by level: song (point, title, development, point of view), then section (stability, contrast, prosody), then line polish. Every note has all six parts:
@@ -112,4 +112,5 @@ Each of these was said by an agent without this skill:
 | "As I remember it, Davis treats ...", "Time frame: broken" under her checklist | "Davis (as reported)"; run the read checks under their own names. |
 | "You were right to keep it" in strengths; "the rhyme is softer than its reputation" | Kept lines appear only in their group, not re-argued. |
 | Kept lines listed with no question | One question for the group. |
+| "sung to her mother, who never calls back" (no file says so) | The summary uses only what the files and the writer say; an inference is a neutral question. |
 | "Making the second pair a near-rhyme would fix it" | Demonstrate the same lines in 2–4 arrangements, measured. |

@@ -68,3 +68,7 @@ Changes:
 |---|---|---|
 | F1 | ✓. Step 7: "`chart --check`: all four sections' inline chords match `music.md`. No chart yet"; the harmony dual reading is flagged as ambiguity. Step 8: "No `drafts/` snapshot exists, so I diffed `lyrics.md` against itself … `kept_missing: []`". Status is `working` after turn 1 and `done for now` after turn 2, the only change. | ✓. Step 7 passes, with the ambiguity noted. Step 8 reads `kept_missing` empty and `kept_changed` 0, and says there is no snapshot. Status is as in g9. |
 | F2 | ✓. Steps 5 and 7: "Not run: no music.md"; no harmony, guitar, transpose or chart calls; empty diff. | |
+
+## Regression from the end-to-end run (B3, B4)
+
+`skill-tests/end-to-end.md`, stage 11: run right after `/critique`, the subject reused that turn's results and described `axxa` as "the last two end words identical". Step 3 now says how to read `rhyme_scheme` and `end_rhyme_types`, the toolkit section says to run every call in this check, and a red flag covers both. Re-run once after a `/critique` in the same session: every call run again, the scheme relayed correctly.

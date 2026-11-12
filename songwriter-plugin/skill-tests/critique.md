@@ -117,3 +117,7 @@ Changes: `drafts diff --song` now reports `kept_missing`, added test-first. Kept
 | C2 | ✓. Both offers name only the topic ("what a publisher may look for in a chorus", "rhyme strictness in the last line"); craft notes are plain. |
 | C4 | ✓. "Both are still in `lyrics.md` (`kept_missing` is empty). There is no `drafts/` snapshot, so I couldn't check whether either was altered." One question for the group. |
 | C5 | ✓. aabb "comes to rest at each couplet"; "an image placed first colours the lines after it"; four measured versions (aabb with the boots first, two abab orders, and the original). The kept line is reported from `kept_missing`, not by reading. |
+
+## Regression from the end-to-end run (B2)
+
+`skill-tests/end-to-end.md`, stage 10: the "What it seems to be about" summary added a detail no file holds. Step 1 now builds the summary only from the files and the writer; red flag added. Re-run once: summary traced to `song.md` and `lyrics.md`.

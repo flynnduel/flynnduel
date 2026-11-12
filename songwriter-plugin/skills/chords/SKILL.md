@@ -129,3 +129,4 @@ Each of these was said or done by an agent without this skill, or in an early te
 | "(Spicer's \"emergent tonic\")" in a Why line; "(Temperley's plagal stop)" after an option (named, no tag) | Every named source carries its tag from the guide, wherever it appears in the option. |
 | "I haven't run this one through the tool" (an option offered anyway) | An option not run through `harmony` is not offered. |
 | "I can sketch a higher chorus melody for you" | Melody is coached, never written (melody skill). |
+| "The third line is your longest" (no count run on the other lines) | Line lengths, syllables and stresses come from `stability` or `prosody` runs; otherwise leave the comparison out. |

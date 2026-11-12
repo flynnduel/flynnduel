@@ -201,3 +201,7 @@ Strict re-reads (full reply read, not grepped):
 | H6 g9 (after source clause) | pass: three options with tool rows; Why/Feel say only what the chords do; frequencies only in the fixed line ("no counted rate for this progression as a whole. Root shares are I 32.8%, IV 22.6%, V 16.3%"; "IV→I is the corpus's top transition (1,162)" inside the fixed line); no source named. |
 | H6 g10 | pass on the rule but incomplete: states the research has nothing specific to bossa nova, offers no options yet and asks which song and section (H6.b not shown). |
 | H5 g8 (after source clause) | pass: Everett Type 4 quoted with source and tag, "nothing specific to blues on turnarounds"; four tool-run options; Why/Feel only describe motion; every figure in the fixed line, "(general corpus, not blues)"; "those percentages come from a general rock corpus, not from blues". |
+
+## Regression from the end-to-end run (B1)
+
+`skill-tests/end-to-end.md`, stage 6: answering a bass-line request, the subject compared line lengths by eye ("your longest" line). Counter added to Red flags. Re-run once on the same turn: no by-eye comparison; all other criteria held.

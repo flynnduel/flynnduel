@@ -13,7 +13,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/guides/rulebook.md` first. Then read `${CLAUDE_PLUGI
 
 ## Toolkit calls
 
-Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words (SECTION, N, KEY, CAPO, ...) are placeholders: every value comes from the song files or the writer, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result or skip the step. Add `--pron songs/pronunciations.txt` before the subcommand when that file exists.
+Run from the writer's project. `<song>` is the song folder, e.g. `songs/porch-light-left-on`. Run each call in the form written, one per command: no shell variables, loops or scripts. Capitalised words (SECTION, N, KEY, CAPO, ...) are placeholders: every value comes from the song files or the writer, never from these examples. If a call is refused or blocked, run it again in that plain form; never guess its result or skip the step. Run every call a step needs in this check, even if another skill ran it earlier in the session; never reuse an earlier result. Add `--pron songs/pronunciations.txt` before the subcommand when that file exists.
 
 ```
 UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "${CLAUDE_PLUGIN_ROOT}/songtools" songtools pov <song>/lyrics.md
@@ -52,7 +52,7 @@ Final check:
 
 1. **Point, title, recoloring.** Read `song.md`'s idea fields against the lyric. Is the point clear? Is the title in a spotlight position (first or last line of a section)? Does each verse change what the chorus means? This is a reading, so say so; no tool measures it.
 2. **Dodson's four checks.** Pronoun drift from `pov` (`shift`, per-section `pov`; a chordless section can raise a false shift). Time jumps and missing backstory are a reading: quote the lines. Twin verses: compare the verses' `stability` profiles and `prosody --compare`, and whether verse 2 adds new information.
-3. **Contrast and stability.** From `stability`: the `contrast` result at the chorus's first line, and each section's verdict and reasons. `unstable` is a description; ask whether it is intended.
+3. **Contrast and stability.** From `stability`; quote `rhyme_scheme` and `end_rhyme_types` as given (letters pair lines: in `abba` lines 1 and 4 rhyme, and each `end_rhyme_types` entry is that line's rhyme with its earlier partner). From it: the `contrast` result at the chorus's first line, and each section's verdict and reasons. `unstable` is a description; ask whether it is intended.
 4. **Prosody.** Run `prosody` for every line that has an entry in `melody.md` and report its flags, strongest first, in the tool's terms, plus the `limit` sentence once. Report the other lines as "no melody set: N lines", not as checked. The flags are the measurement: add no stress findings of your own.
 5. **Melody (Perricone).** Only if `music.md` exists; otherwise the step reads **not run: no music.md**. When it exists, ask Perricone's three questions (leaps, breath between phrases, range and range changes within a section), and if the writer gives a section's lowest and highest melody notes, run `key` with the voice range from `song.md`.
 6. **Listener test (Stolpe).** Answer as a first-time listener would, and say you are simulating one and cannot hear audio: could the words be heard and followed, is the chorus start clear, could you sing a part after one listen, does the music's mood match the words.
@@ -95,4 +95,5 @@ Each of these was said by an agent without this skill:
 | "I can start on the melody for the rest of Verse 1" | Music is coached, never written. |
 | No irritant question; no kept-line question | Steps 8 and 9 are questions to the writer, asked every time. |
 | "Quick one, so just the highlights" | All ten steps; the table keeps it short. |
+| Step figures copied from a `/critique` run earlier in the session; "scheme `abba`, the last two lines rhyme" | Run every step's calls in this check, and quote scheme letters and rhyme types as the tool pairs them (`abba`: line 4 with line 1). |
 | "The tool calls are blocked, so the check hasn't started" (after trying a script) | Run each call alone, exactly as written in Toolkit calls. |

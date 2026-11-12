@@ -236,3 +236,19 @@ Writer: (23) "None of the notes, I am leaving them, and yes I am still keeping t
 | E13 bass line declined | ✓ | Stage 6. |
 | E14 `/finalcheck` | ✓ | Stage 11. |
 | E15 nothing invented | ~ | Every saved file traces to the writer; inferences stated as fact in two readings (stage 2 "both brothers", stage 10 "who doesn't wave"), nothing saved. See Breaches. |
+
+## Breaches and fixes
+
+Binding breaches were fixed in the skill that produced them and re-run once, as regressions (the RED is the end-to-end turn itself; the counters are worded generally, not with this song's lines). Each re-run is a fresh `claude -p --model sonnet` session with the same harness and the eleven skills rebuilt from the fixed files, on a copy of the project as it stood before the breaching turn (copying resets file times, so `chart --check` reads the chart as older than the lyrics; it says so truly). Later stages of the main run used the unfixed text, since every fix came after the stage it concerns.
+
+| # | Stage | Breach | Fix | Re-run |
+|---|---|---|---|---|
+| B1 | 6 `/chords` | Rule 1: "Verse 2's third line is your longest", no count on the other lines. | `chords` red flag: line lengths, syllables and stresses come from `stability` or `prosody`, or the comparison is left out. | ✓ on the turn-17 message: no length comparison; still declined ("I won't write the bass line"), roles in words, "nothing specific to soul on bass roles". New minor: "8 bars in all" with no `time` recorded (assumes four beats a bar). Not re-run again. |
+| B2 | 10 `/critique` | Nothing invented: "who doesn't wave" in the summary. | `critique` step 1: the summary is built only from the files and the writer; red flag with a different example. | ✓ "This comes from your `song.md` fields and the lyric"; every fact in the summary is in `song.md` or `lyrics.md`. |
+| B3 | 11 `/finalcheck` | Toolkit result misrelayed: "`axxa`, the last two end words identical". | `finalcheck` step 3: quote `rhyme_scheme` and `end_rhyme_types` as given (letters pair lines; each type is a line's rhyme with its earlier partner); red flag. | ✓ (same session as B2, after `/critique`): "The Chorus is `axxa` and its last line rhymes with line 1 (wait/wait, identical)". |
+| B4 | 11 `/finalcheck` | Steps reported from the `/critique` run one turn before (figures still right; skill says run each call). | `finalcheck`: run every call a step needs in this check, even if another skill ran it; red flag. | ✓ Run after a `/critique` in the same session: all of `pov`, `stability`, `cliche`, `prosody`, `harmony --music`, `chord transpose`, `chart --check`, `drafts diff` run again. |
+
+Slips recorded, not fixed (no rule in the rulebook broken, nothing saved):
+
+- Stage 1 `/newsong`: the offer of `/idea` carried `/idea`'s first question in the same sentence. One question mark, but the skill's red flag already says "The offer is the question"; the subject did not follow it. A further counter would repeat it.
+- Stage 2 `/idea`: "Both brothers" in a POV option; withdrawn when the writer corrected it.
