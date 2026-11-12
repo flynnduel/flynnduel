@@ -180,3 +180,12 @@ Writer: (20) "No number chart. /chart I need charts and guide tracks for rehears
 | Figures match toolkit | ✓ | "28 chords over 112 beats", "84", concert "Bb", "3 semitones below the band" — `midi`: `chords: 28`, `beats: 112.0`, `key: Bb`, `capo_applied: 3`. |
 | No parts; `time` not assumed | ✓ | "your own chords from `music.md`, as block chords ... nothing added"; "`time` isn't recorded in `song.md`, so I haven't assumed a bar length." |
 | Denials | 1 | A compound `grep` on the chart files was refused; the subject used Read. |
+
+### Stage 9: `/bank` (turn 21; harness file 23)
+
+Writer: "Different thing: bank this line for another song, nothing to do with the ferry: \"Every porch on Mercer Street has a dog that knows my name.\""
+
+| Check | Result | Evidence |
+|---|---|---|
+| One line in the bank, exact format | ✓ | New `songs/_bank/ideas.md`: `# Idea bank`, blank line, `- 2026-11-12 [line] "Every porch on Mercer Street has a dog that knows my name."` (date from `date +%F`). No song folder made; the ferry song untouched. The toolkit has no bank parser, so the format is checked against the skill's line form. |
+| No critique unasked | ✓ | Reply is the entry and "`/newsong` can start a song from it later." |
