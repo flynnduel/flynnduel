@@ -56,3 +56,52 @@ From deferred review items:
 ## Results
 
 Appended stage by stage as the run proceeds. Key: ✓ pass, ✗ fail, ~ partial.
+
+Interruptions: the run was cut off by a usage limit after turn 9. Turns 10 and 11 were first sent during the cut-off, got only the limit message and changed nothing; they were sent again to the same session once the limit reset, so the subject's history holds those two writer messages twice. Only the second sending is judged.
+
+### Stage 1: `/newsong` (turn 1)
+
+Writer: "/newsong All I have is a title: \"The Ferry Doesn't Wait\". No words, no chords yet. I already know I'll play it with a capo on 3 using G shapes, and my voice sits roughly from A2 up to E4. Set it up."
+
+| Check | Result | Evidence |
+|---|---|---|
+| Folder and Core | ✓ | `songs/the-ferry-doesnt-wait/song.md`: `title`, `entry: title`, `key: G`, `capo: 3`, `voice low: A2`, `voice high: E4`, `mode: drafting`, `lenses: pattison`, `status: working`. `song` exit 0. "It holds only what you told me." No `lyrics.md` or `music.md` made. |
+| Order for the entry | ✓ | "I filed this under the `title` entry", then `/idea`, `/structure`, `/lyrics`, `/melody`, `/chords`. |
+| One question | ~ | "Want to start with `/idea`: what does \"The Ferry Doesn't Wait\" mean to you, and what is it about?" One sentence, but it joins the offer to the next skill's first question, which the skill's red flag forbids ("The offer is the question"). See Breaches. |
+| Denials | 1 | A compound `grep ... | head; ls` was refused; the subject read the guide with Read instead. |
+
+### Stage 2: `/idea` (turns 2–4)
+
+Writer turns: (2) the morning she left, Tam on the slip, "What it's saying, I think: leaving isn't one decision, the boat just goes and you find out you've chosen." (3) "Sung to Tam. The point stands as I said it ... The central image is the ramp chain coming up ... What stays open is whether I'll go back for the winter haul-out". (4) "Direct address. (I'm his sister, by the way, not his brother.) Save it."
+
+| Check | Result | Evidence |
+|---|---|---|
+| One question per reply, from the last answer | ✓ | Turn 2: "Who is the song sung to: Tam, someone else, or no one in particular?" Turn 3: one question, the POV pick. |
+| Reflect, don't add; open fields not saved | ✓ | "You said \"I think\", so I'll hold it as yours to reword and won't treat it as settled." "I've saved nothing yet." |
+| All four POVs shown before `pov` is saved | ✓ | Four lines side by side built from her material; `lyrics.md` empty so "there's no `pov` reading of existing words". |
+| Saved on her say-so, `song` exit 0 | ✓ | Seven `key: value` lines added to `## Core` in her words; `song` run. |
+| Nothing invented (E15) | ~ | The third-person option said "Both brothers are characters": the writer had not said she was Tam's brother. Corrected when she said so ("My \"both brothers\" line ... was wrong"); nothing wrong was saved. Recorded as a slip, not a rule breach: no file held it. |
+
+### Stage 3: `/structure` (turns 5–6): the uncovered style
+
+Writer: (5) "/structure What form should this have? I keep hearing it as a sea shanty sort of thing, if that helps." (6) "B, with a bridge, and the title as both the first and the last line of the chorus. And yes, save the style."
+
+| Check | Result | Evidence |
+|---|---|---|
+| E5 plain statement, nothing invented | ✓ | "Sea shanty isn't in this plugin's style index. The research behind it has nothing specific to sea shanty on form, so the options below are style-neutral. I won't say what a shanty \"does\"." No shanty convention appears in the three forms offered. |
+| E5 offered, written only on the yes | ✓ | Turn 5: "Say \"save the style\" and I'll record `style: sea shanty`"; no file changed. Turn 6 diff: `+style: sea shanty`, `+form: Simple verse-chorus with bridge (Verse, Chorus, Verse, Chorus, Bridge, Chorus)`; `song` exit 0. |
+| Measure first; no estimate | ✓ | `stability` run, exit 2 (`lyrics.md: cannot read lyrics file: not found`): "`stability` couldn't run ... I won't estimate them by eye." |
+| Two or three forms, sources tagged, writer picks | ✓ | Strophic (Open Music Theory [verified]), simple verse-chorus (Covach via de Clercq [verified]), through-composed (Osborn [verified]); "Nothing is saved to `form:` until you pick." |
+| Only `form:` and `style:` written | ✓ | "I wrote no section headings or lines into `lyrics.md`." |
+
+### Stage 4a: `/lyrics`, drafting (turns 7–9)
+
+Writer: (7) asks for an object-writing prompt only. (8) pastes her object writing and her lines for Verse 1, Chorus, Verse 2 and Bridge. (9) "The bridge needs a third line to finish it. Draft me a few options from my material."
+
+| Check | Result | Evidence |
+|---|---|---|
+| Object writing prompt from her material | ✓ | Built on "the ramp chain coming up" and the 6:40 deck; the ten minutes labelled "the usual secondhand figure". |
+| Her words saved unchanged | ✓ | `object-writing/ramp-chain.md` and `lyrics.md` with `## Verse 1`, `## Chorus`, `## Verse 2`, `## Bridge`; diff shows her lines verbatim. |
+| Drafting mode is quiet (rule 4) | ✓ | "The song is still in drafting mode, so I've run no checks and have no notes on the lines." Verse 2 holds a line the strict scan later flags; nothing was said. |
+| Drafts from her material, audited (E15) | ✓ | Four options, each with its origin ("From your `unresolved` field", "From your object writing"). Self-audit run on a scratch file: `cliche --strict`, `stability`, `rhyme yard alone`, `rhyme yard up`; "`cliche --strict` found no hits". |
+| One question | ✓ | "Which of these do you want in the bridge, or should I try shorter versions?" |
