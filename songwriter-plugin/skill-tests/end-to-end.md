@@ -166,3 +166,17 @@ Writer: "/arrange Yes. We are a four-piece: me on acoustic guitar and vocal, ele
 | Covered style with no fitting entry | ✓ | "The research behind this plugin has nothing specific to soul for arranging, so the map is style-neutral. Its one soul entry is about harmony". |
 | Shapes offered, writer can switch | ✓ | Staircase, breakdown and rebuild, slow burn, each tied to her idea fields; "I used breakdown and rebuild. You can switch it." |
 | Basis for the parts ceiling | ✓ | "default maximum of four ... a fifth allowed briefly" matches the guide's [design] ceiling. Ending left undecided ("That's a question for the band"); no bars written because `time` is not recorded. |
+
+### Stage 8: `/chart` (turns 20, 20b, 20c; harness files 20–22)
+
+Writer: (20) "No number chart. /chart I need charts and guide tracks for rehearsal next week." (20b) tempo 84; where her chords fall (two per line, first and sixth word; four named bridge words). (20c) "My mistake, those two lines are short. In the first and last chorus lines the G goes on \"wait\"." Turns 20b and 20c were added to answer what the subject asked (no inline chords; no tempo; no sixth word); the scripted turn 20 alone could not finish.
+
+| Check | Result | Evidence |
+|---|---|---|
+| Toolkit errors relayed, nothing guessed | ✓ | `midi` exit 2 quoted verbatim (`no tempo: pass --tempo or set tempo in song.md core`); "What tempo should the guide tracks use, in beats per minute?" Charts with no inline chords: "These charts are lyrics only ... the placement is yours." |
+| Placement is the writer's; gaps asked, not filled | ✓ | Her rule applied (`[G]You tied the bow line [C]the way you always do`); for the four-word chorus lines: "there's no sixth word ... Which word do the missing G chords land on". Snapshot (`drafts/lyrics-v2.md`, `-v3.md`) before each edit; `tempo: 84` written on her word. |
+| `chart --check` before charts; all sections match | ✓ | Turn 20c: "Every section matches" — every section `matches: true`, Chorus `C G D G C G C/D G` both sides. |
+| E2 all outputs | ✓ | `out/`: `chart.cho`, `chart-concert.cho`, `chart.pdf`, `chart-concert.pdf`, `guide.mid`, `guide-concert.mid`. |
+| Figures match toolkit | ✓ | "28 chords over 112 beats", "84", concert "Bb", "3 semitones below the band" — `midi`: `chords: 28`, `beats: 112.0`, `key: Bb`, `capo_applied: 3`. |
+| No parts; `time` not assumed | ✓ | "your own chords from `music.md`, as block chords ... nothing added"; "`time` isn't recorded in `song.md`, so I haven't assumed a bar length." |
+| Denials | 1 | A compound `grep` on the chart files was refused; the subject used Read. |
