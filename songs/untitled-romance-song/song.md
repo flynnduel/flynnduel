@@ -1,4 +1,4 @@
-# Untitled
+# Karantaba Hill
 
 ## Core
 entry: brief or commission
@@ -12,6 +12,7 @@ moment: sunset on the ten-minute walk between our villages, our one-year anniver
 central image: the hill, up to mine and down to hers
 unresolved: what comes next after Karantaba Hill, where do we stroll after it
 pov: direct address
+title: Karantaba Hill
 
 ## Brief
 I want to write a romance song for my girlfriend
