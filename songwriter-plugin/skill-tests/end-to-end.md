@@ -105,3 +105,15 @@ Writer: (7) asks for an object-writing prompt only. (8) pastes her object writin
 | Drafting mode is quiet (rule 4) | ✓ | "The song is still in drafting mode, so I've run no checks and have no notes on the lines." Verse 2 holds a line the strict scan later flags; nothing was said. |
 | Drafts from her material, audited (E15) | ✓ | Four options, each with its origin ("From your `unresolved` field", "From your object writing"). Self-audit run on a scratch file: `cliche --strict`, `stability`, `rhyme yard alone`, `rhyme yard up`; "`cliche --strict` found no hits". |
 | One question | ✓ | "Which of these do you want in the bridge, or should I try shorter versions?" |
+
+### Stage 4b–4c: `/lyrics` drafting pick and editing check (turns 10–11)
+
+Interruption: the session history held turns 10 and 11 from the cut-off, and a later resend of turn 10 was itself stopped mid-turn with no tool call made (no file changed). Turn 10 was then sent once more; with turn 11 already in the history, the subject answered both in that one reply. Judged as one reply.
+
+| Check | Result | Evidence |
+|---|---|---|
+| Pick applied, cut kept (drafts tooling) | ✓ | `drafts snapshot` made `drafts/lyrics-v1.md` before the edit; `drafts cut ... --reason "too neat (the writer's call)..."` wrote `cuts/cuts.md`. "Option C now sits as line 2, so the Bridge has two lines. Say so if you meant it to be three." |
+| Mode switch on the writer's word | ✓ | `mode: drafting` → `mode: editing` after "let's edit". |
+| Measured, figures match toolkit | ✓ | `cliche --strict`: one hit, `lonely`, `abstract`, "BMI (as reported)" — quoted as such. `stability --section "Verse 2"`: `xaxa`, `[4, 5, 4, 6]`, last line `assonance`, `unstable` — all quoted exactly; `rhyme` bay/rind, bay/write, over/write all `none`, as said. |
+| Flag, explain, 2–4 options incl. leave it; basis named | ✓ | Note 1 four options from "Keep it." to one from her object writing ("the deck humming through your boots" is in `ramp-chain.md`); note 2 three options from "Leave it."; bases "BMI, as reported" and "Pattison's stability elements (verified)"; "a description, not a fault". |
+| Stock language as craft, one question | ✓ | "It's a craft note, not a rule." Ends "Which do you want to take up, if any?" |
