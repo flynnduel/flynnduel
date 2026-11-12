@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Copy the plugin's skills into the repo's .claude/skills/ so cloud sessions
+# (where /plugin install is unavailable) load them as project skills.
+# Paths are relative to the repo root, where cloud sessions start.
+set -euo pipefail
+repo="$(cd "$(dirname "$0")/../.." && pwd)"
+src="$repo/songwriter-plugin/skills"
+dst="$repo/.claude/skills"
+for d in "$src"/*/; do
+  name="$(basename "$d")"
+  mkdir -p "$dst/$name"
+  sed -e 's|\${CLAUDE_PLUGIN_ROOT}|songwriter-plugin|g' \
+      -e 's|\${CLAUDE_PLUGIN_DATA}|.songwriter-data|g' \
+      "$d/SKILL.md" > "$dst/$name/SKILL.md"
+done

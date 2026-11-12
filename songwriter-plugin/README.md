@@ -53,6 +53,8 @@ Until the plugin is merged, install it from its branch, `claude/dazzling-feynman
 
 4. Type `/songwriter:` to see the eleven commands. Plugin commands carry the plugin's name, so `/newsong` below is typed `/songwriter:newsong` (typing `/newsong` finds it).
 
+**From a phone (Claude Code cloud session):** `/plugin` is not available there, so the repo carries copies of the skills in `.claude/skills/`, which cloud sessions load. Start a session on `flynnduel/flynnduel`, branch `claude/dazzling-feynman-furauz`, and type `/newsong` (no `songwriter:` prefix). A cloud session's files are lost when it ends: ask Claude to commit and push your `songs/` folder before you finish. After editing a skill in `skills/`, run `scripts/sync-project-skills` to refresh the copies (a test fails until you do).
+
 Commands to try first, on a song or a draft of your own:
 
 1. `/newsong` followed by what you have: "I've got a verse and a chorus, no music yet", and paste them. It creates `songs/<title>/` and names the next step. (Or skip the folder: paste lyrics after `/lyrics` or `/critique` and it will work on them directly and offer the folder.)
