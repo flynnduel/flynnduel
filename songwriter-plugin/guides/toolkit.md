@@ -71,6 +71,8 @@ $ songtools stability song/lyrics.md --section Chorus
  "basis": "Pattison stability elements (verified)"}
 ```
 
+Reading `rhyme_scheme`: the letters pair lines (in `abba` lines 1 and 4 rhyme, and 2 and 3); each `end_rhyme_types` entry is that line's rhyme with its earlier partner, `null` for a line with none. `identical` means a line repeats its partner's end word, not that the last two lines match. [design]
+
 In `rhyme_scheme`, `x` means no partner and `?` means the rhyme is undetermined (estimated pronunciation); the reasons then say so. `unstable` is a description, not a fault: a section may be unstable on purpose. [design]
 
 ### pov

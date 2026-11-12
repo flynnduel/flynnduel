@@ -130,3 +130,4 @@ Each of these was said or done by an agent without this skill, or in an early te
 | "I haven't run this one through the tool" (an option offered anyway) | An option not run through `harmony` is not offered. |
 | "I can sketch a higher chorus melody for you" | Melody is coached, never written (melody skill). |
 | "The third line is your longest" (no count run on the other lines) | Line lengths, syllables and stresses come from `stability` or `prosody` runs; otherwise leave the comparison out. |
+| "That's 8 bars in all" (no `time` in song.md) | Bar counts need `time` in song.md and the `progression:` beats; with no `time`, ask for it and state no bar count. |

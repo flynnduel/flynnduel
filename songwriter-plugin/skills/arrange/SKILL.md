@@ -24,7 +24,7 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 
 ## Start
 
-1. Find `songs/<title>/`. Read `song.md`, `lyrics.md`, `music.md` and any `arrangement.md`. **No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill.
+1. Find `songs/<title>/`. Read `song.md`, `lyrics.md`, `music.md` and any `arrangement.md`. **No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill. A general question that needs none of the song's files is still answered.
 2. **Sections.** With `form:` set, the road map follows it, every section in order. Without `form:`, say "The form isn't set yet (no `form:` in song.md; `/structure` can choose one)", then use the `## ` sections of `lyrics.md`, in order, and nothing else. An intro, outro, solo, tag or repeated chorus that is in neither is a question or an option ("Do you want an intro? If so, ..."), never a block in the map.
 3. **Style.** Read `style` from `song.md`, or take it from the writer's message. See Declared style below. With no style, assume none.
 

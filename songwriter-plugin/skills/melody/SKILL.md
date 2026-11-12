@@ -28,7 +28,7 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 - `key` runs only with a range the writer gives: the lowest and highest sung note of a section, plus `voice low` and `voice high` from `song.md`. One call per section. Never estimate a range from the lyrics, the chords or a description.
 - Use `--pron songs/pronunciations.txt` (before the subcommand) when that file exists.
 
-**No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill.
+**No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill. A general question that needs none of the song's files is still answered.
 
 ## Asked to write the melody
 

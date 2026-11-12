@@ -26,7 +26,7 @@ UV_PROJECT_ENVIRONMENT="${CLAUDE_PLUGIN_DATA}/venv" uv run --frozen --project "$
 
 ## Start
 
-1. Find `songs/<title>/`. Read `song.md` (the idea fields `point`, `moment`, `unresolved`, `title`; `form`; `lenses`; `style`) and `lyrics.md`. **No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill.
+1. Find `songs/<title>/`. Read `song.md` (the idea fields `point`, `moment`, `unresolved`, `title`; `form`; `lenses`; `style`) and `lyrics.md`. **No song folder yet** (nothing in `songs/` for this song): say so in one line and start with `/newsong` (invoke the `newsong` skill, or ask the writer to run it); it creates the folder, records what the writer brought and routes back here. Create no song file from this skill. A general question that needs none of the song's files is still answered.
 2. Run `stability` on the whole `lyrics.md` before saying anything about shape, contrast or stability.
 3. **No contrast reading.** If `stability` returns `"contrast": null`, quote its `note` (no verse, no chorus, or a section with no lines). The first-line contrast check cannot run: say so, never estimate it by eye, and say what would let it run (a section headed Verse and one headed Chorus). A form with no chorus, such as strophic, has no chorus contrast to check; compare sections only through the per-section `stability` results.
 4. Sort the request: choosing a form (Form choice) or a section that feels wrong (Diagnosis). A song can need both. With a declared style, also follow Declared style below.
